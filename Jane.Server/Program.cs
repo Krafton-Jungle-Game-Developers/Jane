@@ -7,6 +7,7 @@ builder.Services.AddGrpc();
 builder.Services.AddMagicOnion();
 
 var app = builder.Build();
+
 app.MapMagicOnionService();
 
 app.Run();
