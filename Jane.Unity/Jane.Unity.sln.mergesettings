@@ -1,0 +1,21 @@
+<SlnMergeSettings>
+    <MergeTargetSolution>..\Jane.Server.sln</MergeTargetSolution>
+    <SolutionFolders>
+        <SolutionFolder FolderPath="AssemblyDefinitions" Guid="{C4909EDB-060D-4AD1-AA47-685ACDF10BB2}"/>
+    </SolutionFolders>
+    <NestedProjects>
+        <NestedProject ProjectName="MemoryPack" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="MessagePack" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="MagicOnion.Abstractions" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="MagicOnion.Client" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="MagicOnion.Unity" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="MagicOnion.Unity.Editor" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="UniTask" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="UniTask.Addressables" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="UniTask.DOTween" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="UniTask.Editor" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="UniTask.Linq" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="UniTask.TextMeshPro" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="Jane.Unity.ServerShared" FolderPath="AssemblyDefinitions" />
+    </NestedProjects>
+</SlnMergeSettings>

@@ -1,17 +1,15 @@
 {
-    "name": "MessagePack",
+    "name": "Jane.Unity.ServerShared",
     "rootNamespace": "",
     "references": [
-        "GUID:5a46ad82eac024e4fbb6a0516a5def17"
+        "GUID:756335c0388f7114790e504ed368ae1d",
+        "GUID:62b9d94cd08d5d047b266d42e8684cb8"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
-    "overrideReferences": true,
-    "precompiledReferences": [
-        "Microsoft.NET.StringTools.dll",
-        "System.Runtime.CompilerServices.Unsafe.dll"
-    ],
+    "overrideReferences": false,
+    "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],

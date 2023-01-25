@@ -1,15 +1,15 @@
 {
     "name": "MagicOnion.Unity",
+    "rootNamespace": "",
     "references": [
-        "MagicOnion.Abstractions",
-        "MagicOnion.Client",
-        "UniTask"
+        "GUID:62b9d94cd08d5d047b266d42e8684cb8",
+        "GUID:ccdb2a3bafe19b34792bb6e19521813e",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
+    "allowUnsafeCode": true,
+    "overrideReferences": true,
     "precompiledReferences": [
         "Grpc.Core.dll",
         "Grpc.Core.Api.dll"
@@ -22,5 +22,6 @@
             "expression": "",
             "define": "MAGICONION_UNITASK_SUPPORT"
         }
-    ]
+    ],
+    "noEngineReferences": false
 }

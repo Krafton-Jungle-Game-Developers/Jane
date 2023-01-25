@@ -287,7 +287,7 @@ namespace MagicOnion
         }
 
 #if MAGICONION_UNITASK_SUPPORT
-        private static async void Forget(UniTask t)
+        private static void Forget(UniTask t)
             => t.Forget();
 #endif
 
