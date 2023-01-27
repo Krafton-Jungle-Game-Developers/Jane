@@ -1,5 +1,12 @@
 {
   "version": 1,
   "isRoot": true,
-  "tools": {}
+  "tools": {
+    "magiconion.generator": {
+      "version": "5.1.0",
+      "commands": [
+        "dotnet-moc"
+      ]
+    }
+  }
 }

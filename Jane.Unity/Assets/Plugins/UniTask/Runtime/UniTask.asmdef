@@ -12,32 +12,32 @@
     "versionDefines": [
         {
             "name": "com.unity.modules.assetbundle",
-            "expression": "",
+            "expression": "1",
             "define": "UNITASK_ASSETBUNDLE_SUPPORT"
         },
         {
             "name": "com.unity.modules.physics",
-            "expression": "",
+            "expression": "1",
             "define": "UNITASK_PHYSICS_SUPPORT"
         },
         {
             "name": "com.unity.modules.physics2d",
-            "expression": "",
+            "expression": "1",
             "define": "UNITASK_PHYSICS2D_SUPPORT"
         },
         {
             "name": "com.unity.modules.particlesystem",
-            "expression": "",
+            "expression": "1",
             "define": "UNITASK_PARTICLESYSTEM_SUPPORT"
         },
         {
             "name": "com.unity.ugui",
-            "expression": "",
+            "expression": "1",
             "define": "UNITASK_UGUI_SUPPORT"
         },
         {
             "name": "com.unity.modules.unitywebrequest",
-            "expression": "",
+            "expression": "1",
             "define": "UNITASK_WEBREQUEST_SUPPORT"
         }
     ],

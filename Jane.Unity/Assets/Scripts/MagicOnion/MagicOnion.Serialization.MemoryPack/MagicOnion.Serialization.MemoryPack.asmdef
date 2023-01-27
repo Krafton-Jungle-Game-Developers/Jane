@@ -1,9 +1,8 @@
 {
-    "name": "MagicOnion.Unity",
+    "name": "MagicOnion.Serialization.MemoryPack",
     "rootNamespace": "",
     "references": [
-        "GUID:f51ebe6a0ceec4240a699833d6309b23",
-        "GUID:62b9d94cd08d5d047b266d42e8684cb8",
+        "GUID:756335c0388f7114790e504ed368ae1d",
         "GUID:ccdb2a3bafe19b34792bb6e19521813e"
     ],
     "includePlatforms": [],
@@ -12,16 +11,11 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "Grpc.Core.dll",
-        "Grpc.Core.Api.dll"
+        "Grpc.Core.Api.dll",
+        "System.Runtime.CompilerServices.Unsafe.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [
-        {
-            "name": "com.cysharp.unitask",
-            "expression": "2.3",
-            "define": "MAGICONION_UNITASK_SUPPORT"
-        }
-    ],
+    "versionDefines": [],
     "noEngineReferences": false
 }

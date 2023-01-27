@@ -1,7 +1,6 @@
-﻿using System;
-using MagicOnion;
+﻿using MagicOnion;
 using MagicOnion.Server;
-using Microsoft.Extensions.Logging;
+using Jane.Unity.ServerShared.Services;
 
 namespace Jane.Server.Services;
 

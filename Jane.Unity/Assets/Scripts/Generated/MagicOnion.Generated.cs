@@ -118,7 +118,9 @@ namespace MagicOnion
     {
         public static void RegisterFormatters()
         {
-            global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MagicOnion.Serialization.MemoryPack.DynamicArgumentTupleFormatter<global::System.String, global::System.String>());
+            global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MagicOnion.Serialization.MemoryPack.DynamicArgumentTupleFormatter<global::System.Collections.Generic.List<global::System.Int32>, global::System.Collections.Generic.Dictionary<global::System.Int32, global::System.String>>());
+            global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.DictionaryFormatter<global::System.Int32, global::System.String>());
+            global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.ListFormatter<global::System.Int32>());
         }
     }
 }
@@ -217,12 +219,16 @@ namespace Jane.Unity.ServerShared.Hubs
             DuplexStreamingAsyncMethod = new global::Grpc.Core.Method<global::System.Byte[], global::System.Byte[]>(global::Grpc.Core.MethodType.DuplexStreaming, "IChatHub", "Connect", marshaller, marshaller);
         }
         
-        public global::System.Threading.Tasks.ValueTask JoinAsync(global::System.String roomName, global::System.String userName)
-            => new global::System.Threading.Tasks.ValueTask(base.WriteMessageWithResponseAsync<global::MagicOnion.DynamicArgumentTuple<global::System.String, global::System.String>, global::MessagePack.Nil>(-733403293, new global::MagicOnion.DynamicArgumentTuple<global::System.String, global::System.String>(roomName, userName)));
+        public global::System.Threading.Tasks.ValueTask JoinAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.JoinRequest request)
+            => new global::System.Threading.Tasks.ValueTask(base.WriteMessageWithResponseAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.JoinRequest, global::MessagePack.Nil>(-733403293, request));
         public global::System.Threading.Tasks.ValueTask LeaveAsync()
             => new global::System.Threading.Tasks.ValueTask(base.WriteMessageWithResponseAsync<global::MessagePack.Nil, global::MessagePack.Nil>(1368362116, global::MessagePack.Nil.Default));
         public global::System.Threading.Tasks.ValueTask SendMessageAsync(global::System.String message)
             => new global::System.Threading.Tasks.ValueTask(base.WriteMessageWithResponseAsync<global::System.String, global::MessagePack.Nil>(-601690414, message));
+        public global::System.Threading.Tasks.ValueTask GenerateException(global::System.String message)
+            => new global::System.Threading.Tasks.ValueTask(base.WriteMessageWithResponseAsync<global::System.String, global::MessagePack.Nil>(517938971, message));
+        public global::System.Threading.Tasks.ValueTask SampleMethod(global::System.Collections.Generic.List<global::System.Int32> sampleList, global::System.Collections.Generic.Dictionary<global::System.Int32, global::System.String> sampleDictionary)
+            => new global::System.Threading.Tasks.ValueTask(base.WriteMessageWithResponseAsync<global::MagicOnion.DynamicArgumentTuple<global::System.Collections.Generic.List<global::System.Int32>, global::System.Collections.Generic.Dictionary<global::System.Int32, global::System.String>>, global::MessagePack.Nil>(-852153394, new global::MagicOnion.DynamicArgumentTuple<global::System.Collections.Generic.List<global::System.Int32>, global::System.Collections.Generic.Dictionary<global::System.Int32, global::System.String>>(sampleList, sampleDictionary)));
         
         public global::Jane.Unity.ServerShared.Hubs.IChatHub FireAndForget()
             => new FireAndForgetClient(this);
@@ -239,12 +245,16 @@ namespace Jane.Unity.ServerShared.Hubs
             public global::System.Threading.Tasks.Task DisposeAsync() => throw new global::System.NotSupportedException();
             public global::System.Threading.Tasks.Task WaitForDisconnect() => throw new global::System.NotSupportedException();
         
-            public global::System.Threading.Tasks.ValueTask JoinAsync(global::System.String roomName, global::System.String userName)
-                => new global::System.Threading.Tasks.ValueTask(parent.WriteMessageFireAndForgetAsync<global::MagicOnion.DynamicArgumentTuple<global::System.String, global::System.String>, global::MessagePack.Nil>(-733403293, new global::MagicOnion.DynamicArgumentTuple<global::System.String, global::System.String>(roomName, userName)));
+            public global::System.Threading.Tasks.ValueTask JoinAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.JoinRequest request)
+                => new global::System.Threading.Tasks.ValueTask(parent.WriteMessageFireAndForgetAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.JoinRequest, global::MessagePack.Nil>(-733403293, request));
             public global::System.Threading.Tasks.ValueTask LeaveAsync()
                 => new global::System.Threading.Tasks.ValueTask(parent.WriteMessageFireAndForgetAsync<global::MessagePack.Nil, global::MessagePack.Nil>(1368362116, global::MessagePack.Nil.Default));
             public global::System.Threading.Tasks.ValueTask SendMessageAsync(global::System.String message)
                 => new global::System.Threading.Tasks.ValueTask(parent.WriteMessageFireAndForgetAsync<global::System.String, global::MessagePack.Nil>(-601690414, message));
+            public global::System.Threading.Tasks.ValueTask GenerateException(global::System.String message)
+                => new global::System.Threading.Tasks.ValueTask(parent.WriteMessageFireAndForgetAsync<global::System.String, global::MessagePack.Nil>(517938971, message));
+            public global::System.Threading.Tasks.ValueTask SampleMethod(global::System.Collections.Generic.List<global::System.Int32> sampleList, global::System.Collections.Generic.Dictionary<global::System.Int32, global::System.String> sampleDictionary)
+                => new global::System.Threading.Tasks.ValueTask(parent.WriteMessageFireAndForgetAsync<global::MagicOnion.DynamicArgumentTuple<global::System.Collections.Generic.List<global::System.Int32>, global::System.Collections.Generic.Dictionary<global::System.Int32, global::System.String>>, global::MessagePack.Nil>(-852153394, new global::MagicOnion.DynamicArgumentTuple<global::System.Collections.Generic.List<global::System.Int32>, global::System.Collections.Generic.Dictionary<global::System.Int32, global::System.String>>(sampleList, sampleDictionary)));
             
         }
         
@@ -277,13 +287,19 @@ namespace Jane.Unity.ServerShared.Hubs
         {
             switch (methodId)
             {
-                case -733403293: // ValueTask JoinAsync(global::System.String roomName, global::System.String userName)
+                case -733403293: // ValueTask JoinAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.JoinRequest request)
                     base.SetResultForResponse<global::MessagePack.Nil>(taskCompletionSource, data);
                     break;
                 case 1368362116: // ValueTask LeaveAsync()
                     base.SetResultForResponse<global::MessagePack.Nil>(taskCompletionSource, data);
                     break;
                 case -601690414: // ValueTask SendMessageAsync(global::System.String message)
+                    base.SetResultForResponse<global::MessagePack.Nil>(taskCompletionSource, data);
+                    break;
+                case 517938971: // ValueTask GenerateException(global::System.String message)
+                    base.SetResultForResponse<global::MessagePack.Nil>(taskCompletionSource, data);
+                    break;
+                case -852153394: // ValueTask SampleMethod(global::System.Collections.Generic.List<global::System.Int32> sampleList, global::System.Collections.Generic.Dictionary<global::System.Int32, global::System.String> sampleDictionary)
                     base.SetResultForResponse<global::MessagePack.Nil>(taskCompletionSource, data);
                     break;
             }
