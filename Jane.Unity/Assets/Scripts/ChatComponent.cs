@@ -6,17 +6,17 @@ using MagicOnion;
 using MagicOnion.Client;
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 
 namespace Jane.Unity
 {
     public class ChatComponent : MonoBehaviour, IChatHubReceiver
     {
-        private CancellationTokenSource _shutdownCts = new();
+        private readonly CancellationTokenSource _shutdownCts = new();
         private ChannelBase _channel;
         
         private IChatHub _streamingClient;
@@ -26,20 +26,35 @@ namespace Jane.Unity
         private bool isSelfDisconnected;
 
         [SerializeField] private TMP_Text chatText;
+        [SerializeField] private Button joinOrLeaveButton;
         [SerializeField] private TMP_Text joinOrLeaveButtonText;
         
         [SerializeField] private TMP_InputField messageInputField;
-        [SerializeField] private TMP_InputField reportInput;
-
-        [SerializeField] private Button joinOrLeaveButton;
         [SerializeField] private Button sendMessageButton;
+
+        [SerializeField] private Button reconnectButton;
+
+        [SerializeField] private TMP_InputField reportInputField;
         [SerializeField] private Button sendReportButton;
+        
         [SerializeField] private Button disconnectButton;
         [SerializeField] private Button exceptionButton;
         [SerializeField] private Button unaryExceptionButton;
+        
 
         private async UniTaskVoid Start()
         {
+            await
+            (
+                joinOrLeaveButton.OnClickAsAsyncEnumerable().ForEachAwaitAsync(async (_) => await JoinOrLeaveAsync(), _shutdownCts.Token),
+                sendMessageButton.OnClickAsAsyncEnumerable().ForEachAwaitAsync(async (_) => await SendMessageAsync(), _shutdownCts.Token),
+                reconnectButton.OnClickAsAsyncEnumerable().ForEachAwaitAsync(async (_) => await ReconnectInitializedServerAsync(), _shutdownCts.Token),
+                disconnectButton.OnClickAsAsyncEnumerable().ForEachAwaitAsync(async (_) => await DisconnectServerAsync(), _shutdownCts.Token),
+                unaryExceptionButton.OnClickAsAsyncEnumerable().ForEachAwaitAsync(async (_) => await UnaryGenerateExceptionAsync(), _shutdownCts.Token),
+                exceptionButton.OnClickAsAsyncEnumerable().ForEachAwaitAsync(async (_) => await GenerateExceptionAsync(), _shutdownCts.Token),
+                sendReportButton.OnClickAsAsyncEnumerable().ForEachAwaitAsync(async (_) => await SendReportAsync(), _shutdownCts.Token)
+            );
+
             await InitializeClientAsync();
             InitializeUi();
         }
@@ -56,9 +71,8 @@ namespace Jane.Unity
         private async UniTask InitializeClientAsync()
         {
             // Initialize the Hub
-            // NOTE: If you want to use SSL/TLS connection, see InitialSettings.OnRuntimeInitialize method.
-            _channel = GrpcChannelx.ForAddress("http://localhost:5000");
-
+            _channel = GrpcChannelx.ForTarget(new("jane.jungle-gamedev.com", 5001, false));
+            
             while (!_shutdownCts.IsCancellationRequested)
             {
                 try
@@ -93,12 +107,12 @@ namespace Jane.Unity
             exceptionButton.interactable = false;
         }
 
-        private async UniTaskVoid RegisterDisconnectEvent(IChatHub streamingClient)
+        private async UniTask RegisterDisconnectEvent(IChatHub streamingClient)
         {
             try
             {
                 // you can wait disconnected event
-                await _streamingClient.WaitForDisconnect().AsUniTask();
+                await streamingClient.WaitForDisconnect().AsUniTask();
             }
             catch (Exception e)
             {
@@ -107,7 +121,7 @@ namespace Jane.Unity
             finally
             {
                 // try-to-reconnect? logging event? close? etc...
-                Debug.Log($"disconnected from the server.");
+                Debug.Log($"Disconnected from the server.");
 
                 if (isSelfDisconnected)
                 {
@@ -119,8 +133,8 @@ namespace Jane.Unity
                 }
             }
         }
-
-        public async UniTaskVoid DisconnectServer()
+        
+        private async UniTask DisconnectServerAsync()
         {
             isSelfDisconnected = true;
 
@@ -131,12 +145,12 @@ namespace Jane.Unity
             exceptionButton.interactable = false;
             unaryExceptionButton.interactable = false;
 
-            if (isJoin) { JoinOrLeave().Forget(); }
+            if (isJoin) { await JoinOrLeaveAsync(); }
 
             await _streamingClient.DisposeAsync().AsUniTask();
         }
-
-        public async UniTaskVoid ReconnectInitializedServer()
+        
+        private async UniTask ReconnectInitializedServerAsync()
         {
             if (_channel != null)
             {
@@ -147,6 +161,7 @@ namespace Jane.Unity
                     _channel = null;
                 }
             }
+            
             if (_streamingClient != null)
             {
                 var streamClient = _streamingClient;
@@ -182,7 +197,7 @@ namespace Jane.Unity
         }
 
         #region Client -> Server (Streaming)
-        public async UniTaskVoid JoinOrLeave()
+        private async UniTask JoinOrLeaveAsync()
         {
             if (isJoin)
             {
@@ -203,8 +218,8 @@ namespace Jane.Unity
                 exceptionButton.interactable = true;
             }
         }
-
-        public async UniTaskVoid SendMessage()
+        
+        private async UniTask SendMessageAsync()
         {
             if (!isJoin) { return; }
 
@@ -213,9 +228,10 @@ namespace Jane.Unity
             messageInputField.text = string.Empty;
         }
 
-        public async UniTaskVoid GenerateException()
+        public async UniTask GenerateExceptionAsync()
         {
             if (!isJoin) { return; }
+            
             await _streamingClient.GenerateException("client exception(streaminghub)!");
         }
 
@@ -240,20 +256,21 @@ namespace Jane.Unity
 
         public void OnSendMessage(MessageResponse message)
         {
-            chatText.text += $"\n{message.UserName}£º{message.Message}";
+            chatText.text += $"\n{message.UserName}: {message.Message}";
         }
         #endregion
 
 
         #region Client -> Server (Unary)
-        public async UniTaskVoid SendReport()
+        
+        private async UniTask SendReportAsync()
         {
-            await _client.SendReportAsync(reportInput.text);
+            await _client.SendReportAsync(reportInputField.text);
 
-            reportInput.text = string.Empty;
+            reportInputField.text = string.Empty;
         }
-
-        public async UniTaskVoid UnaryGenerateException()
+        
+        private async UniTask UnaryGenerateExceptionAsync()
         {
             await _client.GenerateException("client exception(unary)£¡");
         }

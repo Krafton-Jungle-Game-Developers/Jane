@@ -1,10 +1,11 @@
 {
     "name": "MagicOnion.Unity.Editor",
+    "rootNamespace": "",
     "references": [
-        "MagicOnion.Abstractions",
-        "MagicOnion.Client",
-        "MagicOnion.Unity",
-        "UniTask"
+        "GUID:62b9d94cd08d5d047b266d42e8684cb8",
+        "GUID:ccdb2a3bafe19b34792bb6e19521813e",
+        "GUID:350d0af80fb7b7947a59de66ab477547",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
     ],
     "includePlatforms": [
         "Editor"

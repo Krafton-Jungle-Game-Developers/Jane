@@ -6,16 +6,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-#if MAGICONION_UNITASK_SUPPORT
 using Cysharp.Threading.Tasks;
-#if !USE_GRPC_NET_CLIENT_ONLY
 using Channel = Grpc.Core.Channel;
-#endif
-#endif
 using Grpc.Core;
-#if USE_GRPC_NET_CLIENT
-using Grpc.Net.Client;
-#endif
 using MagicOnion.Client;
 using MagicOnion.Unity;
 using UnityEngine;
@@ -25,13 +18,7 @@ namespace MagicOnion
     /// <summary>
     /// gRPC Channel wrapper that managed by the channel provider.
     /// </summary>
-    public sealed partial class GrpcChannelx : ChannelBase, IMagicOnionAwareGrpcChannel, IDisposable
-#if UNITY_EDITOR || MAGICONION_ENABLE_CHANNEL_DIAGNOSTICS
-        , IGrpcChannelxDiagnosticsInfo
-#endif
-#if MAGICONION_UNITASK_SUPPORT
-        , IUniTaskAsyncDisposable
-#endif
+    public sealed partial class GrpcChannelx : ChannelBase, IMagicOnionAwareGrpcChannel, IDisposable, IGrpcChannelxDiagnosticsInfo, IUniTaskAsyncDisposable
     {
         private readonly Action<GrpcChannelx> _onDispose;
         private readonly Dictionary<IStreamingHubMarker, (Func<Task> DisposeAsync, ManagedStreamingHubInfo StreamingHubInfo)> _streamingHubs = new Dictionary<IStreamingHubMarker, (Func<Task>, ManagedStreamingHubInfo)>();
@@ -42,9 +29,7 @@ namespace MagicOnion
 
         public Uri TargetUri { get; }
         public int Id { get; }
-
-
-#if UNITY_EDITOR || MAGICONION_ENABLE_CHANNEL_DIAGNOSTICS
+        
         private readonly string _stackTrace;
         private readonly ChannelStats _channelStats;
         private readonly GrpcChannelOptionsBag _channelOptions;
@@ -53,7 +38,6 @@ namespace MagicOnion
         ChannelStats IGrpcChannelxDiagnosticsInfo.Stats => _channelStats;
         GrpcChannelOptionsBag IGrpcChannelxDiagnosticsInfo.ChannelOptions => _channelOptions;
         ChannelBase IGrpcChannelxDiagnosticsInfo.UnderlyingChannel => _channel;
-#endif
 
         public GrpcChannelx(int id, Action<GrpcChannelx> onDispose, ChannelBase channel, Uri targetUri, GrpcChannelOptionsBag channelOptions)
             : base(targetUri.ToString())
@@ -63,12 +47,10 @@ namespace MagicOnion
             _onDispose = onDispose;
             _channel = channel;
             _disposed = false;
-
-#if UNITY_EDITOR || MAGICONION_ENABLE_CHANNEL_DIAGNOSTICS
+            
             _stackTrace = new System.Diagnostics.StackTrace().ToString();
             _channelStats = new ChannelStats();
             _channelOptions = channelOptions;
-#endif
         }
 
         /// <summary>
@@ -122,20 +104,12 @@ namespace MagicOnion
         public override CallInvoker CreateCallInvoker()
         {
             ThrowIfDisposed();
-#if UNITY_EDITOR || MAGICONION_ENABLE_CHANNEL_DIAGNOSTICS
             return new ChannelStats.WrappedCallInvoker(((IGrpcChannelxDiagnosticsInfo)this).Stats, _channel.CreateCallInvoker());
-#else
-            return _channel.CreateCallInvoker();
-#endif
         }
 
         protected override async Task ShutdownAsyncCore()
         {
-#if MAGICONION_UNITASK_SUPPORT
             await ShutdownInternalAsync();
-#else
-            await ShutdownInternalAsync().ConfigureAwait(false);
-#endif
         }
 
         /// <summary>
@@ -144,19 +118,13 @@ namespace MagicOnion
         /// <param name="deadline"></param>
         /// <returns></returns>
         [Obsolete]
-#if MAGICONION_UNITASK_SUPPORT
         public async UniTask ConnectAsync(DateTime? deadline = null)
-#else
-        public async Task ConnectAsync(DateTime? deadline = null)
-#endif
         {
             ThrowIfDisposed();
-#if !USE_GRPC_NET_CLIENT_ONLY
             if (_channel is Channel grpcCChannel)
             {
                 await grpcCChannel.ConnectAsync(deadline);
             }
-#endif
         }
 
         /// <inheritdoc />
@@ -179,12 +147,8 @@ namespace MagicOnion
                 Forget(WaitForDisconnectAndDisposeAsync(streamingHub, waitForDisconnect));
             }
         }
-
-#if MAGICONION_UNITASK_SUPPORT
+        
         private async UniTask WaitForDisconnectAndDisposeAsync(IStreamingHubMarker streamingHub, Task waitForDisconnect)
-#else
-        private async Task WaitForDisconnectAndDisposeAsync(IStreamingHubMarker streamingHub, Task waitForDisconnect)
-#endif
         {
             await waitForDisconnect;
             DisposeStreamingHubClient(streamingHub);
@@ -248,12 +212,8 @@ namespace MagicOnion
                 _onDispose(this);
             }
         }
-
-#if MAGICONION_UNITASK_SUPPORT
+        
         public async UniTask DisposeAsync()
-#else
-        public async Task DisposeAsync()
-#endif
         {
             if (_disposed) return;
 
@@ -268,12 +228,8 @@ namespace MagicOnion
                 _onDispose(this);
             }
         }
-
-#if MAGICONION_UNITASK_SUPPORT
+        
         private async UniTask ShutdownInternalAsync()
-#else
-        private async Task ShutdownInternalAsync()
-#endif
         {
             if (_shutdownRequested) return;
             _shutdownRequested = true;
@@ -285,11 +241,9 @@ namespace MagicOnion
         {
             if (_disposed) throw new ObjectDisposedException(nameof(GrpcChannelx));
         }
-
-#if MAGICONION_UNITASK_SUPPORT
+        
         private static void Forget(UniTask t)
             => t.Forget();
-#endif
 
         private static async void Forget(Task t)
         {
@@ -302,8 +256,7 @@ namespace MagicOnion
                 Debug.LogException(e);
             }
         }
-
-#if UNITY_EDITOR || MAGICONION_ENABLE_CHANNEL_DIAGNOSTICS
+        
         public class ChannelStats
         {
             private int _sentBytes = 0;
@@ -480,10 +433,8 @@ namespace MagicOnion
                 public Span<byte> GetSpan(int sizeHint = 0) => GetBufferWriter().GetSpan(sizeHint);
             }
         }
-#endif
     }
-
-#if UNITY_EDITOR || MAGICONION_ENABLE_CHANNEL_DIAGNOSTICS
+    
     public interface IGrpcChannelxDiagnosticsInfo
     {
         string StackTrace { get; }
@@ -494,5 +445,4 @@ namespace MagicOnion
 
         ChannelBase UnderlyingChannel { get; }
     }
-#endif
 }

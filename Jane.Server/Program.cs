@@ -4,21 +4,23 @@ using MagicOnion.Serialization.MemoryPack;
 using MagicOnion.Server;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
-MagicOnionSerializerProvider.Default = MemoryPackMagicOnionSerializerProvider.Instance;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    // WORKAROUND: Accept HTTP/2 only to allow insecure HTTP/2 connections during development.
-    options.ConfigureEndpointDefaults(endpointOptions =>
+    options.ListenAnyIP(5001, listenOptions =>
     {
-        endpointOptions.Protocols = HttpProtocols.Http2;
+        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
     });
 });
 
 builder.Services.AddGrpc();
-builder.Services.AddMagicOnion();
+
+MagicOnionSerializerProvider.Default = MemoryPackMagicOnionSerializerProvider.Instance;
+builder.Services.AddMagicOnion(options =>
+{
+    options.MessageSerializer = MemoryPackMagicOnionSerializerProvider.Instance;
+});
 
 var app = builder.Build();
 

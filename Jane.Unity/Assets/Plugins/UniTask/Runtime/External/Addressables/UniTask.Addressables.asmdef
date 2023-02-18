@@ -1,12 +1,13 @@
 {
     "name": "UniTask.Addressables",
+    "rootNamespace": "",
     "references": [
-        "UniTask",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
         "Unity.ResourceManager"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
@@ -17,7 +18,7 @@
             "expression": "",
             "define": "UNITASK_ADDRESSABLE_SUPPORT"
         },
-	{
+        {
             "name": "com.unity.addressables.cn",
             "expression": "",
             "define": "UNITASK_ADDRESSABLE_SUPPORT"

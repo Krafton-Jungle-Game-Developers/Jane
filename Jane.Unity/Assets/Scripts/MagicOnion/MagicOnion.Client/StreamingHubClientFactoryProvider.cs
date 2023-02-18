@@ -1,7 +1,6 @@
 using Grpc.Core;
 using System;
 using System.Linq;
-using MagicOnion.Client.DynamicClient;
 using MagicOnion.Serialization;
 
 namespace MagicOnion.Client
@@ -15,10 +14,10 @@ namespace MagicOnion.Client
         /// Gets or set the StreamingHubClient factory provider to use by default.
         /// </summary>
         public static IStreamingHubClientFactoryProvider Default { get; set; }
-#if ((ENABLE_IL2CPP && !UNITY_EDITOR) || NET_STANDARD_2_0)
-            = DynamicNotSupportedStreamingHubClientFactoryProvider.Instance;
-#else
+#if ((!ENABLE_IL2CPP || UNITY_EDITOR) && !NET_STANDARD_2_0)
             = DynamicStreamingHubClientFactoryProvider.Instance;
+#else
+            = DynamicNotSupportedStreamingHubClientFactoryProvider.Instance;
 #endif
     }
 
@@ -80,8 +79,8 @@ namespace MagicOnion.Client
             throw new InvalidOperationException($"Unable to find a client factory of type '{typeof(TStreamingHub)}'. If the application is running on IL2CPP or AOT, dynamic code generation is not supported. Please use the code generator (moc).");
         }
     }
-
-#if NON_UNITY || !NET_STANDARD_2_0
+    
+#if ((!ENABLE_IL2CPP || UNITY_EDITOR) && !NET_STANDARD_2_0)
     public class DynamicStreamingHubClientFactoryProvider : IStreamingHubClientFactoryProvider
     {
         public static IStreamingHubClientFactoryProvider Instance { get; } = new DynamicStreamingHubClientFactoryProvider();
@@ -98,7 +97,7 @@ namespace MagicOnion.Client
         {
             public static readonly StreamingHubClientFactoryDelegate<TStreamingHub, TReceiver> Factory
                 = (callInvoker, receiver, host, callOptions, serializerProvider, logger)
-                    => (TStreamingHub)Activator.CreateInstance(DynamicStreamingHubClientBuilder<TStreamingHub, TReceiver>.ClientType, callInvoker, host, callOptions, serializerProvider, logger);
+                    => (TStreamingHub)Activator.CreateInstance(DynamicClient.DynamicStreamingHubClientBuilder<TStreamingHub, TReceiver>.ClientType, callInvoker, host, callOptions, serializerProvider, logger);
         }
     }
 #endif
