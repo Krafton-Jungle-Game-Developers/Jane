@@ -44,6 +44,9 @@ namespace Jane.Unity
 
         private async UniTaskVoid Start()
         {
+            await InitializeClientAsync();
+            InitializeUi();
+
             await
             (
                 joinOrLeaveButton.OnClickAsAsyncEnumerable().ForEachAwaitAsync(async (_) => await JoinOrLeaveAsync(), _shutdownCts.Token),
@@ -54,9 +57,6 @@ namespace Jane.Unity
                 exceptionButton.OnClickAsAsyncEnumerable().ForEachAwaitAsync(async (_) => await GenerateExceptionAsync(), _shutdownCts.Token),
                 sendReportButton.OnClickAsAsyncEnumerable().ForEachAwaitAsync(async (_) => await SendReportAsync(), _shutdownCts.Token)
             );
-
-            await InitializeClientAsync();
-            InitializeUi();
         }
 
         private async UniTaskVoid OnDestroy()
