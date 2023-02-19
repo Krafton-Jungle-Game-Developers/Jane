@@ -127,15 +127,15 @@ public class PlayerCameraEffect : MonoBehaviour
             //NOTE: Don't use Delta Time (Jittering)
             if (nowFOV > baseFOV)
             {
-                nowFOV -= 0.1f * lastingDuration;
+                nowFOV -= 0.05f * lastingDuration;
             }
             if (nowCAIntensity > baseCAIntensity)
             {
-                nowCAIntensity -= 0.1f * lastingDuration;
+                nowCAIntensity -= 0.05f * lastingDuration;
             }
             if (nowMBIntensity > baseMBIntensity)
             {
-                nowMBIntensity -= 0.1f * lastingDuration;
+                nowMBIntensity -= 0.01f * lastingDuration;
             }
             if (nowBloomIntensity > baseBloomIntensity)
             {
