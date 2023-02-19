@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
+using MemoryPack;
 
 namespace System // wa-o, System Namespace!?
 {
@@ -18,6 +19,7 @@ namespace System // wa-o, System Namespace!?
 #if NET5_0_OR_GREATER
     [System.Text.Json.Serialization.JsonConverter(typeof(Cysharp.Serialization.Json.UlidJsonConverter))]
 #endif
+    [MemoryPackable]
     public partial struct Ulid : IEquatable<Ulid>, IComparable<Ulid>
     {
         // https://en.wikipedia.org/wiki/Base32

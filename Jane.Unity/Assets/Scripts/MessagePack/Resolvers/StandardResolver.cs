@@ -284,13 +284,8 @@ namespace MessagePack.Internal
         {
             BuiltinResolver.Instance, // Try Builtin
             AttributeFormatterResolver.Instance, // Try use [MessagePackFormatter]
-
-#if UNITY_2018_3_OR_NEWER
+            
             MessagePack.Unity.UnityResolver.Instance,
-#else
-            ImmutableCollection.ImmutableCollectionResolver.Instance,
-            CompositeResolver.Create(ExpandoObjectFormatter.Instance),
-#endif
 
 #if !ENABLE_IL2CPP
             DynamicGenericResolver.Instance, // Try Array, Tuple, Collection, Enum(Generic Fallback)
