@@ -1,34 +1,65 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 
 namespace SCPE
 {
-    public sealed class ColorizeRenderer : PostProcessEffectRenderer<Colorize>
+    public class ColorizeRenderer : ScriptableRendererFeature
     {
-        Shader shader;
-
-        public override void Init()
+        class ColorizeRenderPass : PostEffectRenderer<Colorize>
         {
-            shader = Shader.Find(ShaderNames.Colorize);
+            public ColorizeRenderPass(EffectBaseSettings settings)
+            {
+                this.settings = settings;
+                shaderName = ShaderNames.Colorize;
+                ProfilerTag = this.ToString();
+            }
+
+            public void Setup(ScriptableRenderer renderer)
+            {
+                this.cameraColorTarget = GetCameraTarget(renderer);
+                volumeSettings = VolumeManager.instance.stack.GetComponent<Colorize>();
+                
+                if(volumeSettings && volumeSettings.IsActive()) renderer.EnqueuePass(this);
+            }
+
+            public override void ConfigurePass(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
+            {
+                if (!volumeSettings) return;
+
+                base.ConfigurePass(cmd, cameraTextureDescriptor);
+            }
+
+            public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+            {
+                if (ShouldRender(renderingData) == false) return;
+
+                var cmd = CommandBufferPool.Get(ProfilerTag);
+
+                CopyTargets(cmd, renderingData);
+
+                if (volumeSettings.colorRamp.value) Material.SetTexture("_ColorRamp", volumeSettings.colorRamp.value);
+                Material.SetFloat("_Intensity", volumeSettings.intensity.value);
+                Material.SetFloat("_BlendMode", (int)volumeSettings.mode.value);
+
+                FinalBlit(this, context, cmd, renderingData, mainTexHandle.id, cameraColorTarget, Material, 0);
+            }
         }
 
-        public override void Release()
+        ColorizeRenderPass m_ScriptablePass;
+
+        [SerializeField]
+        public EffectBaseSettings settings = new EffectBaseSettings();
+        
+        public override void Create()
         {
-            base.Release();
+            m_ScriptablePass = new ColorizeRenderPass(settings);
+            m_ScriptablePass.renderPassEvent = settings.injectionPoint;
         }
 
-        public override void Render(PostProcessRenderContext context)
+        public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            var sheet = context.propertySheets.Get(shader);
-
-            if (settings.colorRamp.value) sheet.properties.SetTexture("_ColorRamp", settings.colorRamp);
-            sheet.properties.SetFloat("_Intensity", settings.intensity);
-            sheet.properties.SetFloat("_BlendMode", (int)settings.mode.value);
-
-            context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);
+            m_ScriptablePass.Setup(renderer);
         }
     }
 }

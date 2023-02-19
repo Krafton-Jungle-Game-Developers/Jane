@@ -1,36 +1,39 @@
 ﻿using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(DoubleVision))]
-    public sealed class DoubleVisionEditor : PostProcessEffectEditor<DoubleVision>
+    [VolumeComponentEditor(typeof(DoubleVision))]
+    sealed class DoubleVisionEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride mode;
-        SerializedParameterOverride intensity;
-        SerializedParameterOverride amount;
+        SerializedDataParameter mode;
+        SerializedDataParameter intensity;
+
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            mode = FindParameterOverride(x => x.mode);
-            intensity = FindParameterOverride(x => x.intensity);
+            base.OnEnable();
+
+            var o = new PropertyFetcher<DoubleVision>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<DoubleVisionRenderer>();
+
+            mode = Unpack(o.Find(x => x.mode));
+            intensity = Unpack(o.Find(x => x.intensity));
         }
-        
-        public override string GetDisplayTitle()
-        {
-            return base.GetDisplayTitle() + SCPE_GUI.ModeTitle(mode);
-        }
-        
+
+
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("double-vision");
 
-            SCPE_GUI.DisplaySetupWarning<DoubleVisionRenderer>();
+            SCPE_GUI.DisplaySetupWarning<DoubleVisionRenderer>(ref isSetup);
 
             PropertyField(intensity);
             SCPE_GUI.DisplayIntensityWarning(intensity);
             
             EditorGUILayout.Space();
+            
             PropertyField(mode);
         }
     }

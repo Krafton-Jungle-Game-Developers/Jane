@@ -1,53 +1,55 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine.Rendering.PostProcessing;
-using UnityEditor.Rendering.PostProcessing;
+﻿using UnityEditor;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(Blur))]
-    public class BlurEditor : PostProcessEffectEditor<Blur>
+    [VolumeComponentEditor(typeof(Blur))]
+    sealed class BlurEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride mode;
-        SerializedParameterOverride highQuality;
-        SerializedParameterOverride amount;
-        SerializedParameterOverride iterations;
-        SerializedParameterOverride downscaling;
+        Blur effect;
+
+        SerializedDataParameter mode;
+        SerializedDataParameter highQuality;
+        SerializedDataParameter amount;
+        SerializedDataParameter iterations;
+        SerializedDataParameter downscaling;
+
+        SerializedDataParameter distanceFade;
+        SerializedDataParameter startFadeDistance;
+        SerializedDataParameter endFadeDistance;
         
-        SerializedParameterOverride distanceFade;
-        SerializedParameterOverride startFadeDistance;
-        SerializedParameterOverride endFadeDistance;
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            mode = FindParameterOverride(x => x.mode);
-            highQuality = FindParameterOverride(x => x.highQuality);
-            amount = FindParameterOverride(x => x.amount);
-            iterations = FindParameterOverride(x => x.iterations);
-            downscaling = FindParameterOverride(x => x.downscaling);
-            
-            distanceFade = FindParameterOverride(x => x.distanceFade);
-            startFadeDistance = FindParameterOverride(x => x.startFadeDistance);
-            endFadeDistance = FindParameterOverride(x => x.endFadeDistance);
-        }
+            base.OnEnable();
 
-        public override string GetDisplayTitle()
-        {
-            return base.GetDisplayTitle() + " (" + mode.value.enumDisplayNames[mode.value.intValue] + ")";
+            effect = (Blur)target;
+            var o = new PropertyFetcher<Blur>(serializedObject);
+
+            isSetup = AutoSetup.ValidEffectSetup<BlurRenderer>();
+
+            mode = Unpack(o.Find(x => x.mode));
+            highQuality = Unpack(o.Find(x => x.highQuality));
+            amount = Unpack(o.Find(x => x.amount));
+            iterations = Unpack(o.Find(x => x.iterations));
+            downscaling = Unpack(o.Find(x => x.downscaling));
+            distanceFade = Unpack(o.Find(x => x.distanceFade));
+            startFadeDistance = Unpack(o.Find(x => x.startFadeDistance));
+            endFadeDistance = Unpack(o.Find(x => x.endFadeDistance));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("blur");
 
-            SCPE_GUI.DisplaySetupWarning<BlurRenderer>();
+            SCPE_GUI.DisplaySetupWarning<BlurRenderer>(ref isSetup);
 
             PropertyField(amount);
             SCPE_GUI.DisplayIntensityWarning(amount);
             
             EditorGUILayout.Space();
-            
+
             PropertyField(mode);
             PropertyField(highQuality);
             PropertyField(iterations);
@@ -62,8 +64,6 @@ namespace SCPE
                 PropertyField(startFadeDistance);
                 PropertyField(endFadeDistance);
             }
-
-
         }
     }
 }

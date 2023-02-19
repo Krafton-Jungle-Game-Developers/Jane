@@ -1,0 +1,11 @@
+1: Create a Shader Graph, following the layout of the "BasicPostProcessing_Example" graph. 
+
+You must always use the "Screen Position (Raw)" and "Get Source Image" node as a base. From here on, you can modify the screen image however you like!
+
+2: Create a new material that's using the shader you've just created
+
+3: Add a "CustomEffectRenderFeature" to the renderer, then assign the material in the "Material" slot
+
+The effect will now render to the screen.
+
+Note: You can add multiple instances of the "CustomEffectRenderFeature" pass, to stack effects.

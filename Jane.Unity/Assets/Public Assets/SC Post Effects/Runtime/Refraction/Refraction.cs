@@ -1,36 +1,24 @@
-﻿using System;
+﻿using UnityEngine.Rendering.Universal;
+using System;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
-using TextureParameter = UnityEngine.Rendering.PostProcessing.TextureParameter;
-using BoolParameter = UnityEngine.Rendering.PostProcessing.BoolParameter;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
-using IntParameter = UnityEngine.Rendering.PostProcessing.IntParameter;
-using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
+using UnityEngine.Rendering;
 
 namespace SCPE
 {
-    [PostProcess(typeof(RefractionRenderer), PostProcessEvent.AfterStack, "SC Post Effects/Screen/Refraction", true)]
-    [Serializable]
-    public sealed class Refraction : PostProcessEffectSettings
+    [Serializable, VolumeComponentMenu("SC Post Effects/Screen/Refraction")]
+    public sealed class Refraction : VolumeComponent, IPostProcessComponent
     {
         [Tooltip("Takes a DUDV map (normal map without a blue channel) to perturb the image")]
-        public TextureParameter refractionTex = new TextureParameter { value = null };
+        public TextureParameter refractionTex = new TextureParameter(null);
 
-        [DisplayName("Using normal map"), Tooltip("In the absense of a DUDV map, the supplied normal map can be converted in the shader")]
-        public BoolParameter convertNormalMap = new BoolParameter { value = false };
+        [Tooltip("In the absense of a DUDV map, the supplied normal map can be converted in the shader")]
+        public BoolParameter convertNormalMap = new BoolParameter(false);
 
         [Range(0f, 1f), Tooltip("Amount")]
-        public FloatParameter amount = new FloatParameter { value = 0f };
+        public ClampedFloatParameter amount = new ClampedFloatParameter(0f,0f,1f);
 
-        public override bool IsEnabledAndSupported(PostProcessRenderContext context)
-        {
-            if (enabled.value)
-            {
-                if (amount == 0 || refractionTex.value == null) { return false; }
-                return true;
-            }
+        public bool IsActive() => amount.value > 0f && refractionTex.value != null && this.active;
 
-            return false;
-        }
+        public bool IsTileCompatible() => false;
     }
 }

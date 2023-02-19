@@ -1,34 +1,41 @@
 ﻿using UnityEditor;
-using UnityEngine.Rendering;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(HueShift3D))]
-    public sealed class HueShift3DEditor : PostProcessEffectEditor<HueShift3D>
+    [VolumeComponentEditor(typeof(HueShift3D))]
+    sealed class HueShift3DEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride colorSource;
-        SerializedParameterOverride gradientTex;
-        SerializedParameterOverride intensity;
-        SerializedParameterOverride speed;
-        SerializedParameterOverride size;
-        SerializedParameterOverride geoInfluence;
+        
+        SerializedDataParameter colorSource;
+        SerializedDataParameter gradientTex;
+        SerializedDataParameter intensity;
+        SerializedDataParameter speed;
+        SerializedDataParameter size;
+        SerializedDataParameter geoInfluence;
+
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            colorSource = FindParameterOverride(x => x.colorSource);
-            gradientTex = FindParameterOverride(x => x.gradientTex);
-            intensity = FindParameterOverride(x => x.intensity);
-            speed = FindParameterOverride(x => x.speed);
-            size = FindParameterOverride(x => x.size);
-            geoInfluence = FindParameterOverride(x => x.geoInfluence);
+            base.OnEnable();
+
+            var o = new PropertyFetcher<HueShift3D>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<HueShift3DRenderer>();
+
+            colorSource = Unpack(o.Find(x => x.colorSource));
+            gradientTex = Unpack(o.Find(x => x.gradientTex));
+            intensity = Unpack(o.Find(x => x.intensity));
+            speed = Unpack(o.Find(x => x.speed));
+            size = Unpack(o.Find(x => x.size));
+            geoInfluence = Unpack(o.Find(x => x.geoInfluence));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("hue-shift-3d");
 
-            SCPE_GUI.DisplaySetupWarning<HueShift3DRenderer>();
+            SCPE_GUI.DisplaySetupWarning<HueShift3DRenderer>(ref isSetup);
 
             PropertyField(intensity);
             SCPE_GUI.DisplayIntensityWarning(intensity);
@@ -40,13 +47,8 @@ namespace SCPE
             PropertyField(speed);
             PropertyField(size);
 
-            EditorGUI.BeginDisabledGroup(HueShift3D.isOrtho || GraphicsSettings.renderPipelineAsset != null);
-            {
-                PropertyField(geoInfluence);
-                if (HueShift3D.isOrtho) EditorGUILayout.HelpBox("Not available for orthographic cameras", MessageType.None);
-                if (GraphicsSettings.renderPipelineAsset != null) EditorGUILayout.HelpBox("Not available when using a scriptable render pipeline", MessageType.None);
-            }
-            EditorGUI.EndDisabledGroup();
+            PropertyField(geoInfluence);
+            if (HueShift3D.isOrtho) EditorGUILayout.HelpBox("Not available for orthographic cameras", MessageType.None);
         }
     }
 }

@@ -1,51 +1,78 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
-
-using UnityEngine.Rendering.PostProcessing;
-using TextureParameter = UnityEngine.Rendering.PostProcessing.TextureParameter;
-using BoolParameter = UnityEngine.Rendering.PostProcessing.BoolParameter;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
-using IntParameter = UnityEngine.Rendering.PostProcessing.IntParameter;
-using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
-using Vector2Parameter = UnityEngine.Rendering.PostProcessing.Vector2Parameter;
-using MinAttribute = UnityEngine.Rendering.PostProcessing.MinAttribute;
+using UnityEngine;
 
 namespace SCPE
 {
-    public sealed class CloudShadowsRenderer : PostProcessEffectRenderer<CloudShadows>
+    public class CloudShadowsRenderer : ScriptableRendererFeature
     {
-        Shader shader;
-
-        public override void Init()
+        class CloudShadowsRenderPass : PostEffectRenderer<CloudShadows>
         {
-            shader = Shader.Find(ShaderNames.CloudShadows);
-        }
-
-        public override void Render(PostProcessRenderContext context)
-        {
-            PropertySheet sheet = context.propertySheets.Get(shader);
-            CommandBuffer cmd = context.command;
-
-            Camera cam = context.camera;
-
-            var noiseTexture = settings.texture.value == null ? RuntimeUtilities.whiteTexture : settings.texture.value;
-            sheet.properties.SetTexture("_NoiseTex", noiseTexture);
-
-            float cloudsSpeed = settings.speed * 0.1f;
-            sheet.properties.SetVector("_CloudParams", new Vector4(settings.size * 0.01f, settings.direction.value.x * cloudsSpeed, settings.direction.value.y * cloudsSpeed, settings.density));
-            sheet.properties.SetFloat("_ProjectionEnabled", settings.projectFromSun.value ? 1 : 0);
+            public CloudShadowsRenderPass(EffectBaseSettings settings)
+            {
+                this.settings = settings;
+                this.shaderName = ShaderNames.CloudShadows;
+                ProfilerTag = this.ToString();
+            }
             
-            if(RenderSettings.sun) cmd.SetGlobalMatrix("unity_WorldToLight", RenderSettings.sun.transform.localToWorldMatrix);
+            public void Setup(ScriptableRenderer renderer)
+            {
+                this.cameraColorTarget = GetCameraTarget(renderer);
+                volumeSettings = VolumeManager.instance.stack.GetComponent<CloudShadows>();
+                
+                if(volumeSettings && volumeSettings.IsActive()) renderer.EnqueuePass(this);
+            }
 
-            cmd.SetGlobalVector("_FadeParams", new Vector4(settings.startFadeDistance.value, settings.endFadeDistance.value, 0, 0));
+            public override void ConfigurePass(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
+            {
+                if (!volumeSettings) return;
 
-            context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);
+                base.ConfigurePass(cmd, cameraTextureDescriptor);
+            }
+
+            public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+            {
+                if (ShouldRender(renderingData) == false) return;
+
+                var cmd = CommandBufferPool.Get(ProfilerTag);
+
+                CopyTargets(cmd, renderingData);
+   
+                CloudShadows.isOrtho = renderingData.cameraData.camera.orthographic;
+
+                var noiseTexture = volumeSettings.texture.value == null ? Texture2D.whiteTexture : volumeSettings.texture.value;
+                Material.SetTexture("_NoiseTex", noiseTexture);
+
+                float cloudsSpeed = volumeSettings.speed.value * 0.1f;
+                Material.SetVector("_CloudParams", new Vector4(volumeSettings.size.value * 0.01f, volumeSettings.direction.value.x * cloudsSpeed, volumeSettings.direction.value.y * cloudsSpeed, volumeSettings.density.value));             
+
+                if (volumeSettings.projectFromSun.value) SetMainLightProjection(cmd, renderingData);
+                Material.SetFloat("_ProjectionEnabled", volumeSettings.projectFromSun.value ? 1 : 0);
+
+                cmd.SetGlobalVector("_FadeParams", new Vector4(volumeSettings.startFadeDistance.value, volumeSettings.endFadeDistance.value, 0, 0));
+
+                FinalBlit(this, context, cmd, renderingData, mainTexHandle.id, cameraColorTarget, Material, 0);
+            }
+
+            public override void Cleanup(CommandBuffer cmd)
+            {
+                base.Cleanup(cmd);
+            }
         }
 
-        public override DepthTextureMode GetCameraFlags()
+        CloudShadowsRenderPass m_ScriptablePass;
+        [SerializeField]
+        public EffectBaseSettings settings = new EffectBaseSettings();
+        
+        public override void Create()
         {
-            return DepthTextureMode.Depth;
+            m_ScriptablePass = new CloudShadowsRenderPass(settings);
+            m_ScriptablePass.renderPassEvent = settings.injectionPoint;
+        }
+
+        public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
+        {
+            m_ScriptablePass.Setup(renderer);
         }
     }
 }

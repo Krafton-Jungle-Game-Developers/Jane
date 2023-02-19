@@ -1,62 +1,67 @@
-﻿using System;
+﻿using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
-using TextureParameter = UnityEngine.Rendering.PostProcessing.TextureParameter;
-using BoolParameter = UnityEngine.Rendering.PostProcessing.BoolParameter;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
-using IntParameter = UnityEngine.Rendering.PostProcessing.IntParameter;
-using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
-using MinAttribute = UnityEngine.Rendering.PostProcessing.MinAttribute;
 
 namespace SCPE
 {
-    public sealed class DitheringRenderer : PostProcessEffectRenderer<Dithering>
+    public class DitheringRenderer : ScriptableRendererFeature
     {
-        Shader shader;
-
-        public override void Init()
+        class DitheringRenderPass : PostEffectRenderer<Dithering>
         {
-            shader = Shader.Find(ShaderNames.Dithering);
-        }
-
-        public override void Release()
-        {
-            base.Release();
-        }
-
-        public override void Render(PostProcessRenderContext context)
-        {
-            var sheet = context.propertySheets.Get(shader);
-
-            var lutTexture = settings.lut.value == null ? RuntimeUtilities.blackTexture : settings.lut.value;
-            sheet.properties.SetTexture("_LUT", lutTexture);
-            float luminanceThreshold = QualitySettings.activeColorSpace == ColorSpace.Gamma ? Mathf.LinearToGammaSpace(settings.luminanceThreshold.value) : settings.luminanceThreshold.value;
-
-            Vector4 ditherParams = new Vector4(0f, settings.tiling, luminanceThreshold, settings.intensity);
-            sheet.properties.SetVector("_Dithering_Coords", ditherParams);
-
-            #if DITHERING_WORLD_PROJECTION
-            if (settings.worldProjected.value)
+            public DitheringRenderPass(EffectBaseSettings settings)
             {
-                var p = GL.GetGPUProjectionMatrix(context.camera.projectionMatrix, false);
-                p[2, 3] = p[3, 2] = 0.0f;
-                p[3, 3] = 1.0f;
-                var clipToWorld = Matrix4x4.Inverse(p * context.camera.worldToCameraMatrix) * Matrix4x4.TRS(new Vector3(0, 0, -p[2, 2]), Quaternion.identity, Vector3.one);
-                sheet.properties.SetMatrix("clipToWorld", clipToWorld);
-                sheet.properties.SetMatrix("cameraToWorld", context.camera.cameraToWorldMatrix);
+                this.settings = settings;
+                shaderName = ShaderNames.Dithering;
+                ProfilerTag = this.ToString();
             }
 
-            context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, settings.worldProjected.value ? 1 : 0);
-            #else
-            context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);
-            #endif
+            public void Setup(ScriptableRenderer renderer)
+            {
+                this.cameraColorTarget = GetCameraTarget(renderer);
+                volumeSettings = VolumeManager.instance.stack.GetComponent<Dithering>();
+                
+                if(volumeSettings && volumeSettings.IsActive()) renderer.EnqueuePass(this);
+            }
+
+            public override void ConfigurePass(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
+            {
+                if (!volumeSettings) return;
+
+                base.ConfigurePass(cmd, cameraTextureDescriptor);
+            }
+
+            public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+            {
+                if (ShouldRender(renderingData) == false) return;
+
+                var cmd = CommandBufferPool.Get(ProfilerTag);
+
+                CopyTargets(cmd, renderingData);
+
+                var lutTexture = volumeSettings.lut.value == null ? Texture2D.blackTexture : volumeSettings.lut.value;
+                Material.SetTexture("_LUT", lutTexture);
+                float luminanceThreshold = QualitySettings.activeColorSpace == ColorSpace.Gamma ? Mathf.LinearToGammaSpace(volumeSettings.luminanceThreshold.value) : volumeSettings.luminanceThreshold.value;
+
+                Vector4 ditherParams = new Vector4(0f, volumeSettings.tiling.value, luminanceThreshold, volumeSettings.intensity.value);
+                Material.SetVector("_Dithering_Coords", ditherParams);
+
+                FinalBlit(this, context, cmd, renderingData, mainTexHandle.id, cameraColorTarget, Material, 0);
+            }
         }
+
+        DitheringRenderPass m_ScriptablePass;
+        [SerializeField]
+        public EffectBaseSettings settings = new EffectBaseSettings();
         
-#if DITHERING_WORLD_PROJECTION
-        public override DepthTextureMode GetCameraFlags()
+        public override void Create()
         {
-            return settings.worldProjected.value ? DepthTextureMode.DepthNormals : DepthTextureMode.None;
+            m_ScriptablePass = new DitheringRenderPass(settings);
+            m_ScriptablePass.renderPassEvent = settings.injectionPoint;
         }
-#endif
+
+        public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
+        {
+            m_ScriptablePass.Setup(renderer);
+        }
     }
 }

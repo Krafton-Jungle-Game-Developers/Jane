@@ -1,72 +1,75 @@
 ﻿using UnityEditor;
-using SCPE;
-using UnityEngine.Rendering.PostProcessing;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(Caustics))]
-    public class CausticsEditor : PostProcessEffectEditor<Caustics>
+    [VolumeComponentEditor(typeof(Caustics))]
+    sealed class CausticsEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride causticsTexture;
-        SerializedParameterOverride intensity;
-        SerializedParameterOverride luminanceThreshold;
-        SerializedParameterOverride projectFromSun;
+        SerializedDataParameter causticsTexture;
+        SerializedDataParameter intensity;
+        SerializedDataParameter luminanceThreshold;
+        SerializedDataParameter projectFromSun;
+
+        SerializedDataParameter minHeight;
+        SerializedDataParameter minHeightFalloff;
+        SerializedDataParameter maxHeight;
+        SerializedDataParameter maxHeightFalloff;
         
-        SerializedParameterOverride minHeight;
-        SerializedParameterOverride minHeightFalloff;
-        SerializedParameterOverride maxHeight;
-        SerializedParameterOverride maxHeightFalloff;
+        SerializedDataParameter size;
+        SerializedDataParameter speed;
         
-        SerializedParameterOverride size;
-        SerializedParameterOverride speed;
-        
-        SerializedParameterOverride distanceFade;
-        SerializedParameterOverride startFadeDistance;
-        SerializedParameterOverride endFadeDistance;
+        SerializedDataParameter distanceFade;
+        SerializedDataParameter startFadeDistance;
+        SerializedDataParameter endFadeDistance;
+
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            causticsTexture = FindParameterOverride(x => x.causticsTexture);
-            intensity = FindParameterOverride(x => x.intensity);
-            luminanceThreshold = FindParameterOverride(x => x.luminanceThreshold);
-            projectFromSun = FindParameterOverride(x => x.projectFromSun);
+            base.OnEnable();
+
+            var o = new PropertyFetcher<Caustics>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<CausticsRenderer>();
+
+            causticsTexture = Unpack(o.Find(x =>x.causticsTexture));
+            intensity = Unpack(o.Find(x =>x.intensity));
+            luminanceThreshold = Unpack(o.Find(x =>x.luminanceThreshold));
+            projectFromSun = Unpack(o.Find(x =>x.projectFromSun));
+
+            minHeight = Unpack(o.Find(x =>x.minHeight));
+            minHeightFalloff = Unpack(o.Find(x =>x.minHeightFalloff));
+            maxHeight = Unpack(o.Find(x =>x.maxHeight));
+            maxHeightFalloff = Unpack(o.Find(x =>x.maxHeightFalloff));
+
+            size = Unpack(o.Find(x => x.size));
+            speed = Unpack(o.Find(x =>x.speed));
             
-            minHeight = FindParameterOverride(x => x.minHeight);
-            minHeightFalloff = FindParameterOverride(x => x.minHeightFalloff);
-            maxHeight = FindParameterOverride(x => x.maxHeight);
-            maxHeightFalloff = FindParameterOverride(x => x.maxHeightFalloff);
-            
-            size = FindParameterOverride(x => x.size);
-            speed = FindParameterOverride(x => x.speed);
-            
-            distanceFade = FindParameterOverride(x => x.distanceFade);
-            startFadeDistance = FindParameterOverride(x => x.startFadeDistance);
-            endFadeDistance = FindParameterOverride(x => x.endFadeDistance);
+            distanceFade = Unpack(o.Find(x =>x.distanceFade));
+            startFadeDistance = Unpack(o.Find(x =>x.startFadeDistance));
+            endFadeDistance = Unpack(o.Find(x =>x.endFadeDistance));
         }
         
+
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("caustics");
 
-            SCPE_GUI.DisplayVRWarning(true);
+            SCPE_GUI.DisplaySetupWarning<CausticsRenderer>(ref isSetup, false);
 
-            SCPE_GUI.DisplaySetupWarning<CausticsRenderer>();
-            
             PropertyField(intensity);
             SCPE_GUI.DisplayIntensityWarning(intensity);
             
             EditorGUILayout.Space();
-            
+
             PropertyField(causticsTexture);
             PropertyField(luminanceThreshold);
             PropertyField(projectFromSun);
-            if(projectFromSun.value.boolValue) SCPE_GUI.DrawSunInfo();
-
+            if (projectFromSun.value.boolValue) SCPE_GUI.DrawSunInfo();
+            
             EditorGUILayout.Space();
             
             EditorGUILayout.LabelField("Height filter", EditorStyles.boldLabel);
-
             PropertyField(minHeight);
             PropertyField(minHeightFalloff);
             PropertyField(maxHeight);

@@ -1,30 +1,63 @@
-﻿using System;
+﻿using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 
 namespace SCPE
 {
-    public sealed class SharpenRenderer : PostProcessEffectRenderer<Sharpen>
+    public class SharpenRenderer : ScriptableRendererFeature
     {
-        Shader shader;
-
-        public override void Init()
+        class SharpenRenderPass : PostEffectRenderer<Sharpen>
         {
-            shader = Shader.Find(ShaderNames.Sharpen);
+            public SharpenRenderPass(EffectBaseSettings settings)
+            {
+                this.settings = settings;
+                shaderName = ShaderNames.Sharpen;
+                ProfilerTag = this.ToString();
+            }
+
+            public void Setup(ScriptableRenderer renderer)
+            {
+                this.cameraColorTarget = GetCameraTarget(renderer);
+                volumeSettings = VolumeManager.instance.stack.GetComponent<Sharpen>();
+                
+                if(volumeSettings && volumeSettings.IsActive()) renderer.EnqueuePass(this);
+            }
+
+            public override void ConfigurePass(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
+            {
+                if (!volumeSettings) return;
+
+                base.ConfigurePass(cmd, cameraTextureDescriptor);
+            }
+
+            public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+            {
+                if (ShouldRender(renderingData) == false) return;
+
+                var cmd = CommandBufferPool.Get(ProfilerTag);
+
+                CopyTargets(cmd, renderingData);
+
+                Material.SetVector(ShaderParameters.Params, new Vector3(volumeSettings.amount.value, volumeSettings.radius.value, volumeSettings.contrast.value));
+
+                FinalBlit(this, context, cmd, renderingData, mainTexHandle.id, cameraColorTarget, Material, (int)volumeSettings.mode.value);
+            }
         }
 
-        public override void Release()
+        SharpenRenderPass m_ScriptablePass;
+
+        [SerializeField]
+        public EffectBaseSettings settings = new EffectBaseSettings();
+
+        public override void Create()
         {
-            base.Release();
+            m_ScriptablePass = new SharpenRenderPass(settings);
+            m_ScriptablePass.renderPassEvent = settings.injectionPoint;
         }
 
-        public override void Render(PostProcessRenderContext context)
+        public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            var sheet = context.propertySheets.Get(shader);
-
-            sheet.properties.SetVector(ShaderParameters.Params, new Vector4(settings.amount.value, settings.radius.value, settings.contrast.value, 0f));
-
-            context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, (int)settings.mode.value);
+            m_ScriptablePass.Setup(renderer);
         }
     }
 }

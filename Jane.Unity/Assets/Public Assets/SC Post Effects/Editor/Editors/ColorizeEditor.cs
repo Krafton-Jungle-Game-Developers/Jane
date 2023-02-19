@@ -1,32 +1,34 @@
 ﻿using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(Colorize))]
-    public sealed class ColorizeEditor : PostProcessEffectEditor<Colorize>
+    [VolumeComponentEditor(typeof(Colorize))]
+    sealed class ColorizeEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride mode;
-        SerializedParameterOverride intensity;
-        SerializedParameterOverride colorRamp;
+        SerializedDataParameter mode;
+        SerializedDataParameter intensity;
+        SerializedDataParameter colorRamp;
+
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            mode = FindParameterOverride(x => x.mode);
-            intensity = FindParameterOverride(x => x.intensity);
-            colorRamp = FindParameterOverride(x => x.colorRamp);
-        }
+            base.OnEnable();
 
-        public override string GetDisplayTitle()
-        {
-            return "Colorize (" + mode.value.enumDisplayNames[mode.value.intValue] + ")";
+            var o = new PropertyFetcher<Colorize>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<ColorizeRenderer>();
+
+            mode = Unpack(o.Find(x => x.mode));
+            intensity = Unpack(o.Find(x => x.intensity));
+            colorRamp = Unpack(o.Find(x => x.colorRamp));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("colorize");
 
-            SCPE_GUI.DisplaySetupWarning<ColorizeRenderer>();
+            SCPE_GUI.DisplaySetupWarning<ColorizeRenderer>(ref isSetup);
 
             PropertyField(intensity);
             SCPE_GUI.DisplayIntensityWarning(intensity);

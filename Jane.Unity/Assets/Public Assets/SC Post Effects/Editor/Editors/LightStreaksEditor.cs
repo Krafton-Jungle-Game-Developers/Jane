@@ -1,38 +1,45 @@
 ﻿using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(LightStreaks))]
-    public class LightStreaksEditor : PostProcessEffectEditor<LightStreaks>
+    [VolumeComponentEditor(typeof(LightStreaks))]
+    sealed class LightStreaksEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride quality;
-        SerializedParameterOverride debug;
-        SerializedParameterOverride intensity;
-        SerializedParameterOverride luminanceThreshold;
-        SerializedParameterOverride direction;
-        SerializedParameterOverride blur;
-        SerializedParameterOverride iterations;
-        SerializedParameterOverride downscaling;
+        SerializedDataParameter quality;
+        SerializedDataParameter debug;
+        SerializedDataParameter intensity;
+        SerializedDataParameter luminanceThreshold;
+        SerializedDataParameter direction;
+        SerializedDataParameter blur;
+        SerializedDataParameter iterations;
+        SerializedDataParameter downscaling;
+
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            quality = FindParameterOverride(x => x.quality);
-            debug = FindParameterOverride(x => x.debug);
-            intensity = FindParameterOverride(x => x.intensity);
-            luminanceThreshold = FindParameterOverride(x => x.luminanceThreshold);
-            direction = FindParameterOverride(x => x.direction);
-            blur = FindParameterOverride(x => x.blur);
-            iterations = FindParameterOverride(x => x.iterations);
-            downscaling = FindParameterOverride(x => x.downscaling);
+            base.OnEnable();
+
+            var o = new PropertyFetcher<LightStreaks>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<LightStreaksRenderer>();
+
+            quality = Unpack(o.Find(x => x.quality));
+            debug = Unpack(o.Find(x => x.debug));
+            intensity = Unpack(o.Find(x => x.intensity));
+            luminanceThreshold = Unpack(o.Find(x => x.luminanceThreshold));
+            direction = Unpack(o.Find(x => x.direction));
+            blur = Unpack(o.Find(x => x.blur));
+            iterations = Unpack(o.Find(x => x.iterations));
+            downscaling = Unpack(o.Find(x => x.downscaling));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("light-streaks");
 
-            SCPE_GUI.DisplaySetupWarning<LightStreaksRenderer>();
-
+            SCPE_GUI.DisplaySetupWarning<LightStreaksRenderer>(ref isSetup);
+            
             PropertyField(intensity);
             SCPE_GUI.DisplayIntensityWarning(intensity);
             
@@ -45,7 +52,6 @@ namespace SCPE
             PropertyField(blur);
             PropertyField(iterations);
             PropertyField(downscaling);
-           
         }
     }
 }

@@ -1,36 +1,28 @@
-﻿using System;
+﻿using UnityEngine.Rendering.Universal;
+using System;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
+using UnityEngine.Rendering;
 
 namespace SCPE
 {
-    [PostProcess(typeof(PosterizeRenderer), PostProcessEvent.BeforeStack, "SC Post Effects/Retro/Posterize", true)]
-    [Serializable]
-    public sealed class Posterize : PostProcessEffectSettings
+    [Serializable, VolumeComponentMenu("SC Post Effects/Retro/Posterize")]
+    public sealed class Posterize : VolumeComponent, IPostProcessComponent
     {
-        public BoolParameter hsvMode = new BoolParameter { value = false };
+        public BoolParameter hsvMode = new BoolParameter(false);
 
         [Range(0, 256)]
-        public IntParameter levels = new IntParameter { value = 256 };
+        public ClampedIntParameter levels = new ClampedIntParameter(256, 0, 256);
 
         [Header("Levels")]
         [Range(0, 256)]
-        public IntParameter hue = new IntParameter { value = 256 };
+        public ClampedIntParameter hue = new ClampedIntParameter(256, 0, 256);
         [Range(0, 256)]
-        public IntParameter saturation = new IntParameter { value = 256 };
+        public ClampedIntParameter saturation = new ClampedIntParameter(256, 0, 256);
         [Range(0, 256)]
-        public IntParameter value = new IntParameter { value = 256 };
+        public ClampedIntParameter value = new ClampedIntParameter(256, 0, 256);
 
-        public override bool IsEnabledAndSupported(PostProcessRenderContext context)
-        {
-            if (enabled.value)
-            {
-                if (!hsvMode && levels == 256) { return false; }
-                return true;
-            }
+        public bool IsActive() => (!hsvMode.value && levels.value < 256) || (hsvMode.value && (hue.value < 256 || saturation.value < 256 || value.value < 256)) && this.active;
 
-            return false;
-        }
+        public bool IsTileCompatible() => false;
     }
 }

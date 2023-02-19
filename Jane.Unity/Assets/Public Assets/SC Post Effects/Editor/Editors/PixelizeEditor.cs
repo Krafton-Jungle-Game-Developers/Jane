@@ -1,23 +1,30 @@
 ﻿using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(Pixelize))]
-    public sealed class PixelizeEditor : PostProcessEffectEditor<Pixelize>
+    [VolumeComponentEditor(typeof(Pixelize))]
+    sealed class PixelizeEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride amount;
+        SerializedDataParameter amount;
+        
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            amount = FindParameterOverride(x => x.amount);
+            base.OnEnable();
+
+            var o = new PropertyFetcher<Pixelize>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<PixelizeRenderer>();
+
+            amount = Unpack(o.Find(x => x.amount));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("pixelize");
 
-            SCPE_GUI.DisplaySetupWarning<PixelizeRenderer>();
+            SCPE_GUI.DisplaySetupWarning<PixelizeRenderer>(ref isSetup);
 
             PropertyField(amount);
             SCPE_GUI.DisplayIntensityWarning(amount);

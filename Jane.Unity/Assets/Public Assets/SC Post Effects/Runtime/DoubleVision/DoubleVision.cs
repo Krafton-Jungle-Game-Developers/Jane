@@ -1,18 +1,12 @@
-﻿using System;
+﻿using UnityEngine.Rendering.Universal;
+using System;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
-using TextureParameter = UnityEngine.Rendering.PostProcessing.TextureParameter;
-using BoolParameter = UnityEngine.Rendering.PostProcessing.BoolParameter;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
-using IntParameter = UnityEngine.Rendering.PostProcessing.IntParameter;
-using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
-using MinAttribute = UnityEngine.Rendering.PostProcessing.MinAttribute;
+using UnityEngine.Rendering;
 
 namespace SCPE
 {
-    [PostProcess(typeof(DoubleVisionRenderer), PostProcessEvent.AfterStack, "SC Post Effects/Blurring/Double Vision", true)]
-    [Serializable]
-    public sealed class DoubleVision : PostProcessEffectSettings
+    [Serializable, VolumeComponentMenu("SC Post Effects/Blurring/Double Vision")]
+    public sealed class DoubleVision : VolumeComponent, IPostProcessComponent
     {
         public enum Mode
         {
@@ -21,23 +15,16 @@ namespace SCPE
         }
 
         [Serializable]
-        public sealed class DoubleVisionMode : ParameterOverride<Mode> { }
+        public sealed class DoubleVisionMode : VolumeParameter<Mode> { }
 
-        [DisplayName("Method"), Tooltip("Choose to apply the effect over the entire screen or just the edges")]
+        [Tooltip("Choose to apply the effect over the entire screen or just the edges")]
         public DoubleVisionMode mode = new DoubleVisionMode { value = Mode.FullScreen };
 
         [Range(0f, 1f), Tooltip("Intensity")]
-        public FloatParameter intensity = new FloatParameter { value = 0f };
+        public ClampedFloatParameter intensity = new ClampedFloatParameter(0f,0f,1f);
 
-        public override bool IsEnabledAndSupported(PostProcessRenderContext context)
-        {
-            if (enabled.value)
-            {
-                if (intensity == 0) { return false; }
-                return true;
-            }
+        public bool IsActive() => intensity.value > 0f && this.active;
 
-            return false;
-        }
+        public bool IsTileCompatible() => false;
     }
 }

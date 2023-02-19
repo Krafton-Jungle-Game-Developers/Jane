@@ -1,39 +1,40 @@
 ﻿using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(Overlay))]
-    public sealed class OverlayEditor : PostProcessEffectEditor<Overlay>
+    [VolumeComponentEditor(typeof(Overlay))]
+    sealed class OverlayEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride overlayTex;
-        SerializedParameterOverride autoAspect;
-        SerializedParameterOverride blendMode;
-        SerializedParameterOverride intensity;
-        SerializedParameterOverride luminanceThreshold;
-        SerializedParameterOverride tiling;
+        SerializedDataParameter overlayTex;
+        SerializedDataParameter autoAspect;
+        SerializedDataParameter blendMode;
+        SerializedDataParameter intensity;
+        SerializedDataParameter luminanceThreshold;
+        SerializedDataParameter tiling;
+
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            overlayTex = FindParameterOverride(x => x.overlayTex);
-            autoAspect = FindParameterOverride(x => x.autoAspect);
-            blendMode = FindParameterOverride(x => x.blendMode);
-            intensity = FindParameterOverride(x => x.intensity);
-            luminanceThreshold = FindParameterOverride(x => x.luminanceThreshold);
-            tiling = FindParameterOverride(x => x.tiling);
+            base.OnEnable();
+
+            var o = new PropertyFetcher<Overlay>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<OverlayRenderer>();
+
+            overlayTex = Unpack(o.Find(x => x.overlayTex));
+            autoAspect = Unpack(o.Find(x => x.autoAspect));
+            blendMode = Unpack(o.Find(x => x.blendMode));
+            intensity = Unpack(o.Find(x => x.intensity));
+            luminanceThreshold = Unpack(o.Find(x => x.luminanceThreshold));
+            tiling = Unpack(o.Find(x => x.tiling));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("overlay");
 
-            SCPE_GUI.DisplaySetupWarning<OverlayRenderer>();
-
-            PropertyField(intensity);
-            SCPE_GUI.DisplayIntensityWarning(intensity);
-            
-            EditorGUILayout.Space();
-            
+            SCPE_GUI.DisplaySetupWarning<OverlayRenderer>(ref isSetup);
             PropertyField(overlayTex);
 
             if (overlayTex.overrideState.boolValue && overlayTex.value.objectReferenceValue == null)
@@ -43,6 +44,11 @@ namespace SCPE
 
             EditorGUILayout.Space();
 
+            PropertyField(intensity);
+            SCPE_GUI.DisplayIntensityWarning(intensity);
+            
+            EditorGUILayout.Space();
+            
             PropertyField(luminanceThreshold);
             PropertyField(autoAspect);
             PropertyField(blendMode);

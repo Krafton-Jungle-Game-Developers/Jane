@@ -1,30 +1,19 @@
-﻿using System;
+﻿using UnityEngine.Rendering.Universal;
+using System;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
-using TextureParameter = UnityEngine.Rendering.PostProcessing.TextureParameter;
-using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
+using UnityEngine.Rendering;
 
 namespace SCPE
 {
-    [PostProcess(typeof(TransitionRenderer), PostProcessEvent.AfterStack, "SC Post Effects/Screen/Transition", true)]
-    [Serializable]
-    public sealed class Transition : PostProcessEffectSettings
+    [Serializable, VolumeComponentMenu("SC Post Effects/Screen/Transition")]
+    public sealed class Transition : VolumeComponent, IPostProcessComponent
     {
-        public TextureParameter gradientTex = new TextureParameter { value = null, defaultState = TextureParameterDefault.None };
+        public TextureParameter gradientTex = new TextureParameter(null);
 
-        [Range(0f, 1f), Tooltip("Progress")]
-        public FloatParameter progress = new FloatParameter { value = 0f };
+        public ClampedFloatParameter progress = new ClampedFloatParameter(0f, 0f, 1f);
 
-        public override bool IsEnabledAndSupported(PostProcessRenderContext context)
-        {
-            if (enabled.value)
-            {
-                if (progress == 0) { return false; }
-                return true;
-            }
+        public bool IsActive() => progress.value > 0f && this.active;
 
-            return false;
-        }
+        public bool IsTileCompatible() => false;
     }
 }

@@ -1,72 +1,77 @@
 ﻿using UnityEditor;
-using UnityEngine.Rendering;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(EdgeDetection))]
-    public sealed class EdgeDetectionEditor : PostProcessEffectEditor<EdgeDetection>
+    [VolumeComponentEditor(typeof(EdgeDetection))]
+    sealed class EdgeDetectionEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride mode;
+        EdgeDetection effect;
+        SerializedDataParameter mode;
+        SerializedDataParameter debug;
 
-        SerializedParameterOverride sensitivityDepth;
-        SerializedParameterOverride sensitivityNormals;
-        SerializedParameterOverride lumThreshold;
+        SerializedDataParameter sensitivityDepth;
+        SerializedDataParameter sensitivityNormals;
+        SerializedDataParameter lumThreshold;
 
-        SerializedParameterOverride edgeExp;
-        SerializedParameterOverride edgeSize;
+        SerializedDataParameter edgeExp;
+        SerializedDataParameter edgeSize;
 
-        SerializedParameterOverride edgesOnly;
-        SerializedParameterOverride edgeColor;
-        SerializedParameterOverride edgeOpacity;
+        SerializedDataParameter edgeColor;
+        SerializedDataParameter edgeOpacity;
 
-        SerializedParameterOverride invertFadeDistance;
-        SerializedParameterOverride distanceFade;
-        SerializedParameterOverride startFadeDistance;
-        SerializedParameterOverride endFadeDistance;
-        SerializedParameterOverride sobelThin;
-
-        private static bool showHelp;
-
-        public override string GetDisplayTitle()
-        {
-            return "Edge Detection (" + mode.value.enumDisplayNames[mode.value.intValue] + ")";
-        }
-
+        SerializedDataParameter invertFadeDistance;
+        SerializedDataParameter distanceFade;
+        SerializedDataParameter startFadeDistance;
+        SerializedDataParameter endFadeDistance;
+        SerializedDataParameter sobelThin;
+        
+        private bool isSetup;
         public override void OnEnable()
         {
-            mode = FindParameterOverride(x => x.mode);
-            sensitivityDepth = FindParameterOverride(x => x.sensitivityDepth);
-            sensitivityNormals = FindParameterOverride(x => x.sensitivityNormals);
-            lumThreshold = FindParameterOverride(x => x.lumThreshold);
-            edgeExp = FindParameterOverride(x => x.edgeExp);
-            edgeSize = FindParameterOverride(x => x.edgeSize);
-            edgesOnly = FindParameterOverride(x => x.debug);
-            edgeColor = FindParameterOverride(x => x.edgeColor);
-            edgeOpacity = FindParameterOverride(x => x.edgeOpacity);
-            invertFadeDistance = FindParameterOverride(x => x.invertFadeDistance);
-            distanceFade = FindParameterOverride(x => x.distanceFade);
-            startFadeDistance = FindParameterOverride(x => x.startFadeDistance);
-            endFadeDistance = FindParameterOverride(x => x.endFadeDistance);
-            sobelThin = FindParameterOverride(x => x.sobelThin);
+            base.OnEnable();
+
+            effect = (EdgeDetection)target;
+            var o = new PropertyFetcher<EdgeDetection>(serializedObject);
+
+            isSetup = AutoSetup.ValidEffectSetup<EdgeDetectionRenderer>();
+
+            mode = Unpack(o.Find(x => x.mode));
+            debug = Unpack(o.Find(x => x.debug));
+
+            sensitivityDepth = Unpack(o.Find(x => x.sensitivityDepth));
+            sensitivityNormals = Unpack(o.Find(x => x.sensitivityNormals));
+            lumThreshold = Unpack(o.Find(x => x.lumThreshold));
+
+            edgeExp = Unpack(o.Find(x => x.edgeExp));
+            edgeSize = Unpack(o.Find(x => x.edgeSize));
+
+            edgeColor = Unpack(o.Find(x => x.edgeColor));
+            edgeOpacity = Unpack(o.Find(x => x.edgeOpacity));
+
+            invertFadeDistance = Unpack(o.Find(x => x.invertFadeDistance));
+            distanceFade = Unpack(o.Find(x => x.distanceFade));
+            startFadeDistance = Unpack(o.Find(x => x.startFadeDistance));
+            endFadeDistance = Unpack(o.Find(x => x.endFadeDistance));
+            sobelThin = Unpack(o.Find(x => x.sobelThin));
+
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("edge-detection");
 
-            SCPE_GUI.DisplayVRWarning();
+            SCPE_GUI.DisplaySetupWarning<EdgeDetectionRenderer>(ref isSetup, false);
 
-            SCPE_GUI.DisplaySetupWarning<EdgeDetectionRenderer>();
+            SCPE_GUI.ShowDepthTextureWarning();
 
             PropertyField(edgeOpacity);
+
             SCPE_GUI.DisplayIntensityWarning(edgeOpacity);
             
             EditorGUILayout.Space();
-            
-            PropertyField(edgesOnly);
-            
-            EditorGUILayout.Space();
+
+            PropertyField(debug);
 
             PropertyField(mode);
 
@@ -128,7 +133,6 @@ namespace SCPE
             EditorGUILayout.LabelField("Edge settings");
             PropertyField(edgeColor);
             PropertyField(edgeSize);
-            
         }
     }
 }

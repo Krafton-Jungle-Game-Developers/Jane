@@ -1,30 +1,38 @@
-﻿using UnityEditor.Rendering.PostProcessing;
+﻿using UnityEditor;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(Posterize))]
-    public sealed class PosterizeEditor : PostProcessEffectEditor<Posterize>
+    [VolumeComponentEditor(typeof(Posterize))]
+    sealed class PosterizeEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride hsvMode;
-        SerializedParameterOverride levels;
-        SerializedParameterOverride hue;
-        SerializedParameterOverride saturation;
-        SerializedParameterOverride value;
+        SerializedDataParameter hsvMode;
+        SerializedDataParameter levels;
+        SerializedDataParameter hue;
+        SerializedDataParameter saturation;
+        SerializedDataParameter value;
+        
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            hsvMode = FindParameterOverride(x => x.hsvMode);
-            levels = FindParameterOverride(x => x.levels);
-            hue = FindParameterOverride(x => x.hue);
-            saturation = FindParameterOverride(x => x.saturation);
-            value = FindParameterOverride(x => x.value);
+            base.OnEnable();
+
+            var o = new PropertyFetcher<Posterize>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<PosterizeRenderer>();
+
+            hsvMode = Unpack(o.Find(x => x.hsvMode));
+            levels = Unpack(o.Find(x => x.levels));
+            hue = Unpack(o.Find(x => x.hue));
+            saturation = Unpack(o.Find(x => x.saturation));
+            value = Unpack(o.Find(x => x.value));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("posterize");
 
-            SCPE_GUI.DisplaySetupWarning<PosterizeRenderer>();
+            SCPE_GUI.DisplaySetupWarning<PosterizeRenderer>(ref isSetup);
 
             PropertyField(hsvMode);
             if (hsvMode.value.boolValue)

@@ -1,57 +1,66 @@
 ﻿using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
+using UnityEngine;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(LensFlares))]
-    public class LensFlaresEditor : PostProcessEffectEditor<LensFlares>
+    [VolumeComponentEditor(typeof(LensFlares))]
+    sealed class LensFlaresEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride intensity;
-        SerializedParameterOverride luminanceThreshold;
-        SerializedParameterOverride maskTex;
-        SerializedParameterOverride chromaticAbberation;
-        SerializedParameterOverride colorTex;
+        SerializedDataParameter intensity;
+        SerializedDataParameter luminanceThreshold;
+        SerializedDataParameter maskTex;
+        SerializedDataParameter chromaticAbberation;
+        SerializedDataParameter colorTex;
 
         //Flares
-        SerializedParameterOverride iterations;
-        SerializedParameterOverride distance;
-        SerializedParameterOverride falloff;
+        SerializedDataParameter iterations;
+        SerializedDataParameter distance;
+        SerializedDataParameter falloff;
 
         //Halo
-        SerializedParameterOverride haloSize;
-        SerializedParameterOverride haloWidth;
+        SerializedDataParameter haloSize;
+        SerializedDataParameter haloWidth;
 
         //Blur
-        SerializedParameterOverride blur;
-        SerializedParameterOverride passes;
+        SerializedDataParameter blur;
+        SerializedDataParameter passes;
+
+
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            intensity = FindParameterOverride(x => x.intensity);
-            luminanceThreshold = FindParameterOverride(x => x.luminanceThreshold);
-            maskTex = FindParameterOverride(x => x.maskTex);
-            chromaticAbberation = FindParameterOverride(x => x.chromaticAbberation);
-            colorTex = FindParameterOverride(x => x.colorTex);
+            base.OnEnable();
+
+            var o = new PropertyFetcher<LensFlares>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<LensFlaresRenderer>();
+
+            intensity = Unpack(o.Find(x => x.intensity));
+            luminanceThreshold = Unpack(o.Find(x => x.luminanceThreshold));
+            maskTex = Unpack(o.Find(x => x.maskTex));
+            chromaticAbberation = Unpack(o.Find(x => x.chromaticAbberation));
+            colorTex = Unpack(o.Find(x => x.colorTex));
 
             //Flares
-            iterations = FindParameterOverride(x => x.iterations);
-            distance = FindParameterOverride(x => x.distance);
-            falloff = FindParameterOverride(x => x.falloff);
+            iterations = Unpack(o.Find(x => x.iterations));
+            distance = Unpack(o.Find(x => x.distance));
+            falloff = Unpack(o.Find(x => x.falloff));
 
             //Halo
-            haloSize = FindParameterOverride(x => x.haloSize);
-            haloWidth = FindParameterOverride(x => x.haloWidth);
+            haloSize = Unpack(o.Find(x => x.haloSize));
+            haloWidth = Unpack(o.Find(x => x.haloWidth));
 
             //Blur
-            blur = FindParameterOverride(x => x.blur);
-            passes = FindParameterOverride(x => x.passes);
+            blur = Unpack(o.Find(x => x.blur));
+            passes = Unpack(o.Find(x => x.passes));
         }
-
+        
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("lens-flares");
 
-            SCPE_GUI.DisplaySetupWarning<LensFlaresRenderer>();
+            SCPE_GUI.DisplaySetupWarning<LensFlaresRenderer>(ref isSetup);
 
             SCPE_GUI.DisplayVRWarning();
 
@@ -73,7 +82,7 @@ namespace SCPE
 
             PropertyField(maskTex);
             PropertyField(chromaticAbberation);
-            PropertyField(colorTex);
+            PropertyField(colorTex, new GUIContent("Gradient"));
             if (colorTex.value.objectReferenceValue)
             {
                 SCPE.CheckGradientImportSettings(colorTex.value.objectReferenceValue);

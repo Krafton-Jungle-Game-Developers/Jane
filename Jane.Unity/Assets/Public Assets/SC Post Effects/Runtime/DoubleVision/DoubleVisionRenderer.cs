@@ -1,30 +1,63 @@
-﻿using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+﻿using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
+using UnityEngine;
 
 namespace SCPE
 {
-    public sealed class DoubleVisionRenderer : PostProcessEffectRenderer<DoubleVision>
+    public class DoubleVisionRenderer : ScriptableRendererFeature
     {
-        Shader DoubleVisionShader;
-
-        public override void Init()
+        class DoubleVisionRenderPass : PostEffectRenderer<DoubleVision>
         {
-            DoubleVisionShader = Shader.Find(ShaderNames.DoubleVision);
+            public DoubleVisionRenderPass(EffectBaseSettings settings)
+            {
+                this.settings = settings;
+                shaderName = ShaderNames.DoubleVision;
+                ProfilerTag = this.ToString();
+            }
+
+            public void Setup(ScriptableRenderer renderer)
+            {
+                this.cameraColorTarget = GetCameraTarget(renderer);
+                volumeSettings = VolumeManager.instance.stack.GetComponent<DoubleVision>();
+                
+                if(volumeSettings && volumeSettings.IsActive()) renderer.EnqueuePass(this);
+            }
+
+            public override void ConfigurePass(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
+            {
+                if (!volumeSettings) return;
+
+                base.ConfigurePass(cmd, cameraTextureDescriptor);
+            }
+
+            public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+            {
+                if (ShouldRender(renderingData) == false) return;
+
+                var cmd = CommandBufferPool.Get(ProfilerTag);
+
+                CopyTargets(cmd, renderingData);
+
+                Material.SetFloat("_Amount", volumeSettings.intensity.value / 10);
+
+                FinalBlit(this, context, cmd, renderingData, mainTexHandle.id, cameraColorTarget, Material, (int)volumeSettings.mode.value);
+            }
         }
 
-        public override void Release()
+        DoubleVisionRenderPass m_ScriptablePass;
+
+        [SerializeField]
+        public EffectBaseSettings settings = new EffectBaseSettings(false);
+        
+        public override void Create()
         {
-            base.Release();
+            m_ScriptablePass = new DoubleVisionRenderPass(settings);
+            m_ScriptablePass.renderPassEvent = settings.injectionPoint;
         }
 
-        public override void Render(PostProcessRenderContext context)
+        public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-
-            var sheet = context.propertySheets.Get(DoubleVisionShader);
-
-            sheet.properties.SetFloat("_Amount", settings.intensity.value / 10);
-
-            context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, (int)settings.mode.value);
+            m_ScriptablePass.Setup(renderer);
         }
     }
 }

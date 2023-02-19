@@ -1,40 +1,43 @@
-﻿using UnityEngine;
-using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+﻿using UnityEditor;
+using UnityEditor.Rendering;
+using UnityEngine;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(Kuwahara))]
-    public class KuwaharaEditor : PostProcessEffectEditor<Kuwahara>
+    [VolumeComponentEditor(typeof(Kuwahara))]
+    sealed class KuwaharaEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride mode;
-        SerializedParameterOverride radius;
+        SerializedDataParameter mode;
+        SerializedDataParameter radius;
 
-        SerializedParameterOverride startFadeDistance;
-        SerializedParameterOverride endFadeDistance;
+        SerializedDataParameter startFadeDistance;
+        SerializedDataParameter endFadeDistance;
 
         private bool isOrthographic = false;
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            mode = FindParameterOverride(x => x.mode);
-            radius = FindParameterOverride(x => x.radius);
-            startFadeDistance = FindParameterOverride(x => x.startFadeDistance);
-            endFadeDistance = FindParameterOverride(x => x.endFadeDistance);
+            base.OnEnable();
+
+            var o = new PropertyFetcher<Kuwahara>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<KuwaharaRenderer>();
+
+            mode = Unpack(o.Find(x => x.mode));
+            radius = Unpack(o.Find(x => x.radius));
+            startFadeDistance = Unpack(o.Find(x => x.startFadeDistance));
+            endFadeDistance = Unpack(o.Find(x => x.endFadeDistance));
 
             if (Camera.current) isOrthographic = Camera.current.orthographic;
-        }
-
-        public override string GetDisplayTitle()
-        {
-            return "Kuwahara" + ((mode.value.intValue == 0) ? "" : " (Depth Fade)");
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("kuwahara");
 
-            SCPE_GUI.DisplaySetupWarning<KuwaharaRenderer>();
+            SCPE_GUI.DisplaySetupWarning<KuwaharaRenderer>(ref isSetup);
+
+            SCPE_GUI.ShowDepthTextureWarning(mode.value.intValue == 1);
 
             EditorGUI.BeginDisabledGroup(isOrthographic);
             
@@ -48,14 +51,14 @@ namespace SCPE
 
             if (isOrthographic)
             {
+                mode.value.intValue = 0;
                 EditorGUILayout.HelpBox("Depth fade is disabled for orthographic cameras", MessageType.Info);
             }
-            
             if (mode.value.intValue == (int)Kuwahara.KuwaharaMode.DepthFade)
             {
                 EditorGUILayout.Space();
                 EditorGUILayout.LabelField("Distance Fading");
-                
+
                 PropertyField(startFadeDistance);
                 PropertyField(endFadeDistance);
             }

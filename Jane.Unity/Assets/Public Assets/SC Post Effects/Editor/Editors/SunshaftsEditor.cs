@@ -1,75 +1,92 @@
-﻿using UnityEngine;
-using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+﻿using UnityEditor;
+using UnityEditor.Rendering;
+using UnityEngine;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(Sunshafts))]
-    public sealed class SunshaftsEditor : PostProcessEffectEditor<Sunshafts>
+    [VolumeComponentEditor(typeof(Sunshafts))]
+    sealed class SunshaftsEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride useCasterColor;
-        SerializedParameterOverride useCasterIntensity;
+        Sunshafts effect;
 
-        SerializedParameterOverride resolution;
-        SerializedParameterOverride sunThreshold;
-        SerializedParameterOverride blendMode;
-        SerializedParameterOverride sunColor;
-        SerializedParameterOverride sunShaftIntensity;
-        SerializedParameterOverride falloff;
+        SerializedDataParameter useCasterColor;
+        SerializedDataParameter useCasterIntensity;
 
-        SerializedParameterOverride length;
-        SerializedParameterOverride highQuality;
+        SerializedDataParameter resolution;
+        SerializedDataParameter sunThreshold;
+        SerializedDataParameter blendMode;
+        SerializedDataParameter sunColor;
+        SerializedDataParameter sunShaftIntensity;
+        SerializedDataParameter falloff;
+
+        SerializedDataParameter length;
+        SerializedDataParameter highQuality;
+
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            useCasterColor = FindParameterOverride(x => x.useCasterColor);
-            useCasterIntensity = FindParameterOverride(x => x.useCasterIntensity);
+            base.OnEnable();
 
-            resolution = FindParameterOverride(x => x.resolution);
-            sunThreshold = FindParameterOverride(x => x.sunThreshold);
-            blendMode = FindParameterOverride(x => x.blendMode);
-            sunColor = FindParameterOverride(x => x.sunColor);
-            sunShaftIntensity = FindParameterOverride(x => x.sunShaftIntensity);
-            falloff = FindParameterOverride(x => x.falloff);
-            length = FindParameterOverride(x => x.length);
-            highQuality = FindParameterOverride(x => x.highQuality);
+            effect = (Sunshafts)target;
+            var o = new PropertyFetcher<Sunshafts>(serializedObject);
+
+            isSetup = AutoSetup.ValidEffectSetup<SunshaftsRenderer>();
+
+            useCasterColor = Unpack(o.Find(x => x.useCasterColor));
+            useCasterIntensity = Unpack(o.Find(x => x.useCasterIntensity));
+
+            resolution = Unpack(o.Find(x => x.resolution));
+            sunThreshold = Unpack(o.Find(x => x.sunThreshold));
+            blendMode = Unpack(o.Find(x => x.blendMode));
+            sunColor = Unpack(o.Find(x => x.sunColor));
+            sunShaftIntensity = Unpack(o.Find(x => x.sunShaftIntensity));
+            falloff = Unpack(o.Find(x => x.falloff));
+
+            length = Unpack(o.Find(x => x.length));
+            highQuality = Unpack(o.Find(x => x.highQuality));
         }
 
         public override void OnInspectorGUI()
         {
+            SCPE_GUI.DisplayDocumentationButton("edge-detection");
+
             SCPE_GUI.DisplayDocumentationButton("sunshafts");
 
             SCPE_GUI.DisplayVRWarning();
 
-            SCPE_GUI.DisplaySetupWarning<SunshaftsRenderer>();
+            SCPE_GUI.ShowDepthTextureWarning();
             
             SCPE_GUI.DrawSunInfo();
+
+            SCPE_GUI.DisplaySetupWarning<SunshaftsRenderer>(ref isSetup, false);
 
             if (useCasterIntensity.value.boolValue == false)
             {
                 PropertyField(sunShaftIntensity);
                 SCPE_GUI.DisplayIntensityWarning(sunShaftIntensity);
             }
-                
-            EditorUtilities.DrawHeaderLabel("Quality");
+            
+            EditorGUILayout.LabelField("Quality");
             PropertyField(resolution);
             PropertyField(highQuality, new GUIContent("High quality"));
 
             EditorGUILayout.Space();
 
-            EditorUtilities.DrawHeaderLabel("Use values from caster");
+            EditorGUILayout.LabelField("Use values from caster");
             PropertyField(useCasterColor, new GUIContent("Color"));
             if (useCasterColor.value.boolValue == false) PropertyField(sunColor);
             PropertyField(useCasterIntensity, new GUIContent("Intensity"));
 
             EditorGUILayout.Space();
 
-            EditorUtilities.DrawHeaderLabel("Sunshafts");
+            EditorGUILayout.LabelField("Sunshafts");
             PropertyField(blendMode);
+            if (blendMode.value.intValue == 1) EditorGUILayout.HelpBox("Screen blend mode currrently not supported in URP", MessageType.Warning);
             PropertyField(sunThreshold);
             PropertyField(falloff);
             PropertyField(length);
-
+            
         }
 
     }

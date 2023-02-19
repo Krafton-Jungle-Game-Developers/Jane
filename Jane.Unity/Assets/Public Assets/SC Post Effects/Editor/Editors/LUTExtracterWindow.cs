@@ -23,7 +23,7 @@ namespace SCPE
         {
             EditorWindow editorWindow = GetWindow<LUTExtracterWindow>(false, " LUT Extracter", true);
 
-            editorWindow.titleContent.image = EditorGUIUtility.IconContent("LookDevObjRotation").image;
+            editorWindow.titleContent.image = EditorGUIUtility.IconContent("d_eyeDropper.Large").image;
             editorWindow.autoRepaintOnSceneChange = true;
 
             //Open cursor position
@@ -88,7 +88,7 @@ namespace SCPE
                     /*
                     else
                     {
-                        EditorGUILayout.TextField(LUTExtracter.InputPath, SCPE.SCPE_GUI.PathField);
+                        EditorGUILayout.TextField(LUTExtracter.InputPath, SCPE_GUI.PathField);
                         if (GUILayout.Button("...", GUILayout.Width(50f)))
                         {
                             LUTExtracter.InputPath = EditorUtility.OpenFilePanel("Screenshot destination folder", LUTExtracter.InputPath, "");
@@ -126,7 +126,7 @@ namespace SCPE
                 GUILayout.FlexibleSpace();
                 using (new EditorGUI.DisabledGroupScope(inputTexture == null || OutputLUT == null || LUTExtracter.AutoExtract))
                 {
-                    if (GUILayout.Button(new GUIContent(" Extract", EditorGUIUtility.IconContent("LookDevObjRotation").image), GUILayout.Width(150f)))
+                    if (GUILayout.Button(new GUIContent(" Extract"), GUILayout.Width(150f)))
                     {
                         LUTExtracter.ExtractLUT(inputTexture, OutputLUT);
                     }

@@ -1,32 +1,32 @@
 ﻿using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(TubeDistortion))]
-    public sealed class TubeDistortionEditor : PostProcessEffectEditor<TubeDistortion>
+    [VolumeComponentEditor(typeof(TubeDistortion))]
+    sealed class TubeDistortionEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride mode;
-        SerializedParameterOverride amount;
-        SerializedParameterOverride luminanceThreshold;
-        SerializedParameterOverride lut;
+        SerializedDataParameter mode;
+        SerializedDataParameter amount;
+
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            mode = FindParameterOverride(x => x.mode);
-            amount = FindParameterOverride(x => x.amount);
-        }
+            base.OnEnable();
 
-        public override string GetDisplayTitle()
-        {
-            return base.GetDisplayTitle() + SCPE_GUI.ModeTitle(mode);
+            var o = new PropertyFetcher<TubeDistortion>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<TubeDistortionRenderer>();
+
+            mode = Unpack(o.Find(x => x.mode));
+            amount = Unpack(o.Find(x => x.amount));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("tube-distortion");
 
-            SCPE_GUI.DisplaySetupWarning<TubeDistortionRenderer>();
+            SCPE_GUI.DisplaySetupWarning<TubeDistortionRenderer>(ref isSetup);
 
             PropertyField(amount);
             SCPE_GUI.DisplayIntensityWarning(amount);

@@ -1,34 +1,21 @@
-﻿using System;
+﻿using UnityEngine.Rendering.Universal;
+using System;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
-using TextureParameter = UnityEngine.Rendering.PostProcessing.TextureParameter;
-using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
+using UnityEngine.Rendering;
 
 namespace SCPE
 {
-    [PostProcess(typeof(DangerRenderer), PostProcessEvent.AfterStack, "SC Post Effects/Screen/Danger", true)]
-    [Serializable]
-    public sealed class Danger : PostProcessEffectSettings
+    [Serializable, VolumeComponentMenu("SC Post Effects/Screen/Danger")]
+    public sealed class Danger : VolumeComponent, IPostProcessComponent
     {
-        public TextureParameter overlayTex = new TextureParameter { value = null, defaultState = TextureParameterDefault.None };
-        public ColorParameter color = new ColorParameter { value = new Color(0.66f, 0f, 0f) };
+        public TextureParameter overlayTex = new TextureParameter(null);
+        public ColorParameter color = new ColorParameter(new Color(0.66f, 0f, 0f));
 
-        [Range(0f, 1f), DisplayName("Opacity")]
-        public FloatParameter intensity = new FloatParameter { value = 1f };
+        public ClampedFloatParameter intensity = new ClampedFloatParameter(0f, 0f, 1f);
+        public ClampedFloatParameter size = new ClampedFloatParameter(0f, 0f, 1f);
 
-        [Range(0f, 1f), Tooltip("Size")]
-        public FloatParameter size = new FloatParameter { value = 0f };
+        public bool IsActive() => size.value > 0f || intensity.value > 0 && this.active;
 
-        public override bool IsEnabledAndSupported(PostProcessRenderContext context)
-        {
-            if (enabled.value)
-            {
-                if (size == 0 || intensity == 0) { return false; }
-                return true;
-            }
-
-            return false;
-        }
+        public bool IsTileCompatible() => false;
     }
 }

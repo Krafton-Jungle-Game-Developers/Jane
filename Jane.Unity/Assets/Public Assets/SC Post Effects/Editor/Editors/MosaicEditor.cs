@@ -1,30 +1,32 @@
 ﻿using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(Mosaic))]
-    public sealed class MosaicEditor : PostProcessEffectEditor<Mosaic>
+    [VolumeComponentEditor(typeof(Mosaic))]
+    sealed class MosaicEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride mode;
-        SerializedParameterOverride size;
+        SerializedDataParameter mode;
+        SerializedDataParameter size;
+
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            mode = FindParameterOverride(x => x.mode);
-            size = FindParameterOverride(x => x.size);
-        }
+            base.OnEnable();
 
-        public override string GetDisplayTitle()
-        {
-            return base.GetDisplayTitle() + SCPE_GUI.ModeTitle(mode);
+            var o = new PropertyFetcher<Mosaic>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<MosaicRenderer>();
+
+            mode = Unpack(o.Find(x => x.mode));
+            size = Unpack(o.Find(x => x.size));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("mosaic");
 
-            SCPE_GUI.DisplaySetupWarning<MosaicRenderer>();
+            SCPE_GUI.DisplaySetupWarning<MosaicRenderer>(ref isSetup);
 
             PropertyField(size);
             SCPE_GUI.DisplayIntensityWarning(size);

@@ -1,84 +1,121 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.PostProcessing;
+using UnityEngine;
 
 namespace SCPE
 {
-    public sealed class AmbientOcclusion2DRenderer : PostProcessEffectRenderer<AmbientOcclusion2D>
+    public class AmbientOcclusion2DRenderer : ScriptableRendererFeature
     {
-        Shader shader;
-        private int aoTexID;
-        private int screenCopyID;
-        RenderTexture aoRT;
-
-        public override void Init()
+        class AmbientOcclusion2DRenderPass : PostEffectRenderer<AmbientOcclusion2D>
         {
-            shader = Shader.Find(ShaderNames.AO2D);
-            aoTexID = Shader.PropertyToID("_AO");
-        }
-
-        public override void Release()
-        {
-            base.Release();
-        }
-
-        enum Pass
-        {
-            LuminanceDiff,
-            Blur,
-            Blend,
-            Debug
-        }
-
-
-        public override void Render(PostProcessRenderContext context)
-        {
-            var sheet = context.propertySheets.Get(shader);
-            CommandBuffer cmd = context.command;
-
-            sheet.properties.SetFloat("_SampleDistance", settings.distance);
-            float luminanceThreshold = QualitySettings.activeColorSpace == ColorSpace.Gamma ? Mathf.GammaToLinearSpace(settings.luminanceThreshold.value) : settings.luminanceThreshold.value;
-
-            sheet.properties.SetFloat("_Threshold", luminanceThreshold);
-            sheet.properties.SetFloat("_Blur", settings.blurAmount);
-            sheet.properties.SetFloat("_Intensity", settings.intensity);
-
-            // Create RT for storing edge detection in
-            context.command.GetTemporaryRT(aoTexID, context.width, context.height, 0, FilterMode.Bilinear, context.sourceFormat);
-
-            //Luminance difference check on RT
-            context.command.BlitFullscreenTriangle(context.source, aoTexID, sheet, (int)Pass.LuminanceDiff);
-
+            private int aoTexID = Shader.PropertyToID("_AO");
             // get two smaller RTs
             int blurredID = Shader.PropertyToID("_Temp1");
             int blurredID2 = Shader.PropertyToID("_Temp2");
-            cmd.GetTemporaryRT(blurredID, context.screenWidth / settings.downscaling, context.screenHeight / settings.downscaling, 0, FilterMode.Bilinear);
-            cmd.GetTemporaryRT(blurredID2, context.screenWidth / settings.downscaling, context.screenHeight / settings.downscaling, 0, FilterMode.Bilinear);
-
-            //Pass AO into blur target texture
-            cmd.Blit(aoTexID, blurredID);
-
-            for (int i = 0; i < settings.iterations; i++)
+            
+            public AmbientOcclusion2DRenderPass(EffectBaseSettings settings)
             {
-                // horizontal blur
-                cmd.SetGlobalVector("_BlurOffsets", new Vector4((settings.blurAmount) / context.screenWidth, 0, 0, 0));
-                context.command.BlitFullscreenTriangle(blurredID, blurredID2, sheet, (int)Pass.Blur);
-
-                // vertical blur
-                cmd.SetGlobalVector("_BlurOffsets", new Vector4(0, (settings.blurAmount) / context.screenHeight, 0, 0));
-                context.command.BlitFullscreenTriangle(blurredID2, blurredID, sheet, (int)Pass.Blur);
+                this.settings = settings;
+                shaderName = ShaderNames.AO2D;
+                ProfilerTag = this.ToString();
+            }
+            
+            enum Pass
+            {
+                LuminanceDiff,
+                Blur,
+                Blend,
+                Debug
             }
 
-            context.command.SetGlobalTexture("_AO", blurredID);
+            public void Setup(ScriptableRenderer renderer)
+            {
+                this.cameraColorTarget = GetCameraTarget(renderer);
+                volumeSettings = VolumeManager.instance.stack.GetComponent<AmbientOcclusion2D>();
+                
+                if(volumeSettings && volumeSettings.IsActive()) renderer.EnqueuePass(this);
+            }
 
-            //Blend AO tex with image
-            context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, (settings.aoOnly) ? (int)Pass.Debug : (int)Pass.Blend);
+            public override void ConfigurePass(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
+            {
+                if (!volumeSettings) return;
 
-            // release
-            context.command.ReleaseTemporaryRT(blurredID);
-            context.command.ReleaseTemporaryRT(blurredID2);
-            context.command.ReleaseTemporaryRT(aoTexID);
+                base.ConfigurePass(cmd, cameraTextureDescriptor);
+
+                cmd.GetTemporaryRT(aoTexID, cameraTextureDescriptor.width, cameraTextureDescriptor.height, 0, FilterMode.Point, RenderTextureFormat.R8);
+
+                RenderTextureDescriptor rtDsc = cameraTextureDescriptor;
+                rtDsc.width /= volumeSettings.downscaling.value;
+                rtDsc.height /= volumeSettings.downscaling.value;
+                
+                cmd.GetTemporaryRT(blurredID, rtDsc.width, rtDsc.height, 0, FilterMode.Bilinear, RenderTextureFormat.R8);
+                cmd.GetTemporaryRT(blurredID2, rtDsc.width, rtDsc.height, 0, FilterMode.Bilinear, RenderTextureFormat.R8);
+            }
+
+            public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+            {
+                if (ShouldRender(renderingData) == false) return;
+
+                var cmd = CommandBufferPool.Get(ProfilerTag);
+
+                CopyTargets(cmd, renderingData);
+                
+                cmd.SetGlobalFloat("_SampleDistance", volumeSettings.distance.value);
+                float luminanceThreshold = QualitySettings.activeColorSpace == ColorSpace.Gamma ? Mathf.GammaToLinearSpace(volumeSettings.luminanceThreshold.value) : volumeSettings.luminanceThreshold.value;
+
+                cmd.SetGlobalFloat("_Threshold", luminanceThreshold);
+                cmd.SetGlobalFloat("_Blur", volumeSettings.blurAmount.value);
+                cmd.SetGlobalFloat("_Intensity", volumeSettings.intensity.value);
+                
+                Blit(cmd, cameraColorTarget, aoTexID, base.Material, (int)Pass.LuminanceDiff);
+
+                //Pass AO into blur target texture
+                Blit(cmd,aoTexID, blurredID);
+                
+                for (int i = 0; i < volumeSettings.iterations.value; i++)
+                {
+                    // horizontal blur
+                    cmd.SetGlobalVector("_BlurOffsets", new Vector4((volumeSettings.blurAmount.value) / renderingData.cameraData.camera.scaledPixelWidth, 0, 0, 0));
+                    Blit(this, cmd, blurredID, blurredID2, Material, (int)Pass.Blur);
+
+                    // vertical blur
+                    cmd.SetGlobalVector("_BlurOffsets", new Vector4(0, (volumeSettings.blurAmount.value) / renderingData.cameraData.camera.scaledPixelHeight, 0, 0));
+                    Blit(this, cmd, blurredID2, blurredID, Material, (int)Pass.Blur);
+                }
+                
+                cmd.SetGlobalTexture(aoTexID, blurredID);
+
+                FinalBlit(this, context, cmd, renderingData, mainTexHandle.id, cameraColorTarget, Material, (volumeSettings.aoOnly.value) ? (int)Pass.Debug : (int)Pass.Blend);
+            }
+
+            public override void Cleanup(CommandBuffer cmd)
+            {
+                base.Cleanup(cmd);
+                
+                cmd.ReleaseTemporaryRT(blurredID);
+                cmd.ReleaseTemporaryRT(blurredID2);
+                cmd.ReleaseTemporaryRT(aoTexID);
+            }
+        }
+
+        AmbientOcclusion2DRenderPass m_ScriptablePass;
+        [SerializeField]
+        public EffectBaseSettings settings = new EffectBaseSettings(true);
+        
+        public override void Create()
+        {
+            #if URP_12_0_OR_NEWER || SCPE_DEV
+            m_ScriptablePass = new AmbientOcclusion2DRenderPass(settings);
+            m_ScriptablePass.renderPassEvent = settings.injectionPoint;
+            #endif
+        }
+
+        public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
+        {
+            //Render features aren't supported for 2D in older versions
+            #if URP_12_0_OR_NEWER || SCPE_DEV
+            m_ScriptablePass.Setup(renderer);
+            #endif
         }
     }
 }

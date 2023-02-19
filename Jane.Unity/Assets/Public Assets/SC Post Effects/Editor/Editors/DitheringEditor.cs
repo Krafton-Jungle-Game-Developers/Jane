@@ -1,35 +1,36 @@
 ﻿using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(Dithering))]
-    public sealed class DitheringEditor : PostProcessEffectEditor<Dithering>
+    [VolumeComponentEditor(typeof(Dithering))]
+    sealed class DitheringEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride intensity;
-        SerializedParameterOverride tiling;
-        SerializedParameterOverride luminanceThreshold;
-        SerializedParameterOverride lut;
-#if DITHERING_WORLD_PROJECTION
-        SerializedParameterOverride worldProjected;
-#endif
+        SerializedDataParameter intensity;
+        SerializedDataParameter tiling;
+        SerializedDataParameter luminanceThreshold;
+        SerializedDataParameter lut;
+
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            lut = FindParameterOverride(x => x.lut);
-            intensity = FindParameterOverride(x => x.intensity);
-            tiling = FindParameterOverride(x => x.tiling);
-            luminanceThreshold = FindParameterOverride(x => x.luminanceThreshold);
-#if DITHERING_WORLD_PROJECTION
-            worldProjected = FindParameterOverride(x => x.worldProjected);
-#endif
+            base.OnEnable();
+
+            var o = new PropertyFetcher<Dithering>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<DitheringRenderer>();
+
+            intensity = Unpack(o.Find(x => x.intensity));
+            tiling = Unpack(o.Find(x => x.tiling));
+            luminanceThreshold = Unpack(o.Find(x => x.luminanceThreshold));
+            lut = Unpack(o.Find(x => x.lut));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("dithering");
 
-            SCPE_GUI.DisplaySetupWarning<DitheringRenderer>();
+            SCPE_GUI.DisplaySetupWarning<DitheringRenderer>(ref isSetup);
 
             PropertyField(intensity);
             SCPE_GUI.DisplayIntensityWarning(intensity);
@@ -46,9 +47,6 @@ namespace SCPE
             EditorGUILayout.Space();
 
             PropertyField(luminanceThreshold);
-#if DITHERING_WORLD_PROJECTION
-            PropertyField(worldProjected);
-#endif
             PropertyField(tiling);
         }
     }

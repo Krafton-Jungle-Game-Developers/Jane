@@ -1,44 +1,85 @@
-﻿using System;
+﻿using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 
 namespace SCPE
 {
-    public sealed class HueShift3DRenderer : PostProcessEffectRenderer<HueShift3D>
+    public class HueShift3DRenderer : ScriptableRendererFeature
     {
-        Shader shader;
-
-        public override void Init()
+        class HueShift3DRenderPass : PostEffectRenderer<HueShift3D>
         {
-            shader = Shader.Find(ShaderNames.HueShift3D);
+            public HueShift3DRenderPass(EffectBaseSettings settings)
+            {
+                this.settings = settings;
+                shaderName = ShaderNames.HueShift3D;
+                ProfilerTag = this.ToString();
+            }
+
+            public void Setup(ScriptableRenderer renderer, bool reconstructDepthNormals)
+            {
+                this.reconstructDepthNormals = reconstructDepthNormals;
+                this.cameraColorTarget = GetCameraTarget(renderer);
+                this.cameraDepthTarget = GetCameraDepthTarget(renderer);
+                volumeSettings = VolumeManager.instance.stack.GetComponent<HueShift3D>();
+                
+                if(volumeSettings && volumeSettings.IsActive()) renderer.EnqueuePass(this);
+            }
+
+            public override void ConfigurePass(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
+            {
+                if (!volumeSettings) return;
+
+                requiresDepthNormals = volumeSettings.IsActive() && volumeSettings.geoInfluence.value > 0f;
+
+                base.ConfigurePass(cmd, cameraTextureDescriptor);
+            }
+            
+            enum Pass
+            {
+                ColorSpectrum,
+                GradientTexture
+            }
+
+            public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+            {
+                if (ShouldRender(renderingData) == false) return;
+
+                var cmd = CommandBufferPool.Get(ProfilerTag);
+
+                CopyTargets(cmd, renderingData);
+
+                HueShift3D.isOrtho = renderingData.cameraData.camera.orthographic;
+
+                Material.SetVector("_Params", new Vector4(volumeSettings.speed.value, volumeSettings.size.value, volumeSettings.geoInfluence.value, volumeSettings.intensity.value));
+                if(volumeSettings.gradientTex.value) Material.SetTexture("_GradientTex", volumeSettings.gradientTex.value);
+                
+                FinalBlit(this, context, cmd, renderingData, mainTexHandle.id, cameraColorTarget, Material, volumeSettings.colorSource.value == (int)HueShift3D.ColorSource.RGBSpectrum ? (int)Pass.ColorSpectrum : (int)Pass.GradientTexture);
+            }
         }
 
-        public override void Release()
+        HueShift3DRenderPass m_ScriptablePass;
+
+        [System.Serializable]
+        public class HueShift3DSettings : EffectBaseSettings
         {
-            base.Release();
+            [Header("Effect specific")]
+            [Tooltip("Reconstruct the scene geometry's normals from the depth texture." +
+                     "\n\nIn Unity 2020.3+, disabling this will have the effect use the Depth-Normals prepass, which is more accurate. This will have all object re-render, if the scene isn't already optimized for draw calls, this will negatively affect performance")]
+            public bool reconstructDepthNormals = false;
         }
 
-        enum Pass
+        [SerializeField]
+        public HueShift3DSettings settings = new HueShift3DSettings();
+
+        public override void Create()
         {
-            ColorSpectrum,
-            GradientTexture
+            m_ScriptablePass = new HueShift3DRenderPass(settings);
+            m_ScriptablePass.renderPassEvent = settings.injectionPoint;
         }
 
-        public override void Render(PostProcessRenderContext context)
+        public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            var sheet = context.propertySheets.Get(shader);
-
-            HueShift3D.isOrtho = context.camera.orthographic;
-
-            sheet.properties.SetVector(ShaderParameters.Params, new Vector4(settings.speed.value, settings.size.value, settings.geoInfluence.value, settings.intensity.value));
-            if(settings.gradientTex.value) sheet.properties.SetTexture("_GradientTex", settings.gradientTex.value);
-
-            context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, settings.colorSource.value == (int)HueShift3D.ColorSource.RGBSpectrum ? (int)Pass.ColorSpectrum : (int)Pass.GradientTexture);
-        }
-
-        public override DepthTextureMode GetCameraFlags()
-        {
-            return DepthTextureMode.DepthNormals;
+            m_ScriptablePass.Setup(renderer, settings.reconstructDepthNormals);
         }
     }
 }

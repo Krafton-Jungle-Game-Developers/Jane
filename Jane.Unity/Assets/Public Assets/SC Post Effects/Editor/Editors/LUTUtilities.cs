@@ -92,7 +92,7 @@ namespace SCPE
             {
                 Camera cam = SceneView.lastActiveSceneView.camera;
 
-                RenderTexture rt = new RenderTexture(ssWidth, ssHeight, 16);
+                RenderTexture rt = new RenderTexture(ssWidth, ssHeight, 0);
                 cam.targetTexture = rt;
 
                 Texture2D screenShot = new Texture2D(ssWidth, ssHeight, TextureFormat.RGB24, false);
@@ -126,7 +126,7 @@ namespace SCPE
                 Texture2D result = (Texture2D)AssetDatabase.LoadAssetAtPath(filePath, typeof(Texture2D));
                 LUTExtracterWindow.inputTexture = result;
             }
-            
+
             LUT.Bypass = false;
         }
     }

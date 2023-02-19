@@ -1,25 +1,63 @@
-﻿using System;
+﻿using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 
 namespace SCPE
 {
-    public sealed class PosterizeRenderer : PostProcessEffectRenderer<Posterize>
+    public class PosterizeRenderer : ScriptableRendererFeature
     {
-        Shader shader;
-
-        public override void Init()
+        class PosterizeRenderPass : PostEffectRenderer<Posterize>
         {
-            shader = Shader.Find(ShaderNames.Posterize);
+            public PosterizeRenderPass(EffectBaseSettings settings)
+            {
+                this.settings = settings;
+                shaderName = ShaderNames.Posterize;
+                ProfilerTag = this.ToString();
+            }
+
+            public void Setup(ScriptableRenderer renderer)
+            {
+                this.cameraColorTarget = GetCameraTarget(renderer);
+                volumeSettings = VolumeManager.instance.stack.GetComponent<Posterize>();
+                
+                if(volumeSettings && volumeSettings.IsActive()) renderer.EnqueuePass(this);
+            }
+
+            public override void ConfigurePass(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
+            {
+                if (!volumeSettings) return;
+
+                base.ConfigurePass(cmd, cameraTextureDescriptor);
+            }
+
+            public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+            {
+                if (ShouldRender(renderingData) == false) return;
+
+                var cmd = CommandBufferPool.Get(ProfilerTag);
+
+                CopyTargets(cmd, renderingData);
+
+                Material.SetVector("_Params", new Vector4(volumeSettings.hue.value, volumeSettings.saturation.value, volumeSettings.value.value, volumeSettings.levels.value));
+
+                FinalBlit(this, context, cmd, renderingData, mainTexHandle.id, cameraColorTarget, Material, volumeSettings.hsvMode.value ? 1 : 0);
+            }
         }
 
-        public override void Render(PostProcessRenderContext context)
+        PosterizeRenderPass m_ScriptablePass;
+
+        [SerializeField]
+        public EffectBaseSettings settings = new EffectBaseSettings();
+
+        public override void Create()
         {
-            var sheet = context.propertySheets.Get(shader);
+            m_ScriptablePass = new PosterizeRenderPass(settings);
+            m_ScriptablePass.renderPassEvent = settings.injectionPoint;
+        }
 
-            sheet.properties.SetVector(ShaderParameters.Params, new Vector4(settings.hue.value, settings.saturation.value, settings.value.value, settings.levels.value));
-
-            context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, settings.hsvMode.value ? 1 : 0);
+        public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
+        {
+            m_ScriptablePass.Setup(renderer);
         }
     }
 }

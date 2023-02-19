@@ -1,18 +1,12 @@
-﻿using System;
+﻿using UnityEngine.Rendering.Universal;
+using System;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
-using TextureParameter = UnityEngine.Rendering.PostProcessing.TextureParameter;
-using BoolParameter = UnityEngine.Rendering.PostProcessing.BoolParameter;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
-using IntParameter = UnityEngine.Rendering.PostProcessing.IntParameter;
-using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
-using MinAttribute = UnityEngine.Rendering.PostProcessing.MinAttribute;
+using UnityEngine.Rendering;
 
 namespace SCPE
 {
-    [PostProcess(typeof(KuwaharaRenderer), PostProcessEvent.AfterStack, "SC Post Effects/Stylized/Kuwahara", true)]
-    [Serializable]
-    public sealed class Kuwahara : PostProcessEffectSettings
+    [Serializable, VolumeComponentMenu("SC Post Effects/Stylized/Kuwahara")]
+    public sealed class Kuwahara : VolumeComponent, IPostProcessComponent
     {
         public enum KuwaharaMode
         {
@@ -21,26 +15,19 @@ namespace SCPE
         }
 
         [Serializable]
-        public sealed class KuwaharaModeParam : ParameterOverride<KuwaharaMode> { }
+        public sealed class KuwaharaModeParam : VolumeParameter<KuwaharaMode> { }
 
-        [DisplayName("Method"), Tooltip("Choose to apply the effect to the entire screen, or fade in/out over a distance")]
+        [Tooltip("Choose to apply the effect to the entire screen, or fade in/out over a distance")]
         public KuwaharaModeParam mode = new KuwaharaModeParam { value = KuwaharaMode.FullScreen };
 
-        [Range(0, 8), DisplayName("Radius")]
-        public IntParameter radius = new IntParameter { value = 0 };
+        //[Range(0, 8), DisplayName("Radius")]
+        public ClampedIntParameter radius = new ClampedIntParameter(0, 0, 8);
 
-        public FloatParameter startFadeDistance = new FloatParameter { value = 100 };
-        public FloatParameter endFadeDistance = new FloatParameter { value = 500f };
+        public FloatParameter startFadeDistance = new FloatParameter(100f);
+        public FloatParameter endFadeDistance = new FloatParameter(500f);
 
-        public override bool IsEnabledAndSupported(PostProcessRenderContext context)
-        {
-            if (enabled.value)
-            {
-                if (radius == 0) { return false; }
-                return true;
-            }
+        public bool IsActive() => radius.value > 0 && this.active;
 
-            return false;
-        }
+        public bool IsTileCompatible() => false;
     }
 }

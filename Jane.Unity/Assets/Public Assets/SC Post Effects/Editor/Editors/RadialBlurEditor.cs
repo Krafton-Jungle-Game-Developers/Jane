@@ -1,35 +1,39 @@
 ﻿using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(RadialBlur))]
-    public sealed class RadialBlurEditor : PostProcessEffectEditor<RadialBlur>
+    [VolumeComponentEditor(typeof(RadialBlur))]
+    sealed class RadialBlurEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride amount;
-        SerializedParameterOverride center;
-        SerializedParameterOverride angle;
-        SerializedParameterOverride iterations;
+        SerializedDataParameter amount;
+        SerializedDataParameter center;
+        SerializedDataParameter angle;
+        SerializedDataParameter iterations;
+
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            amount = FindParameterOverride(x => x.amount);
-            center = FindParameterOverride(x => x.center);
-            angle = FindParameterOverride(x => x.angle);
-            iterations = FindParameterOverride(x => x.iterations);
+            base.OnEnable();
+
+            var o = new PropertyFetcher<RadialBlur>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<RadialBlurRenderer>();
+
+            amount = Unpack(o.Find(x => x.amount));
+            center = Unpack(o.Find(x => x.center));
+            angle = Unpack(o.Find(x => x.angle));
+            iterations = Unpack(o.Find(x => x.iterations));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("radial-blur");
 
-            SCPE_GUI.DisplaySetupWarning<RadialBlurRenderer>();
+            SCPE_GUI.DisplaySetupWarning<RadialBlurRenderer>(ref isSetup);
 
             PropertyField(amount);
             SCPE_GUI.DisplayIntensityWarning(amount);
-            
-            EditorGUILayout.Space();
-            
             PropertyField(center);
             PropertyField(angle);
             PropertyField(iterations);

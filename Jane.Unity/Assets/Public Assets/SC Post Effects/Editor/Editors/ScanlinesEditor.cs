@@ -1,32 +1,40 @@
 ﻿using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(Scanlines))]
-    public sealed class ScanlinesEditor : PostProcessEffectEditor<Scanlines>
+    [VolumeComponentEditor(typeof(Scanlines))]
+    sealed class ScanlinesEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride intensity;
-        SerializedParameterOverride amount;
-        SerializedParameterOverride speed;
+        SerializedDataParameter intensity;
+        SerializedDataParameter amount;
+        SerializedDataParameter speed;
+
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            intensity = FindParameterOverride(x => x.intensity);
-            amount = FindParameterOverride(x => x.amount);
-            speed = FindParameterOverride(x => x.speed);
+            base.OnEnable();
+
+            var o = new PropertyFetcher<Scanlines>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<ScanlinesRenderer>();
+
+            intensity = Unpack(o.Find(x => x.intensity));
+            amount = Unpack(o.Find(x => x.amount));
+            speed = Unpack(o.Find(x => x.speed));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("scanlines");
 
-            SCPE_GUI.DisplaySetupWarning<ScanlinesRenderer>();
+            SCPE_GUI.DisplaySetupWarning<ScanlinesRenderer>(ref isSetup);
 
             PropertyField(intensity);
             SCPE_GUI.DisplayIntensityWarning(intensity);
             
             EditorGUILayout.Space();
+            
             PropertyField(amount);
             PropertyField(speed);
         }

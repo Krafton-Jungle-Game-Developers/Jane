@@ -1,38 +1,25 @@
-﻿using UnityEngine.Rendering.PostProcessing;
-using TextureParameter = UnityEngine.Rendering.PostProcessing.TextureParameter;
-using BoolParameter = UnityEngine.Rendering.PostProcessing.BoolParameter;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
-using IntParameter = UnityEngine.Rendering.PostProcessing.IntParameter;
-using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
-
+﻿using UnityEngine.Rendering.Universal;
 using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace SCPE
 {
-    [PostProcess(typeof(ScanlinesRenderer), PostProcessEvent.AfterStack, "SC Post Effects/Retro/Scanlines", true)]
-    [Serializable]
-    public sealed class Scanlines : PostProcessEffectSettings
+    [Serializable, VolumeComponentMenu("SC Post Effects/Retro/Scanlines")]
+    public sealed class Scanlines : VolumeComponent, IPostProcessComponent
     {
         [Range(0f, 1f), Tooltip("Intensity")]
-        public FloatParameter intensity = new FloatParameter { value = 0f };
+        public ClampedFloatParameter intensity = new ClampedFloatParameter(0f, 0f, 1f);
 
-        [Range(0f, 2048f), DisplayName("Lines")]
-        public FloatParameter amount = new FloatParameter { value = 700 };
+        [Range(0f, 1f), Tooltip("Lines")]
+        public ClampedFloatParameter amount = new ClampedFloatParameter(700f, 0f, 2048f);
 
         [Range(0f, 1f), Tooltip("Animation speed")]
-        public FloatParameter speed = new FloatParameter { value = 0f };
+        public ClampedFloatParameter speed = new ClampedFloatParameter(0f, 0f, 1f);
 
-        public override bool IsEnabledAndSupported(PostProcessRenderContext context)
-        {
-            if (enabled.value)
-            {
-                if (intensity.value == 0) return false;
-                return true;
-            }
+        public bool IsActive() => intensity.value > 0f && this.active;
 
-            return false;
-        }
+        public bool IsTileCompatible() => false;
+
     }
 }

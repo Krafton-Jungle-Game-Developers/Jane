@@ -1,41 +1,78 @@
-﻿using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+﻿using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
+using UnityEngine;
 
 namespace SCPE
 {
-    public sealed class CausticsRenderer : PostProcessEffectRenderer<Caustics>
+    public class CausticsRenderer : ScriptableRendererFeature
     {
-        Shader shader;
-
-        public override void Init()
+        class CausticsRenderPass : PostEffectRenderer<Caustics>
         {
-            shader = Shader.Find(ShaderNames.Caustics);
-        }
+            public CausticsRenderPass(EffectBaseSettings settings)
+            {
+                this.settings = settings;
+                shaderName = ShaderNames.Caustics;
+                ProfilerTag = this.ToString();
+            }
 
-        public override void Release()
-        {
-            base.Release();
-        }
+            public void Setup(ScriptableRenderer renderer)
+            {
+                this.cameraColorTarget = GetCameraTarget(renderer);
+                volumeSettings = VolumeManager.instance.stack.GetComponent<Caustics>();
+                
+                if(volumeSettings && volumeSettings.IsActive()) renderer.EnqueuePass(this);
+            }
 
-        public override void Render(PostProcessRenderContext context)
-        {
-            PropertySheet sheet = context.propertySheets.Get(shader);
-            var cmd = context.command;
-    
-            if(settings.causticsTexture.value) sheet.properties.SetTexture("_CausticsTex", settings.causticsTexture.value);
-            sheet.properties.SetFloat("_LuminanceThreshold", Mathf.GammaToLinearSpace(settings.luminanceThreshold.value));
-            sheet.properties.SetVector("_CausticsParams", new Vector4(settings.size, settings.speed, settings.projectFromSun.value ? 1 : 0, settings.intensity));
-            sheet.properties.SetVector("_HeightParams", new Vector4(settings.minHeight.value, settings.minHeightFalloff.value, settings.maxHeight.value, settings.maxHeightFalloff.value));
+            public override void ConfigurePass(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
+            {
+                if (!volumeSettings) return;
+
+                base.ConfigurePass(cmd, cameraTextureDescriptor);
+            }
+
+            public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+            {
+                if (ShouldRender(renderingData) == false) return;
+
+                var cmd = CommandBufferPool.Get(ProfilerTag);
+
+                CopyTargets(cmd, renderingData);
+
+                if(volumeSettings.causticsTexture.value) Material.SetTexture("_CausticsTex", volumeSettings.causticsTexture.value);
+                Material.SetFloat("_LuminanceThreshold", Mathf.GammaToLinearSpace(volumeSettings.luminanceThreshold.value));
+
+                if (volumeSettings.projectFromSun.value) SetMainLightProjection(cmd, renderingData);
+
+                Material.SetVector("_CausticsParams", new Vector4(volumeSettings.size.value, volumeSettings.speed.value, volumeSettings.projectFromSun.value ? 1 : 0, volumeSettings.intensity.value));
+                Material.SetVector("_HeightParams", new Vector4(volumeSettings.minHeight.value, volumeSettings.minHeightFalloff.value, volumeSettings.maxHeight.value, volumeSettings.maxHeightFalloff.value));
             
-            if(RenderSettings.sun) cmd.SetGlobalMatrix("unity_WorldToLight", RenderSettings.sun.transform.localToWorldMatrix);
-            cmd.SetGlobalVector("_FadeParams", new Vector4(settings.startFadeDistance.value, settings.endFadeDistance.value, 0, settings.distanceFade.value ? 1 : 0));
-
-            cmd.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);
+                cmd.SetGlobalVector("_FadeParams", new Vector4(volumeSettings.startFadeDistance.value, volumeSettings.endFadeDistance.value, 0, volumeSettings.distanceFade.value ? 1 : 0));
+                
+                FinalBlit(this, context, cmd, renderingData, mainTexHandle.id, cameraColorTarget, Material, 0);
+            }
         }
 
-        public override DepthTextureMode GetCameraFlags()
+        CausticsRenderPass m_ScriptablePass;
+        [System.Serializable]
+        public class Causticsettings : EffectBaseSettings
         {
-            return DepthTextureMode.Depth;
+            [Header("Effect specific")]
+            [Tooltip("Executes the effect before transparent materials are rendered.")]
+            public bool skipTransparents;
+        }
+
+        [SerializeField]
+        public Causticsettings settings = new Causticsettings();
+        
+        public override void Create()
+        {
+            m_ScriptablePass = new CausticsRenderPass(settings);
+            m_ScriptablePass.renderPassEvent = settings.skipTransparents ? RenderPassEvent.BeforeRenderingTransparents : settings.injectionPoint;
+        }
+
+        public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
+        {
+            m_ScriptablePass.Setup(renderer);
         }
     }
 }

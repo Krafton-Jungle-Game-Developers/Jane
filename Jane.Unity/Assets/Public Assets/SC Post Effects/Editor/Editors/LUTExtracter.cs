@@ -42,7 +42,7 @@ namespace SCPE
 
             if (OutputLUT == null) return;
 
-#if PPS_DEV
+#if SCPE_DEV
             Debug.Log("Auto extracting LUT from " + inputTexture.name);
 #endif
             ExtractLUT(inputTexture, OutputLUT);

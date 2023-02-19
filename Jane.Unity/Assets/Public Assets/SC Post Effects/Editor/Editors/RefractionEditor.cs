@@ -1,27 +1,34 @@
 ﻿using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(Refraction))]
-    public sealed class RefractionEditor : PostProcessEffectEditor<Refraction>
+    [VolumeComponentEditor(typeof(Refraction))]
+    sealed class RefractionEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride refractionTex;
-        SerializedParameterOverride convertNormalMap;
-        SerializedParameterOverride amount;
+        SerializedDataParameter refractionTex;
+        SerializedDataParameter convertNormalMap;
+        SerializedDataParameter amount;
+
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            amount = FindParameterOverride(x => x.amount);
-            convertNormalMap = FindParameterOverride(x => x.convertNormalMap);
-            refractionTex = FindParameterOverride(x => x.refractionTex);
+            base.OnEnable();
+
+            var o = new PropertyFetcher<Refraction>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<RefractionRenderer>();
+
+            refractionTex = Unpack(o.Find(x => x.refractionTex));
+            convertNormalMap = Unpack(o.Find(x => x.convertNormalMap));
+            amount = Unpack(o.Find(x => x.amount));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("refraction");
 
-            SCPE_GUI.DisplaySetupWarning<RefractionRenderer>();
+            SCPE_GUI.DisplaySetupWarning<RefractionRenderer>(ref isSetup);
 
             PropertyField(amount);
             SCPE_GUI.DisplayIntensityWarning(amount);

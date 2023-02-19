@@ -1,48 +1,31 @@
-﻿using System;
+﻿using UnityEngine.Rendering.Universal;
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-using UnityEngine.Rendering.PostProcessing;
-using UnityEngine.Serialization;
-using TextureParameter = UnityEngine.Rendering.PostProcessing.TextureParameter;
-using BoolParameter = UnityEngine.Rendering.PostProcessing.BoolParameter;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
-using Vector2Parameter = UnityEngine.Rendering.PostProcessing.Vector2Parameter;
-using IntParameter = UnityEngine.Rendering.PostProcessing.IntParameter;
-using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
-using MinAttribute = UnityEngine.Rendering.PostProcessing.MinAttribute;
-
 namespace SCPE
 {
-    [PostProcess(typeof(RadialBlurRenderer), PostProcessEvent.AfterStack, "SC Post Effects/Blurring/Radial Blur", true)]
-    [Serializable]
-    public sealed class RadialBlur : PostProcessEffectSettings
+    [Serializable, VolumeComponentMenu("SC Post Effects/Blurring/Radial Blur")]
+    public sealed class RadialBlur : VolumeComponent, IPostProcessComponent
     {
         [Range(0f, 1f)]
-        public FloatParameter amount = new FloatParameter { value = 0f };
-        
+        public ClampedFloatParameter amount = new ClampedFloatParameter(0f, 0f, 1f);
+
         [Space]
         
         [Tooltip("Sets the blur center point (screen center is [0.5, 0.5]).")]
-        public Vector2Parameter center = new Vector2Parameter { value = new Vector2(0.5f, 0.5f) };
+        public Vector2Parameter center = new Vector2Parameter( new Vector2(0.5f, 0.5f) );
         
         [Range(-180f, 180f)]
-        public FloatParameter angle = new FloatParameter { value = 0f };
+        public ClampedFloatParameter angle = new ClampedFloatParameter(0f, -180f, 180f);
         
         [Space]
-
-        [Range(3, 12)]
-        public IntParameter iterations = new IntParameter { value = 6 };
         
-        public override bool IsEnabledAndSupported(PostProcessRenderContext context)
-        {
-            if (enabled.value)
-            {
-                if (amount == 0) { return false; }
-                return true;
-            }
+        [Range(3, 12)]
+        public ClampedIntParameter iterations = new ClampedIntParameter(6, 3,12);
 
-            return false;
-        }
+        public bool IsActive() => amount.value > 0f && this.active;
+
+        public bool IsTileCompatible() => false;
     }
 }

@@ -1,35 +1,65 @@
-﻿using System;
+﻿using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
-using TextureParameter = UnityEngine.Rendering.PostProcessing.TextureParameter;
-using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
 
 namespace SCPE
 {
-    public sealed class TransitionRenderer : PostProcessEffectRenderer<Transition>
+    public class TransitionRenderer : ScriptableRendererFeature
     {
-        Shader shader;
-
-        public override void Init()
+        class TransitionRenderPass : PostEffectRenderer<Transition>
         {
-            shader = Shader.Find(ShaderNames.Transition);
+            public TransitionRenderPass(EffectBaseSettings settings)
+            {
+                this.settings = settings;
+                shaderName = ShaderNames.Transition;
+                ProfilerTag = this.ToString();
+            }
+
+            public void Setup(ScriptableRenderer renderer)
+            {
+                this.cameraColorTarget = GetCameraTarget(renderer);
+                volumeSettings = VolumeManager.instance.stack.GetComponent<Transition>();
+                
+                if(volumeSettings && volumeSettings.IsActive()) renderer.EnqueuePass(this);
+            }
+
+            public override void ConfigurePass(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
+            {
+                if (!volumeSettings) return;
+
+                base.ConfigurePass(cmd, cameraTextureDescriptor);
+            }
+
+            public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+            {
+                if (ShouldRender(renderingData) == false) return;
+
+                var cmd = CommandBufferPool.Get(ProfilerTag);
+
+                CopyTargets(cmd, renderingData);
+
+                Material.SetFloat("_Progress", volumeSettings.progress.value);
+                var overlayTexture = volumeSettings.gradientTex.value == null ? Texture2D.whiteTexture : volumeSettings.gradientTex.value;
+                Material.SetTexture("_Gradient", overlayTexture);
+
+                FinalBlit(this, context, cmd, renderingData, mainTexHandle.id, cameraColorTarget, Material, 0);
+            }
         }
 
-        public override void Release()
+        TransitionRenderPass m_ScriptablePass;
+
+        [SerializeField]
+        public EffectBaseSettings settings = new EffectBaseSettings();
+
+        public override void Create()
         {
-            base.Release();
+            m_ScriptablePass = new TransitionRenderPass(settings);
+            m_ScriptablePass.renderPassEvent = settings.injectionPoint;
         }
 
-        public override void Render(PostProcessRenderContext context)
+        public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            var sheet = context.propertySheets.Get(shader);
-
-            sheet.properties.SetFloat("_Progress", settings.progress.value);
-            var overlayTexture = settings.gradientTex.value == null ? RuntimeUtilities.whiteTexture : settings.gradientTex.value;
-            sheet.properties.SetTexture("_Gradient", overlayTexture);
-
-            context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);
+            m_ScriptablePass.Setup(renderer);
         }
     }
 }

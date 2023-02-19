@@ -1,31 +1,38 @@
 ﻿using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(SpeedLines))]
-    public sealed class SpeedLinesEditor : PostProcessEffectEditor<SpeedLines>
+    [VolumeComponentEditor(typeof(SpeedLines))]
+    sealed class SpeedLinesEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride intensity;
-        SerializedParameterOverride size;
-        SerializedParameterOverride falloff;
-        SerializedParameterOverride noiseTex;
+        SerializedDataParameter intensity;
+        SerializedDataParameter size;
+        SerializedDataParameter falloff;
+        SerializedDataParameter noiseTex;
+
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            intensity = FindParameterOverride(x => x.intensity);
-            size = FindParameterOverride(x => x.size);
-            falloff = FindParameterOverride(x => x.falloff);
-            noiseTex = FindParameterOverride(x => x.noiseTex);
+            base.OnEnable();
+
+            var o = new PropertyFetcher<SpeedLines>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<SpeedLinesRenderer>();
+
+            intensity = Unpack(o.Find(x => x.intensity));
+            size = Unpack(o.Find(x => x.size));
+            falloff = Unpack(o.Find(x => x.falloff));
+            noiseTex = Unpack(o.Find(x => x.noiseTex));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("speed-lines");
 
-            SCPE_GUI.DisplaySetupWarning<SpeedLinesRenderer>();
+            SCPE_GUI.DisplaySetupWarning<SpeedLinesRenderer>(ref isSetup);
 
-            PropertyField(intensity);            
+            PropertyField(intensity);
             SCPE_GUI.DisplayIntensityWarning(intensity);
             
             EditorGUILayout.Space();

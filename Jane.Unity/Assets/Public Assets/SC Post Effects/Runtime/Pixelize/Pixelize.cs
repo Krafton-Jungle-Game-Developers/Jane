@@ -1,25 +1,17 @@
-﻿using System;
+﻿using UnityEngine.Rendering.Universal;
+using System;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.Rendering;
 
 namespace SCPE
 {
-    [PostProcess(typeof(PixelizeRenderer), PostProcessEvent.BeforeStack, "SC Post Effects/Retro/Pixelize", true)]
-    [Serializable]
-    public sealed class Pixelize : PostProcessEffectSettings
+    [Serializable, VolumeComponentMenu("SC Post Effects/Retro/Pixelize")]
+    public sealed class Pixelize : VolumeComponent, IPostProcessComponent
     {
-        [Range(0f, 1f), Tooltip("Amount")]
-        public UnityEngine.Rendering.PostProcessing.FloatParameter amount = new UnityEngine.Rendering.PostProcessing.FloatParameter { value = 0f };
+        public ClampedFloatParameter amount = new ClampedFloatParameter(0f, 0f, 1f);
 
-        public override bool IsEnabledAndSupported(PostProcessRenderContext context)
-        {
-            if (enabled.value)
-            {
-                if (amount == 0f) { return false; }
-                return true;
-            }
+        public bool IsActive() => amount.value > 0f && this.active;
 
-            return false;
-        }
+        public bool IsTileCompatible() => false;
     }
 }

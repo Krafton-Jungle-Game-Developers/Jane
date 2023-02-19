@@ -1,91 +1,120 @@
-﻿using UnityEngine.Rendering;
+﻿using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 using UnityEngine;
 
-using UnityEngine.Rendering.PostProcessing;
-using TextureParameter = UnityEngine.Rendering.PostProcessing.TextureParameter;
-using BoolParameter = UnityEngine.Rendering.PostProcessing.BoolParameter;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
-using IntParameter = UnityEngine.Rendering.PostProcessing.IntParameter;
-using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
-using MinAttribute = UnityEngine.Rendering.PostProcessing.MinAttribute;
-
-namespace SCPE 
+namespace SCPE
 {
-    public sealed class BlurRenderer : PostProcessEffectRenderer<Blur>
+    public class BlurRenderer : ScriptableRendererFeature
     {
-        Shader shader;
-        int screenCopyID;
-        int blurredID = Shader.PropertyToID("_Temp1");
-        int blurredID2 = Shader.PropertyToID("_Temp2");
-
-        enum Pass
+        class BlurRenderPass : PostEffectRenderer<Blur>
         {
-            Blend,
-            BlendDepthFade,
-            Gaussian,
-            Box
-        }
+            int blurredID;
+            int blurredID2;
 
-        public override void Init()
-        {
-            shader = Shader.Find(ShaderNames.Blur);
-            screenCopyID = Shader.PropertyToID("_ScreenCopyTexture");
-        }
-
-        public override void Render(PostProcessRenderContext context)
-        {
-            PropertySheet sheet = context.propertySheets.Get(shader);
-            CommandBuffer cmd = context.command;
-
-            cmd.GetTemporaryRT(screenCopyID, context.width, context.height, 0, FilterMode.Bilinear, context.sourceFormat);
-            cmd.Blit(context.source, screenCopyID);
-
-            // get two smaller RTs
-            cmd.GetTemporaryRT(blurredID, context.screenWidth / settings.downscaling, context.screenHeight / settings.downscaling, 0, FilterMode.Bilinear);
-            cmd.GetTemporaryRT(blurredID2, context.screenWidth / settings.downscaling, context.screenHeight / settings.downscaling, 0, FilterMode.Bilinear);
-
-            // downsample screen copy into smaller RT, release screen RT
-            cmd.Blit(screenCopyID, blurredID);
-
-            int blurPass = (settings.mode == Blur.BlurMethod.Gaussian) ? (int)Pass.Gaussian : (int)Pass.Box;
-
-            for (int i = 0; i < settings.iterations; i++)
+            enum Pass
             {
-                //Safeguard for exploding GPUs
-                if (settings.iterations > 12) return;
+                Blend,
+                BlendDepthFade,
+                Gaussian,
+                Box
+            }
+            public BlurRenderPass(EffectBaseSettings settings)
+            {
+                this.settings = settings;
+                shaderName = ShaderNames.Blur;
+                ProfilerTag = this.ToString();
 
-                // horizontal blur
-                cmd.SetGlobalVector("_BlurOffsets", new Vector4(settings.amount / context.screenWidth, 0, 0, 0));
-                context.command.BlitFullscreenTriangle(blurredID, blurredID2, sheet, blurPass);
-
-                // vertical blur
-                cmd.SetGlobalVector("_BlurOffsets", new Vector4(0, settings.amount / context.screenHeight, 0, 0));
-                context.command.BlitFullscreenTriangle(blurredID2, blurredID, sheet, blurPass);
-
-                //Double blur
-                if (settings.highQuality)
-                {
-                    // horizontal blur
-                    cmd.SetGlobalVector("_BlurOffsets", new Vector4(settings.amount / context.screenWidth, 0, 0, 0));
-                    context.command.BlitFullscreenTriangle(blurredID, blurredID2, sheet, blurPass);
-
-                    // vertical blur
-                    cmd.SetGlobalVector("_BlurOffsets", new Vector4(0, settings.amount / context.screenHeight, 0, 0));
-                    context.command.BlitFullscreenTriangle(blurredID2, blurredID, sheet, blurPass);
-                }
+                blurredID = Shader.PropertyToID("_Temp1");
+                blurredID2 = Shader.PropertyToID("_Temp2");
             }
 
-            cmd.SetGlobalTexture("_BlurredTex", blurredID);
-            
-            if( settings.distanceFade.value) cmd.SetGlobalVector("_FadeParams", new Vector4(settings.startFadeDistance.value, settings.endFadeDistance.value, 0, 0));
-            
-            // Render blurred texture in blend pass
-            cmd.BlitFullscreenTriangle(context.source, context.destination, sheet, settings.distanceFade.value ? (int)Pass.BlendDepthFade : (int)Pass.Blend);
+            public void Setup(ScriptableRenderer renderer)
+            {
+                this.cameraColorTarget = GetCameraTarget(renderer);
+                volumeSettings = VolumeManager.instance.stack.GetComponent<Blur>();
+                
+                if(volumeSettings && volumeSettings.IsActive()) renderer.EnqueuePass(this);
+            }
 
-            // release
-            cmd.ReleaseTemporaryRT(screenCopyID);
-            cmd.ReleaseTemporaryRT(blurredID);
-            cmd.ReleaseTemporaryRT(blurredID2);
+            public override void ConfigurePass(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
+            {
+                if (!volumeSettings) return;
+                
+                base.ConfigurePass(cmd, cameraTextureDescriptor);
+
+                cameraTextureDescriptor.width /= volumeSettings.downscaling.value;
+                cameraTextureDescriptor.height /= volumeSettings.downscaling.value;
+
+                cmd.GetTemporaryRT(blurredID, cameraTextureDescriptor.width, cameraTextureDescriptor.height, 0, FilterMode.Bilinear, cameraTextureDescriptor.graphicsFormat);
+                cmd.GetTemporaryRT(blurredID2, cameraTextureDescriptor.width, cameraTextureDescriptor.height, 0, FilterMode.Bilinear, cameraTextureDescriptor.graphicsFormat);
+            }
+
+            public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+            {
+                if (ShouldRender(renderingData) == false) return;
+
+                var cmd = CommandBufferPool.Get(ProfilerTag);
+
+                CopyTargets(cmd, renderingData);
+                Blit(cmd, cameraColorTarget, blurredID);
+
+                int blurPass = (volumeSettings.mode == Blur.BlurMethod.Gaussian) ? (int)Pass.Gaussian : (int)Pass.Box;
+
+                for (int i = 0; i < volumeSettings.iterations.value; i++)
+                {
+                    //Safeguard for exploding GPUs
+                    if (volumeSettings.iterations.value > 12) return;
+
+                    // horizontal blur
+                    cmd.SetGlobalVector("_BlurOffsets", new Vector4(volumeSettings.amount.value / renderingData.cameraData.camera.scaledPixelWidth, 0, 0, 0));
+                    Blit(this, cmd, blurredID, blurredID2, Material, blurPass);
+
+                    // vertical blur
+                    cmd.SetGlobalVector("_BlurOffsets", new Vector4(0, volumeSettings.amount.value / renderingData.cameraData.camera.scaledPixelHeight, 0, 0));
+                    Blit(this, cmd, blurredID2, blurredID, Material, blurPass);
+
+                    //Double blur
+                    if (volumeSettings.highQuality.value)
+                    {
+                        // horizontal blur
+                        cmd.SetGlobalVector("_BlurOffsets", new Vector4(volumeSettings.amount.value / renderingData.cameraData.camera.scaledPixelWidth, 0, 0, 0));
+                        Blit(this, cmd, blurredID, blurredID2, Material, blurPass);
+
+                        // vertical blur
+                        cmd.SetGlobalVector("_BlurOffsets", new Vector4(0, volumeSettings.amount.value / renderingData.cameraData.camera.scaledPixelHeight, 0, 0));
+                        Blit(this, cmd, blurredID2, blurredID, Material, blurPass);
+                    }
+                }
+                
+                cmd.SetGlobalTexture("_BlurredTex", blurredID);
+                
+                if(volumeSettings.distanceFade.value) cmd.SetGlobalVector("_FadeParams", new Vector4(volumeSettings.startFadeDistance.value, volumeSettings.endFadeDistance.value, 0, volumeSettings.distanceFade.value ? 1 : 0));
+
+                FinalBlit(this, context, cmd, renderingData, mainTexHandle.id, cameraColorTarget, Material, volumeSettings.distanceFade.value ? (int)Pass.BlendDepthFade : (int)Pass.Blend);
+            }
+
+            public override void Cleanup(CommandBuffer cmd)
+            {
+                base.Cleanup(cmd);
+                
+                cmd.ReleaseTemporaryRT(blurredID);
+                cmd.ReleaseTemporaryRT(blurredID2);
+            }
+        }
+
+        BlurRenderPass m_ScriptablePass;
+        [SerializeField]
+        public EffectBaseSettings settings = new EffectBaseSettings(false);
+        
+        public override void Create()
+        {
+            m_ScriptablePass = new BlurRenderPass(settings);
+            m_ScriptablePass.renderPassEvent = settings.injectionPoint;
+        }
+
+        public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
+        {
+            m_ScriptablePass.Setup(renderer);
         }
     }
 }

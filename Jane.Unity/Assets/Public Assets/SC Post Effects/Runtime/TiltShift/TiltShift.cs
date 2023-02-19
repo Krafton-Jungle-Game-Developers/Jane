@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine.Rendering.Universal;
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.PostProcessing;
-using TextureParameter = UnityEngine.Rendering.PostProcessing.TextureParameter;
-using BoolParameter = UnityEngine.Rendering.PostProcessing.BoolParameter;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
-using IntParameter = UnityEngine.Rendering.PostProcessing.IntParameter;
-using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
-using MinAttribute = UnityEngine.Rendering.PostProcessing.MinAttribute;
 
 namespace SCPE
 {
-    [PostProcess(typeof(TiltShiftRenderer), PostProcessEvent.AfterStack, "SC Post Effects/Blurring/Tilt Shift")]
-    [Serializable]
-    public class TiltShift : PostProcessEffectSettings
+    [Serializable, VolumeComponentMenu("SC Post Effects/Blurring/Tilt Shift")]
+    public sealed class TiltShift : VolumeComponent, IPostProcessComponent
     {
         public enum TiltShiftMethod
         {
@@ -24,13 +15,12 @@ namespace SCPE
         }
 
         [Serializable]
-        public sealed class TiltShifMethodParameter : ParameterOverride<TiltShiftMethod> { }
+        public sealed class TiltShifMethodParameter : VolumeParameter<TiltShiftMethod> { }
 
-        [Range(0f, 1f), Tooltip("The amount of blurring that must be performed")]
-        public FloatParameter amount = new FloatParameter { value = 0f };
+        [Tooltip("The amount of blurring that must be performed")]
+        public ClampedFloatParameter amount = new ClampedFloatParameter(0f, 0f, 1f);
         
-        [DisplayName("Method")]
-        public TiltShifMethodParameter mode = new TiltShifMethodParameter { value = TiltShiftMethod.Horizontal };
+        public TiltShifMethodParameter mode = new TiltShifMethodParameter();
 
         public enum Quality
         {
@@ -39,31 +29,20 @@ namespace SCPE
         }
 
         [Serializable]
-        public sealed class TiltShiftQualityParameter : ParameterOverride<Quality> { }
+        public sealed class TiltShiftQualityParameter : VolumeParameter<Quality> { }
 
-        [DisplayName("Quality"), Tooltip("Choose to use more texture samples, for a smoother blur when using a high blur amout")]
-        public TiltShiftQualityParameter quality = new TiltShiftQualityParameter { value = Quality.Appearance };
+        [Tooltip("Choose to use more texture samples, for a smoother blur when using a high blur amout")]
+        public TiltShiftQualityParameter quality = new TiltShiftQualityParameter();
 
-        [Range(0f, 1f)]
-        public FloatParameter areaSize = new FloatParameter { value = 1f };
-        [Range(0f, 1f)]
-        public FloatParameter areaFalloff = new FloatParameter { value = 1f };
-        [Range(-1f, 1f)]
-        public FloatParameter offset = new FloatParameter { value = 0f };
-        [Range(0f, 360f)]
-        public FloatParameter angle = new FloatParameter { value = 0f };
+        public ClampedFloatParameter areaSize = new ClampedFloatParameter(0.5f, 0f, 1f);
+        public ClampedFloatParameter areaFalloff = new ClampedFloatParameter(1f, 0.01f, 1f);
+        public ClampedFloatParameter offset = new ClampedFloatParameter(0f, -1f, 1f);
+        public ClampedFloatParameter angle = new ClampedFloatParameter(0f, 0f, 360f);
+        
+        public bool IsActive() => (areaSize.value > 0f) || amount.value > 0f && this.active;
+
+        public bool IsTileCompatible() => false;
 
         public static bool debug;
-
-        public override bool IsEnabledAndSupported(PostProcessRenderContext context)
-        {
-            if (enabled.value)
-            {
-                if ((areaSize == 0f && areaFalloff == 0f) || amount == 0f) { return false; }
-                return true;
-            }
-
-            return false;
-        }
     }
 }

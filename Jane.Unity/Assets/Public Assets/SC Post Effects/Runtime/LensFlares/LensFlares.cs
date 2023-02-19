@@ -1,65 +1,61 @@
-﻿using System;
+﻿using UnityEngine.Rendering.Universal;
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-using UnityEngine.Rendering.PostProcessing;
-using TextureParameter = UnityEngine.Rendering.PostProcessing.TextureParameter;
-using BoolParameter = UnityEngine.Rendering.PostProcessing.BoolParameter;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
-using IntParameter = UnityEngine.Rendering.PostProcessing.IntParameter;
-using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
-using MinAttribute = UnityEngine.Rendering.PostProcessing.MinAttribute;
-
 namespace SCPE
 {
-    [PostProcess(typeof(LensFlaresRenderer), PostProcessEvent.BeforeStack, "SC Post Effects/Rendering/Lens Flares", true)]
-    [Serializable]
-    public sealed class LensFlares : PostProcessEffectSettings
+    [Serializable, VolumeComponentMenu("SC Post Effects/Rendering/Lens Flares")]
+    public sealed class LensFlares : VolumeComponent, IPostProcessComponent
     {
-        public BoolParameter debug = new BoolParameter { value = false };
+        public BoolParameter debug = new BoolParameter(false);
 
         [Space]
 
-        [Range(0f, 1f), DisplayName("Intensity")]
-        public FloatParameter intensity = new FloatParameter { value = 0f };
+        [Range(0f, 1f)]
+        public ClampedFloatParameter intensity = new ClampedFloatParameter(0f, 0f, 1f);
 
-        [Range(0.01f, 5f), DisplayName("Threshold"), Tooltip("Luminance threshold, pixels above this threshold will contribute to the effect")]
-        public FloatParameter luminanceThreshold = new FloatParameter { value = 1f };
+        [Range(0.01f, 5f), Tooltip("Luminance threshold, pixels above this threshold will contribute to the effect")]
+        public ClampedFloatParameter luminanceThreshold = new ClampedFloatParameter(1f, 0.01f, 5f);
+
 
         [Header("Flares")]
-        [Range(1, 4), DisplayName("Number")]
-        public IntParameter iterations = new IntParameter { value = 2 };
+        [Range(1, 4)]
+        public ClampedIntParameter iterations = new ClampedIntParameter(2,1,4 );
 
-        [Range(1, 2), DisplayName("Distance"), Tooltip("Offsets the Flares towards the edge of the screen")]
-        public FloatParameter distance = new FloatParameter { value = 1.5f };
+        [Range(1, 2), Tooltip("Offsets the Flares towards the edge of the screen")]
+        public ClampedFloatParameter distance = new ClampedFloatParameter( 1.5f, 1f, 2f);
 
-        [Range(1, 10), DisplayName("Falloff"), Tooltip("Fades out the Flares towards the edge of the screen")]
-        public FloatParameter falloff = new FloatParameter { value = 10f };
+        [Range(1, 10), Tooltip("Fades out the Flares towards the edge of the screen")]
+        public ClampedFloatParameter falloff = new ClampedFloatParameter(10f, 1f, 10f);
 
         [Header("Halo"), Tooltip("Creates a halo at the center of the screen when looking directly at a bright spot")]
-        [Range(0, 1), DisplayName("Size")]
-        public FloatParameter haloSize = new FloatParameter { value = 0.2f };
+        [Range(0, 1)]
+        public ClampedFloatParameter haloSize = new ClampedFloatParameter(0.2f, 0f, 1f);
 
-        [Range(0f, 100f), DisplayName("Width")]
-        public FloatParameter haloWidth = new FloatParameter { value = 70f };
+        [Range(0f, 100f)]
+        public ClampedFloatParameter haloWidth = new ClampedFloatParameter(70f, 0f, 100f);
 
         [Header("Colors and masking")]
-        [DisplayName("Mask"), Tooltip("Use a texture to mask out the effect")]
-        public TextureParameter maskTex = new TextureParameter { value = null };
+        [Tooltip("Use a texture to mask out the effect")]
+        public TextureParameter maskTex = new TextureParameter(null);
 
-        [Range(0f, 20f), DisplayName("Chromatic Abberation"), Tooltip("Refracts the color channels")]
-        public FloatParameter chromaticAbberation = new FloatParameter { value = 10f };
+        [Range(0f, 20f), Tooltip("Refracts the color channels")]
+        public ClampedFloatParameter chromaticAbberation = new ClampedFloatParameter(10f, 0f, 20f);
 
-        [DisplayName("Gradient"), Tooltip("Color the flares from the center of the screen to the outer edges")]
-        public TextureParameter colorTex = new TextureParameter { value = null };
+        [Tooltip("Color the flares from the center of the screen to the outer edges")]
+        public TextureParameter colorTex = new TextureParameter(null);
 
         [Header("Blur")]
-        [Range(1, 8), DisplayName("Blur"), Tooltip("The amount of blurring that must be performed")]
-        public FloatParameter blur = new FloatParameter { value = 2f };
+        [Range(1, 8), Tooltip("The amount of blurring that must be performed")]
+        public ClampedFloatParameter blur = new ClampedFloatParameter(2f, 1f, 8f);
 
-        [Range(1, 12), DisplayName("Iterations"), Tooltip("The number of times the effect is blurred. More iterations provide a smoother effect but induce more drawcalls.")]
-        public IntParameter passes = new IntParameter { value = 3 };
-        
+        [Range(1, 12), Tooltip("The number of times the effect is blurred. More iterations provide a smoother effect but induce more drawcalls.")]
+        public ClampedIntParameter passes = new ClampedIntParameter(3, 1, 12);
+        public bool IsActive() => intensity.value > 0f && this.active;
+
+        public bool IsTileCompatible() => false;
+
         #if UNITY_EDITOR
         private void Reset()
         {

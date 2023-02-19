@@ -1,39 +1,40 @@
 ﻿using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor.Rendering;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(Ripples))]
-    public sealed class RipplesEditor : PostProcessEffectEditor<Ripples>
+    [VolumeComponentEditor(typeof(Ripples))]
+    sealed class RipplesEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride mode;
+        SerializedDataParameter mode;
 
-        SerializedParameterOverride strength;
-        SerializedParameterOverride distance;
-        SerializedParameterOverride speed;
-        SerializedParameterOverride width;
-        SerializedParameterOverride height;
+        SerializedDataParameter strength;
+        SerializedDataParameter distance;
+        SerializedDataParameter speed;
+        SerializedDataParameter width;
+        SerializedDataParameter height;
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            strength = FindParameterOverride(x => x.strength);
-            mode = FindParameterOverride(x => x.mode);
-            distance = FindParameterOverride(x => x.distance);
-            speed = FindParameterOverride(x => x.speed);
-            width = FindParameterOverride(x => x.width);
-            height = FindParameterOverride(x => x.height);
-        }
+            base.OnEnable();
 
-        public override string GetDisplayTitle()
-        {
-            return "Ripples (" + (Ripples.RipplesMode)mode.value.enumValueIndex + ")";
+            var o = new PropertyFetcher<Ripples>(serializedObject);
+            isSetup = AutoSetup.ValidEffectSetup<RipplesRenderer>();
+
+            strength = Unpack(o.Find(x => x.strength));
+            mode = Unpack(o.Find(x => x.mode));
+            distance = Unpack(o.Find(x => x.distance));
+            speed = Unpack(o.Find(x => x.speed));
+            width = Unpack(o.Find(x => x.width));
+            height = Unpack(o.Find(x => x.height));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("ripples");
 
-            SCPE_GUI.DisplaySetupWarning<RipplesRenderer>();
+            SCPE_GUI.DisplaySetupWarning<RipplesRenderer>(ref isSetup);
 
             PropertyField(strength);
             SCPE_GUI.DisplayIntensityWarning(strength);
@@ -50,7 +51,6 @@ namespace SCPE
                 EditorGUILayout.Space();
                 PropertyField(width);
                 PropertyField(height);
-
             }
         }
     }

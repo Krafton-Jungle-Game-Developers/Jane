@@ -1,30 +1,62 @@
-﻿using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+﻿using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
+using UnityEngine;
 
 namespace SCPE
 {
-    public sealed class BlackBarsRenderer : PostProcessEffectRenderer<BlackBars>
+    public class BlackBarsRenderer : ScriptableRendererFeature
     {
-        Shader shader;
-
-        public override void Init()
+        class BlackBarsRenderPass : PostEffectRenderer<BlackBars>
         {
-            shader = Shader.Find(ShaderNames.BlackBars);
+            public BlackBarsRenderPass(EffectBaseSettings settings)
+            {
+                this.settings = settings;
+                shaderName = ShaderNames.BlackBars;
+                ProfilerTag = this.ToString();
+            }
+
+            public void Setup(ScriptableRenderer renderer)
+            {
+                this.cameraColorTarget = GetCameraTarget(renderer);
+                volumeSettings = VolumeManager.instance.stack.GetComponent<BlackBars>();
+                
+                if(volumeSettings && volumeSettings.IsActive()) renderer.EnqueuePass(this);
+            }
+
+            public override void ConfigurePass(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
+            {
+                if (!volumeSettings) return;
+
+                base.ConfigurePass(cmd, cameraTextureDescriptor);
+            }
+
+            public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+            {
+                if (ShouldRender(renderingData) == false) return;
+
+                var cmd = CommandBufferPool.Get(ProfilerTag);
+
+                CopyTargets(cmd, renderingData);
+
+                Material.SetVector("_Size", new Vector2(volumeSettings.size.value / 10f, volumeSettings.maxSize.value * 5));
+
+                FinalBlit(this, context, cmd, renderingData, mainTexHandle.id, cameraColorTarget, Material, (int)volumeSettings.mode.value);
+            }
         }
 
-        public override void Release()
+        BlackBarsRenderPass m_ScriptablePass;
+        [SerializeField]
+        public EffectBaseSettings settings = new EffectBaseSettings(false);
+        
+        public override void Create()
         {
-            base.Release();
+            m_ScriptablePass = new BlackBarsRenderPass(settings);
+            m_ScriptablePass.renderPassEvent = settings.injectionPoint;
         }
 
-        public override void Render(PostProcessRenderContext context)
+        public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            var sheet = context.propertySheets.Get(shader);
-
-            sheet.properties.SetVector("_Size", new Vector2(settings.size / 10f, settings.maxSize * 5));
-
-            context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, (int)settings.mode.value);
+            m_ScriptablePass.Setup(renderer);
         }
-
     }
 }

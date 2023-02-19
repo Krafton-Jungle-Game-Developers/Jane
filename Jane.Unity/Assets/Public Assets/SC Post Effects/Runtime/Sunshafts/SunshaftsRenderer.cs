@@ -1,94 +1,134 @@
-﻿using UnityEngine.Rendering.PostProcessing;
+﻿using UnityEngine.Rendering.Universal;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace SCPE
 {
-    public sealed class SunshaftsRenderer : PostProcessEffectRenderer<Sunshafts>
+    public class SunshaftsRenderer : ScriptableRendererFeature
     {
-        Shader shader;
-        private int skyboxBufferID;
-
-        enum Pass
+        class SunshaftsRenderPass : PostEffectRenderer<Sunshafts>
         {
-            SkySource,
-            RadialBlur,
-            Blend
-        }
+            private int skyboxBufferID;
+            int blurredID;
+            int blurredID2;
 
-        public override void Init()
-        {
-            shader = Shader.Find(ShaderNames.Sunshafts);
-            skyboxBufferID = Shader.PropertyToID("_SkyboxBuffer");
-        }
-
-        public override void Release()
-        {
-            base.Release();
-        }
-
-        public override void Render(PostProcessRenderContext context)
-        {
-            PropertySheet sheet = context.propertySheets.Get(shader);
-            CommandBuffer cmd = context.command;
-
-    #region Parameters
-            float sunIntensity = (settings.useCasterIntensity && RenderSettings.sun) ? RenderSettings.sun.intensity : settings.sunShaftIntensity.value;
-
-            //Screen-space sun position
-            Vector3 v = Vector3.one * 0.5f;
-            if(RenderSettings.sun) v = context.camera.WorldToViewportPoint(-RenderSettings.sun.transform.forward * 1E10f);
-            sheet.properties.SetVector("_SunPosition", new Vector4(v.x, v.y, sunIntensity, settings.falloff));
-
-            Color sunColor = (settings.useCasterColor && RenderSettings.sun) ? RenderSettings.sun.color : settings.sunColor.value;
-            sheet.properties.SetFloat("_BlendMode", (int)settings.blendMode.value);
-            sheet.properties.SetColor("_SunColor", (v.z >= 0.0f) ? sunColor : new Color(0, 0, 0, 0));
-            sheet.properties.SetColor("_SunThreshold", settings.sunThreshold);
-    #endregion
-
-            int res = (int)settings.resolution.value;
-
-            //Create skybox mask
-            context.command.GetTemporaryRT(skyboxBufferID, context.width / 2, context.height / 2, 0, FilterMode.Bilinear, context.sourceFormat);
-            context.command.BlitFullscreenTriangle(context.source, skyboxBufferID, sheet, (int)Pass.SkySource);
-            cmd.SetGlobalTexture("_SunshaftBuffer", skyboxBufferID);
-
-            //Blur buffer
-    #region Blur
-            cmd.BeginSample("Sunshafts blur");
-            int blurredID = Shader.PropertyToID("_Temp1");
-            int blurredID2 = Shader.PropertyToID("_Temp2");
-            cmd.GetTemporaryRT(blurredID, context.width / res, context.height / res, 0, FilterMode.Bilinear);
-            cmd.GetTemporaryRT(blurredID2, context.width / res, context.height / res, 0, FilterMode.Bilinear);
-
-            cmd.Blit(skyboxBufferID, blurredID);
-
-            float offset = settings.length * (1.0f / 768.0f);
-
-            int iterations = (settings.highQuality) ? 2 : 1;
-            float blurAmount = (settings.highQuality) ? settings.length / 2.5f : settings.length;
-
-            for (int i = 0; i < iterations; i++)
+            public SunshaftsRenderPass(EffectBaseSettings settings)
             {
-                context.command.BlitFullscreenTriangle(blurredID, blurredID2, sheet, (int)Pass.RadialBlur);
-                offset = blurAmount * (((i * 2.0f + 1.0f) * 6.0f)) / context.screenWidth;
-                sheet.properties.SetFloat("_BlurRadius", offset);
-
-                context.command.BlitFullscreenTriangle(blurredID2, blurredID, sheet, (int)Pass.RadialBlur);
-                offset = blurAmount * (((i * 2.0f + 2.0f) * 6.0f)) / context.screenWidth;
-                sheet.properties.SetFloat("_BlurRadius", offset);
-
+                this.settings = settings;
+                shaderName = ShaderNames.Sunshafts;
+                requiresDepth = true;
+                ProfilerTag = this.ToString();
+                
+                skyboxBufferID = Shader.PropertyToID("_SkyboxBuffer");
+                blurredID = Shader.PropertyToID("_Temp1");
+                blurredID2 = Shader.PropertyToID("_Temp2");
             }
-            cmd.EndSample("Sunshafts blur");
 
-            cmd.SetGlobalTexture("_SunshaftBuffer", blurredID);
-    #endregion
+            public void Setup(ScriptableRenderer renderer)
+            {
+                this.cameraColorTarget = GetCameraTarget(renderer);
+                this.cameraDepthTarget = GetCameraDepthTarget(renderer);
+                volumeSettings = VolumeManager.instance.stack.GetComponent<Sunshafts>();
+                
+                if(volumeSettings && volumeSettings.IsActive()) renderer.EnqueuePass(this);
+            }
 
-            context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, (int)Pass.Blend);
+            public override void ConfigurePass(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
+            {
+                base.ConfigurePass(cmd, cameraTextureDescriptor);
+                
+                cmd.GetTemporaryRT(skyboxBufferID, cameraTextureDescriptor.width / 2, cameraTextureDescriptor.height / 2,0, FilterMode.Bilinear);
+                
+                int res = (int)volumeSettings.resolution.value;
+                cmd.GetTemporaryRT(blurredID, cameraTextureDescriptor.width / res, cameraTextureDescriptor.height / res, 0, FilterMode.Bilinear);
+                cmd.GetTemporaryRT(blurredID2, cameraTextureDescriptor.width / res, cameraTextureDescriptor.height / res, 0, FilterMode.Bilinear);
+            }
 
-            cmd.ReleaseTemporaryRT(blurredID);
-            cmd.ReleaseTemporaryRT(blurredID2);
-            cmd.ReleaseTemporaryRT(skyboxBufferID);
+            public enum Pass
+            {
+                SkySource,
+                RadialBlur,
+                Blend
+            }
+            
+            public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+            {
+                if (ShouldRender(renderingData) == false) return;
+                
+                var cmd = CommandBufferPool.Get(ProfilerTag);
+                
+                CopyTargets(cmd, renderingData);
+
+                #region Parameters
+                float sunIntensity = (volumeSettings.useCasterIntensity.value && RenderSettings.sun) ? RenderSettings.sun.intensity : volumeSettings.sunShaftIntensity.value;
+
+                //Screen-space sun position
+                Vector3 v = Vector3.one * 0.5f;
+                if(RenderSettings.sun) v = renderingData.cameraData.camera.WorldToViewportPoint(-RenderSettings.sun.transform.forward * 1E10f);
+                
+                Material.SetVector("_SunPosition", new Vector4(v.x, v.y, sunIntensity, volumeSettings.falloff.value));
+
+                Color col = (volumeSettings.useCasterColor.value && RenderSettings.sun) ? RenderSettings.sun.color : volumeSettings.sunColor.value;
+                Material.SetFloat("_BlendMode", (int)volumeSettings.blendMode.value);
+                Material.SetColor("_SunColor", (v.z >= 0.0f) ? col : new Color(0, 0, 0, 0));
+                Material.SetColor("_SunThreshold", volumeSettings.sunThreshold.value);
+                #endregion
+                
+                #region Blur
+                cmd.BeginSample("Sunshafts blur");
+                
+                Blit(this, cmd, mainTexHandle.id, skyboxBufferID, Material, (int)Pass.SkySource);
+                Blit(cmd, skyboxBufferID, blurredID);
+
+                float offset = volumeSettings.length.value * (1.0f / 768.0f);
+
+                int iterations = (volumeSettings.highQuality.value) ? 2 : 1;
+                float blurAmount = (volumeSettings.highQuality.value) ? volumeSettings.length.value / 2.5f : volumeSettings.length.value;
+
+                for (int i = 0; i < iterations; i++)
+                {
+                    Blit(this, cmd, blurredID, blurredID2, Material, (int)Pass.RadialBlur);
+                    offset = blurAmount * (((i * 2.0f + 1.0f) * 6.0f)) / renderingData.cameraData.camera.pixelWidth;
+                    Material.SetFloat("_BlurRadius", offset);
+
+                    Blit(this, cmd, blurredID2, blurredID, Material, (int)Pass.RadialBlur);
+                    offset = blurAmount * (((i * 2.0f + 1.0f) * 6.0f)) / renderingData.cameraData.camera.pixelHeight;
+                    Material.SetFloat("_BlurRadius", offset);
+
+                }
+                cmd.EndSample("Sunshafts blur");
+
+                #endregion
+
+                cmd.SetGlobalTexture("_SunshaftBuffer", blurredID);
+
+                FinalBlit(this, context, cmd, renderingData, mainTexHandle.id, cameraColorTarget, Material, (int)Pass.Blend);
+            }
+
+            public override void Cleanup(CommandBuffer cmd)
+            {
+                cmd.ReleaseTemporaryRT(skyboxBufferID);
+                cmd.ReleaseTemporaryRT(blurredID);
+                cmd.ReleaseTemporaryRT(blurredID2);
+                
+                base.Cleanup(cmd);
+            }
+        }
+
+        SunshaftsRenderPass m_ScriptablePass;
+
+        [SerializeField]
+        public EffectBaseSettings settings = new EffectBaseSettings();
+
+        public override void Create()
+        {
+            m_ScriptablePass = new SunshaftsRenderPass(settings);
+            m_ScriptablePass.renderPassEvent = settings.injectionPoint;
+        }
+
+        public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
+        {
+            m_ScriptablePass.Setup(renderer);
         }
     }
 }

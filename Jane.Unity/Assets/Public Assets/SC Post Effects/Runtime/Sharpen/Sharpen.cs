@@ -1,18 +1,12 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
-using TextureParameter = UnityEngine.Rendering.PostProcessing.TextureParameter;
-using BoolParameter = UnityEngine.Rendering.PostProcessing.BoolParameter;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
-using IntParameter = UnityEngine.Rendering.PostProcessing.IntParameter;
-using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
-using MinAttribute = UnityEngine.Rendering.PostProcessing.MinAttribute;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 
 namespace SCPE
 {
-    [PostProcess(typeof(SharpenRenderer), PostProcessEvent.AfterStack, "SC Post Effects/Image/Sharpen", true)]
-    [Serializable]
-    public sealed class Sharpen : PostProcessEffectSettings
+    [Serializable, VolumeComponentMenu("SC Post Effects/Image/Sharpen")]
+    public sealed class Sharpen : VolumeComponent, IPostProcessComponent
     {
         public enum Method
         {
@@ -23,26 +17,16 @@ namespace SCPE
         }
 
         [Serializable]
-        public sealed class MethodParam : ParameterOverride<Method> { }
+        public sealed class MethodParam : VolumeParameter<Method> { }
 
         public MethodParam mode = new MethodParam { value = Method.LuminanceEnhancement };
         
-        [Range(0f, 1f)]
-        public FloatParameter amount = new FloatParameter { value = 0f };
-        [Range(0.1f,2f)]
-        public FloatParameter radius = new FloatParameter { value = 1f };
-        [Range(0f,1f)]
-        public FloatParameter contrast = new FloatParameter { value = 1f };
+        public ClampedFloatParameter amount = new ClampedFloatParameter(0f, 0f, 1f);
+        public ClampedFloatParameter radius = new ClampedFloatParameter(1f, 0.1f, 2f);
+        public ClampedFloatParameter contrast = new ClampedFloatParameter(1f, 0f, 1f);
 
-        public override bool IsEnabledAndSupported(PostProcessRenderContext context)
-        {
-            if (enabled.value)
-            {
-                if (amount == 0) { return false; }
-                return true;
-            }
+        public bool IsActive() { return active && amount.value > 0f; }
 
-            return false;
-        }
+        public bool IsTileCompatible() => false;
     }
 }

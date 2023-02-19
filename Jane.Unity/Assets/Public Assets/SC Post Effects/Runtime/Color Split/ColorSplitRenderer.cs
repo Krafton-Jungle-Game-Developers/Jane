@@ -1,29 +1,63 @@
-﻿using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+﻿using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
+using UnityEngine;
 
 namespace SCPE
 {
-    public sealed class ColorSplitRenderer : PostProcessEffectRenderer<ColorSplit>
+    public class ColorSplitRenderer : ScriptableRendererFeature
     {
-        Shader shader;
-
-        public override void Init()
+        class ColorSplitRenderPass : PostEffectRenderer<ColorSplit>
         {
-            shader = Shader.Find(ShaderNames.ColorSplit);
+            public ColorSplitRenderPass(EffectBaseSettings settings)
+            {
+                this.settings = settings;
+                shaderName = ShaderNames.ColorSplit;
+                ProfilerTag = this.ToString();
+            }
+
+            public void Setup(ScriptableRenderer renderer)
+            {
+                this.cameraColorTarget = GetCameraTarget(renderer);
+                volumeSettings = VolumeManager.instance.stack.GetComponent<ColorSplit>();
+                
+                if(volumeSettings && volumeSettings.IsActive()) renderer.EnqueuePass(this);
+            }
+
+            public override void ConfigurePass(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
+            {
+                if (!volumeSettings) return;
+
+                base.ConfigurePass(cmd, cameraTextureDescriptor);
+            }
+
+            public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+            {
+                if (ShouldRender(renderingData) == false) return;
+
+                var cmd = CommandBufferPool.Get(ProfilerTag);
+
+                CopyTargets(cmd, renderingData);
+
+                Material.SetFloat("_Offset", volumeSettings.offset.value / 100);
+
+                FinalBlit(this, context, cmd, renderingData, mainTexHandle.id, cameraColorTarget, Material, (int)volumeSettings.mode.value);
+            }
         }
 
-        public override void Release()
+        ColorSplitRenderPass m_ScriptablePass;
+
+        [SerializeField]
+        public EffectBaseSettings settings = new EffectBaseSettings();
+        
+        public override void Create()
         {
-            base.Release();
+            m_ScriptablePass = new ColorSplitRenderPass(settings);
+            m_ScriptablePass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
         }
 
-        public override void Render(PostProcessRenderContext context)
+        public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            var sheet = context.propertySheets.Get(shader);
-
-            sheet.properties.SetFloat("_Offset", settings.offset.value / 100);
-
-            context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, (int)settings.mode.value);
+            m_ScriptablePass.Setup(renderer);
         }
     }
 }

@@ -1,61 +1,62 @@
-﻿using UnityEngine;
-using UnityEditor;
-using UnityEditor.Rendering.PostProcessing;
+﻿using UnityEditor;
+using UnityEditor.Rendering;
+using UnityEngine;
 
 namespace SCPE
 {
-    [PostProcessEditor(typeof(LUT))]
-    public sealed class LUTEditor : PostProcessEffectEditor<LUT>
+    [VolumeComponentEditor(typeof(LUT))]
+    sealed class LUTEditor : VolumeComponentEditor
     {
-        SerializedParameterOverride mode;
-        SerializedParameterOverride intensity;
-        SerializedParameterOverride lutNear;
-        SerializedParameterOverride lutFar;
-        SerializedParameterOverride invert;
-        SerializedParameterOverride startFadeDistance;
-        SerializedParameterOverride endFadeDistance;
+        LUT effect;
+        SerializedDataParameter mode;
+        SerializedDataParameter intensity;
+        SerializedDataParameter lutNear;
+        SerializedDataParameter lutFar;
+        SerializedDataParameter invert;
+        SerializedDataParameter startFadeDistance;
+        SerializedDataParameter endFadeDistance;
         
-        SerializedParameterOverride vibranceRGBBalance;
-        SerializedParameterOverride vibrance;
+        SerializedDataParameter vibranceRGBBalance;
+        SerializedDataParameter vibrance;
+        
+        private bool isSetup;
 
         public override void OnEnable()
         {
-            mode = FindParameterOverride(x => x.mode);
-            intensity = FindParameterOverride(x => x.intensity);
-            lutNear = FindParameterOverride(x => x.lutNear);
-            lutFar = FindParameterOverride(x => x.lutFar);
-            invert = FindParameterOverride(x => x.invert);
-            
-            startFadeDistance = FindParameterOverride(x => x.startFadeDistance);
-            endFadeDistance = FindParameterOverride(x => x.endFadeDistance);
-            
-            vibranceRGBBalance = FindParameterOverride(x => x.vibranceRGBBalance);
-            vibrance = FindParameterOverride(x => x.vibrance);
-        }
+            base.OnEnable();
 
-        public override string GetDisplayTitle()
-        {
-            return "LUT Color Grading" + ((mode.value.intValue == 0) ? "" : " (2-way distance blend)");
+            effect = (LUT)target;
+            var o = new PropertyFetcher<LUT>(serializedObject);
+
+            isSetup = AutoSetup.ValidEffectSetup<LUTRenderer>();
+
+            mode = Unpack(o.Find(x => x.mode));
+            intensity = Unpack(o.Find(x => x.intensity));
+            lutNear = Unpack(o.Find(x => x.lutNear));
+            lutFar = Unpack(o.Find(x => x.lutFar));
+            invert = Unpack(o.Find(x => x.invert));
+            startFadeDistance = Unpack(o.Find(x => x.startFadeDistance));
+            endFadeDistance = Unpack(o.Find(x => x.endFadeDistance));
+            vibranceRGBBalance = Unpack(o.Find(x => x.vibranceRGBBalance));
+            vibrance = Unpack(o.Find(x => x.vibrance));
         }
 
         public override void OnInspectorGUI()
         {
             SCPE_GUI.DisplayDocumentationButton("lut");
 
-            SCPE_GUI.DisplaySetupWarning<LUTRenderer>();
-
+            SCPE_GUI.DisplaySetupWarning<LUTRenderer>(ref isSetup);
+            
             using (new EditorGUILayout.HorizontalScope())
             {
-                GUILayout.FlexibleSpace();
+                //GUILayout.FlexibleSpace();
 
-                if (GUILayout.Button(new GUIContent("Open LUT Extracter", EditorGUIUtility.IconContent("d_PreTextureRGB").image, 
-                    "Extract a LUT from the bottom-left corner of a screenshot"), 
+                if (GUILayout.Button(new GUIContent("Open LUT Extracter", EditorGUIUtility.IconContent("d_PreTextureRGB").image,
+                    "Extract a LUT from the bottom-left corner of a screenshot"),
                     EditorStyles.miniButton, GUILayout.Height(20f), GUILayout.Width(150f)))
                 {
                     LUTExtracterWindow.ShowWindow();
                 }
-                
-                GUILayout.FlexibleSpace();
             }
 
             EditorGUILayout.Space();
@@ -76,7 +77,7 @@ namespace SCPE
             }
             
             EditorGUILayout.Space();
-
+            
             PropertyField(lutNear, new GUIContent(mode.value.intValue == 0 ? "Look up Texture" : "Near"));
             if (mode.value.intValue == (int)LUT.Mode.DistanceBased)
             {
@@ -94,7 +95,7 @@ namespace SCPE
         }
 
         // Checks import settings on the lut, offers to fix them if invalid
-        void CheckLUTImportSettings(SerializedParameterOverride tex)
+        void CheckLUTImportSettings(SerializedDataParameter tex)
         {
             if (tex != null)
             {
@@ -105,7 +106,7 @@ namespace SCPE
                     bool valid = importer.anisoLevel == 0
                         && importer.mipmapEnabled == false
                         && importer.sRGBTexture == false
-                        && (importer.textureCompression == TextureImporterCompression.Uncompressed) 
+                        && (importer.textureCompression == TextureImporterCompression.Uncompressed)
                         && importer.wrapMode == TextureWrapMode.Clamp;
 
                     if (!valid)
@@ -136,7 +137,7 @@ namespace SCPE
         void SetLUTImportSettings(TextureImporter importer)
         {
             importer.textureType = TextureImporterType.Default;
-           // importer.filterMode = FilterMode.Bilinear;
+            // importer.filterMode = FilterMode.Bilinear;
             importer.wrapMode = TextureWrapMode.Clamp;
             importer.sRGBTexture = false;
             importer.textureCompression = TextureImporterCompression.Uncompressed;
@@ -144,5 +145,6 @@ namespace SCPE
             importer.mipmapEnabled = false;
             importer.SaveAndReimport();
         }
+
     }
 }
