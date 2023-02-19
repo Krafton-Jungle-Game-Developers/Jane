@@ -1,0 +1,71 @@
+{
+    "name": "sc.posteffects.editor",
+    "references": [
+        "GUID:2dd7e9ee6d7b89e4197547f04c3897ad",
+        "GUID:a35efad8797223d499f8c68b1f545dbc",
+        "GUID:d60799ab2a985554ea1a39cd38695018",
+        "GUID:15fc0a57446b3144c949da3e2b9737a9",
+        "GUID:3eae0364be2026648bf74846acb8a731",
+        "GUID:df380645f10b7bc4b97d4f5eb6303d95",
+        "GUID:e40ba710768534012815d3193fa296cb",
+        "GUID:f9fe0089ec81f4079af78eb2287a6163",
+        "GUID:4af21795022437d4bb139a86514b9ff9"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.xr.management",
+            "expression": "3.2.10",
+            "define": "XR"
+        },
+        {
+            "name": "com.unity.xr.oculus",
+            "expression": "1.0.0",
+            "define": "OCULUS"
+        },
+        {
+            "name": "com.unity.postprocessing",
+            "expression": "2.1.7",
+            "define": "PPS"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "7.2.1",
+            "define": "URP"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "8.9.9",
+            "define": "URP_9_0_OR_NEWER"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "10.2.2",
+            "define": "URP_10_0_OR_NEWER"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "11.0.0",
+            "define": "URP_11_0_OR_NEWER"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "12.0.0",
+            "define": "URP_12_0_OR_NEWER"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "13.0.0",
+            "define": "URP_13_0_OR_NEWER"
+        }
+    ],
+    "noEngineReferences": false
+}

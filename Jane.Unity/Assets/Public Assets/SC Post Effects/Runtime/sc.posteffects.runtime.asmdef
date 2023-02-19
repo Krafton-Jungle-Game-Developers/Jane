@@ -1,0 +1,60 @@
+{
+    "name": "sc.posteffects.runtime",
+    "references": [
+        "GUID:d60799ab2a985554ea1a39cd38695018",
+        "GUID:15fc0a57446b3144c949da3e2b9737a9",
+        "GUID:df380645f10b7bc4b97d4f5eb6303d95"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        ""
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.postprocessing",
+            "expression": "2.1.7",
+            "define": "PPS"
+        },
+        {
+            "name": "com.unity.render-pipelines.lightweight",
+            "expression": "5.7.2",
+            "define": "LWRP"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "7.2.1",
+            "define": "URP"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "8.9.9",
+            "define": "URP_9_0_OR_NEWER"
+        },
+		{
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "10.2.2",
+            "define": "URP_10_0_OR_NEWER"
+        },
+		{
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "11.0.0",
+            "define": "URP_11_0_OR_NEWER"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "12.0.0",
+            "define": "URP_12_0_OR_NEWER"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "13.0.0",
+            "define": "URP_13_0_OR_NEWER"
+        }
+    ]
+}
