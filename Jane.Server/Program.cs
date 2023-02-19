@@ -12,7 +12,7 @@ builder.WebHost.ConfigureKestrel(options =>
     {
         listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
     });
-});
+}).UseUrls("http://jane.jungle-gamedev.com:5000;https://jane.jungle-gamedev.com:5001");
 
 builder.Services.AddGrpc();
 

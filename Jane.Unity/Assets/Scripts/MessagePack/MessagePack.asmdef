@@ -2,7 +2,8 @@
     "name": "MessagePack",
     "rootNamespace": "",
     "references": [
-        "GUID:5a46ad82eac024e4fbb6a0516a5def17"
+        "GUID:5a46ad82eac024e4fbb6a0516a5def17",
+        "GUID:756335c0388f7114790e504ed368ae1d"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

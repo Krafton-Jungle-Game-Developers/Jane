@@ -4,15 +4,17 @@
 using System;
 using System.Buffers;
 using System.Data.Common;
+using MemoryPack;
 
 namespace MessagePack
 {
+    [MemoryPackable]
 #if MESSAGEPACK_INTERNAL
     internal
 #else
     public
 #endif
-    struct Nil : IEquatable<Nil>
+    partial struct Nil : IEquatable<Nil>
     {
         public static readonly Nil Default = default(Nil);
 

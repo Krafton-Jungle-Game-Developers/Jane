@@ -5,6 +5,7 @@ using MagicOnion.Serialization;
 using MagicOnion.Serialization.MemoryPack;
 using UnityEngine;
 using MagicOnion;
+using MessagePack.Resolvers;
 
 namespace Assets.Scripts
 {
