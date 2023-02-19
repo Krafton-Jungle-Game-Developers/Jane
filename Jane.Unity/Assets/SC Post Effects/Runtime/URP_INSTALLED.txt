@@ -1,5 +1,0 @@
-2.2.0
-
-If I'm here it means the URP package was unpacked and installer shouldn't be prompted when importing while the URP is active.
-
-GUID should match 751b255a24402084da7237349738181f
