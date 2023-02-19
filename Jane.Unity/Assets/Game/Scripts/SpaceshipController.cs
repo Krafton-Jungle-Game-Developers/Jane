@@ -6,30 +6,28 @@ public class SpaceshipController : MonoBehaviour
 {
     [SerializeField] private Rigidbody _rb;
 
-    public float forwardSpeed;
-    public float strafeSpeed;
-    public float hoverSpeed;
+    public float forwardSpeed = 25f;
+    public float strafeSpeed = 15f;
+    public float hoverSpeed = 15f;
     private float _activeForwardSpeed;
     private float _activeStrafeSpeed;
     private float _activeHoverSpeed;
-    [SerializeField] private float _forwardAcceleration;
-    [SerializeField] private float _strafeAcceleration;
-    [SerializeField] private float _hoverAcceleration;
+    [SerializeField] private float _forwardAcceleration = 5f;
+    [SerializeField] private float _strafeAcceleration = 2f;
+    [SerializeField] private float _hoverAcceleration = 2f;
 
-    public float lookRateSpeed;
-    private Vector2 lookInput, screenCenter, mouseDistance;
+    public float lookRateSpeed = 0.5f;
+    private Vector3 lookInput, screenCenter, mouseDistance;
 
     private float rollInput;
-    public float rollSpeed;
-    public float rollAcceleration;
+    public float rollSpeed = 5f ;
+    public float rollAcceleration = 0.5f;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        screenCenter.x = Screen.width * 0.5f;
-        screenCenter.y = Screen.height * 0.5f;
-
-        Cursor.lockState = CursorLockMode.Confined;
+        screenCenter = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0f);
+        Cursor.visible = false;
     }
 
     void Update()
@@ -40,13 +38,12 @@ public class SpaceshipController : MonoBehaviour
 
     private void MouseSteeringUpdate()
     {
-        lookInput.x = Input.mousePosition.x;
-        lookInput.y = Input.mousePosition.y;
+        lookInput = new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 0f);
 
         mouseDistance.x = (lookInput.x - screenCenter.x) / screenCenter.y;
         mouseDistance.y = (lookInput.y - screenCenter.y) / screenCenter.y;
 
-        mouseDistance = Vector2.ClampMagnitude(mouseDistance, 1f);
+        mouseDistance = Vector3.ClampMagnitude(mouseDistance, 1f);
 
         rollInput = Mathf.Lerp(rollInput, Input.GetAxisRaw("Roll"), rollAcceleration * Time.deltaTime);
 
