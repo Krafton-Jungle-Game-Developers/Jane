@@ -27,6 +27,7 @@ public class SpaceshipController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         screenCenter = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0f);
+        Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
     }
 
