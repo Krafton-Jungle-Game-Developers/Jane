@@ -201,6 +201,7 @@ public partial struct Color
     public float b;
     public float a;
 
+    [MemoryPackConstructor]
     public Color(float r, float g, float b)
         : this(r, g, b, 1.0f)
     {
@@ -281,6 +282,7 @@ public partial struct Rect
 
     public float height;
 
+    [MemoryPackConstructor]
     public Rect(float x, float y, float width, float height)
     {
         this.x = x;
@@ -332,6 +334,7 @@ public partial struct Keyframe
 
     public float outTangent;
 
+    [MemoryPackConstructor]
     public Keyframe(float time, float value)
     {
         this.time = time;
@@ -538,6 +541,7 @@ public partial struct RectInt
 
     public int height;
 
+    [MemoryPackConstructor]
     public RectInt(int x, int y, int width, int height)
     {
         this.x = x;

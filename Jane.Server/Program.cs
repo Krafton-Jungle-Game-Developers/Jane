@@ -5,12 +5,11 @@ using MagicOnion.Server;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.WebHost.ConfigureKestrel(options =>
+builder.WebHost.UseKestrel(options =>
 {
-    options.ListenAnyIP(5001, listenOptions =>
+    options.ConfigureEndpointDefaults(endpointOptions =>
     {
-        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+        endpointOptions.Protocols = HttpProtocols.Http1AndHttp2;
     });
 }).UseUrls("http://jane.jungle-gamedev.com:5000;https://jane.jungle-gamedev.com:5001");
 
