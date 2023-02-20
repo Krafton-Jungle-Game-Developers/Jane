@@ -174,7 +174,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   - visible: 1
-    position: 0.06
+    position: 0
     positionOffset: {x: 0, y: 0}
     angularOffset: 0
     translationScale: {x: 1, y: 1}
