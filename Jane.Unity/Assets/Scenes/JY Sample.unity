@@ -868,7 +868,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 100000
+  far clip plane: 1e+10
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -932,9 +932,9 @@ MonoBehaviour:
   baseMBIntensity: 0
   nowMBIntensity: 0
   maxMBIntensity: 5
-  baseBloomIntensity: 5
-  nowBloomIntensity: 5
-  maxBloomIntensity: 5
+  baseBloomIntensity: 1
+  nowBloomIntensity: 1
+  maxBloomIntensity: 3
   baseRadialBlurIntensity: 5
   nowRadialBlurIntensity: 5
   maxRadialBlurIntensity: 5
@@ -1929,6 +1929,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Astroids Prefab
       objectReference: {fileID: 0}
+    - target: {fileID: 8513206280872235530, guid: 302e957c30a253347aa95eba6b98e9a7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 302e957c30a253347aa95eba6b98e9a7, type: 3}
 --- !u!1001 &1822351006
@@ -2214,6 +2219,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5125148767863619431, guid: ef1d2a57335301b47a927ce7232d2065,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1462
+      objectReference: {fileID: 0}
+    - target: {fileID: 5125148767863619431, guid: ef1d2a57335301b47a927ce7232d2065,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 9403
+      objectReference: {fileID: 0}
+    - target: {fileID: 5125237861260414132, guid: ef1d2a57335301b47a927ce7232d2065,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 7641
+      objectReference: {fileID: 0}
     - target: {fileID: 5129862595919417132, guid: ef1d2a57335301b47a927ce7232d2065,
         type: 3}
       propertyPath: m_RootOrder
@@ -2288,6 +2308,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Planets
+      objectReference: {fileID: 0}
+    - target: {fileID: 5133730109604002744, guid: ef1d2a57335301b47a927ce7232d2065,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 8066
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef1d2a57335301b47a927ce7232d2065, type: 3}
@@ -2756,6 +2781,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1061718438}
     m_Modifications:
+    - target: {fileID: 2448979261624510594, guid: b5125b6361cd96f48b61165ca8bbfd30,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6707873126195868352, guid: b5125b6361cd96f48b61165ca8bbfd30,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -2790,6 +2820,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BlackHole
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707873128162554592, guid: b5125b6361cd96f48b61165ca8bbfd30,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6707873128162554593, guid: b5125b6361cd96f48b61165ca8bbfd30,
         type: 3}
