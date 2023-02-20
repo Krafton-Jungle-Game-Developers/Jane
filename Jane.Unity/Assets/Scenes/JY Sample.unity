@@ -1558,9 +1558,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorRectTransform: {fileID: 1624037100}
-  lineRectTransform: {fileID: 0}
+  lineRectTransform: {fileID: 1624037100}
   canvas: {fileID: 583553267}
   camera: {fileID: 413370018}
+  radius: 350
 --- !u!1001 &1527375581
 PrefabInstance:
   m_ObjectHideFlags: 0

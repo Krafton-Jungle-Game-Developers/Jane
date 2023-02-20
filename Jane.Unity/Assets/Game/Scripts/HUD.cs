@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 
@@ -19,17 +20,16 @@ public class HUD : MonoBehaviour
     void Update()
     {
         Vector3 screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0.0f);
-        float distanceFromCenter = Vector3.Distance(screenCenter, Input.mousePosition);
+        float distanceFromCenter = Vector2.Distance(screenCenter, Input.mousePosition);
+        Vector3 direction = Input.mousePosition - screenCenter;
 
-        Debug.Log($"mouse position:{Input.mousePosition},  cursor position:{cursorRectTransform.position},  distance:{distanceFromCenter}");
         if (distanceFromCenter < radius)
         {
-            cursorRectTransform.position = Input.mousePosition;
+            cursorRectTransform.position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, camera.nearClipPlane);
         }
         else if (distanceFromCenter >= radius)
         {
-            Mathf.Clamp(distanceFromCenter, 0f, radius);
-            cursorRectTransform.position = 
+            cursorRectTransform.position = screenCenter + (direction.normalized * radius);
         }
     }
 }
