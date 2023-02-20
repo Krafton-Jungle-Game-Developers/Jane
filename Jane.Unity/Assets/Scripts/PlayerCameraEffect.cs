@@ -58,6 +58,8 @@ public class PlayerCameraEffect : MonoBehaviour
     private ParticleSystem.EmissionModule _speedParticleEmission;
     [SerializeField] private ParticleSystem _verticalParticleSystem;
     private ParticleSystem.EmissionModule _verticalParticleEmission;
+    [SerializeField] private ParticleSystem _cockpitParticleSystem;
+    private ParticleSystem.EmissionModule _cockpitParticleEmission;
     [Space]
 
     [SerializeField] private float baseParticleIntensity = 0f;
@@ -86,7 +88,9 @@ public class PlayerCameraEffect : MonoBehaviour
         globalVolume.profile.TryGet(out _radialBlur);
         _speedParticleEmission = _speedParticleSystem.emission;
         _verticalParticleEmission = _verticalParticleSystem.emission;
+        _cockpitParticleEmission = _cockpitParticleSystem.emission;
     }
+
 
     private void Update()
     {
@@ -157,6 +161,7 @@ public class PlayerCameraEffect : MonoBehaviour
         _bloom.intensity.value = nowBloomIntensity;
         _speedParticleEmission.rateOverTime = nowParticleIntensity;
         _verticalParticleEmission.rateOverTime = nowParticleIntensity / 10f;
+        _cockpitParticleEmission.rateOverTime = nowParticleIntensity;
     }
     private void UpsideCameraEffect()
     {
