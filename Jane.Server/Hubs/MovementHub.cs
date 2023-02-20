@@ -1,4 +1,5 @@
-﻿using Jane.Unity.ServerShared.Hubs;
+﻿using System;
+using Jane.Unity.ServerShared.Hubs;
 using Jane.Unity.ServerShared.MemoryPackObjects;
 using MagicOnion.Server.Hubs;
 using UnityEngine;
@@ -7,19 +8,38 @@ namespace Jane.Server.Hubs
 {
     public class MovementHub : StreamingHubBase<IMovementHub, IMovementHubReceiver>, IMovementHub
     {
-        public ValueTask<MoveRequest[]> JoinAsync(Ulid roomId, Ulid userId, Vector3 position, Quaternion rotation)
+        private IGroup room;
+        private Player self;
+        private IInMemoryStorage<Player> storage;
+
+        public async ValueTask<Player[]> JoinAsync(Ulid roomId, Ulid userId, Vector3 position, Quaternion rotation)
         {
-            throw new NotImplementedException();
+            self = new() { Id = userId, Position = position, Rotation = rotation };
+            (room, storage) = await Group.AddAsync(roomId.ToString(), self);
+
+            Broadcast(room).OnJoin(self);
+
+            return storage.AllValues.ToArray();
         }
 
-        public ValueTask LeaveAsync()
+        public async ValueTask LeaveAsync()
         {
-            throw new NotImplementedException();
+            await room.RemoveAsync(Context);
+            Broadcast(room).OnLeave(self);
         }
 
-        public ValueTask MoveAsync(Vector3 position, Quaternion rotation)
+        public ValueTask MoveAsync(MoveRequest request)
         {
-            throw new NotImplementedException();
+            self.Position = request.Position;
+            self.Rotation = request.Rotation;
+            Broadcast(room).OnMove(request);
+            return CompletedTask;
+        }
+
+        protected override ValueTask OnDisconnected()
+        {
+            BroadcastExceptSelf(room).OnLeave(self);
+            return CompletedTask;
         }
     }
 }

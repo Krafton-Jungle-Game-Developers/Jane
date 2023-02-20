@@ -4,8 +4,8 @@ namespace Jane.Unity.ServerShared.Hubs
 {
     public interface IMovementHubReceiver
     {
-        void OnJoin(MoveRequest request);
-        void OnLeave(MoveRequest request);
+        void OnJoin(Player request);
+        void OnLeave(Player request);
         void OnMove(MoveRequest request);
     }
 }
