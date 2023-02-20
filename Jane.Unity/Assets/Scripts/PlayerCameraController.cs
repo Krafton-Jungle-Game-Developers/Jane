@@ -15,18 +15,19 @@ public class PlayerCameraController : MonoBehaviour
     private float _rotationY;
     private float _rotationZ;
     private float _rotationW;
-    [SerializeField] private float cameraRotationTension = 10;
 
     //Position Variables
-    [SerializeField] private Vector3 cameraTargetPos;
-    [SerializeField] private Vector3 playerForward;
-    [SerializeField] private Vector3 playerUp;
-    [SerializeField] private Vector3 playerRight;
+    private Vector3 _cameraTargetPos;
+    private Vector3 _playerForward;
+    private Vector3 _playerUp;
+    private Vector3 _playerRight;
 
+    [Space]
     //Inspector Edit
     [SerializeField] private Vector3 cameraOffset;
     [SerializeField] private Quaternion cameraRotationOffset = new Quaternion(0f, 0f, 0f, 0f);
-    [SerializeField] private float cameraTension = 10;
+    [SerializeField] private float cameraPositionTension = 10;
+    [SerializeField] private float cameraRotationTension = 10;
 
     private float _cameraX;
     private float _cameraY;
@@ -45,6 +46,9 @@ public class PlayerCameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Check Camera Distance
+        cameraDistance = (m_Camera.transform.position - playerTransform.position).magnitude;
+
         //Camera Rotation
         playerQuaternion = playerTransform.rotation;
         
@@ -61,15 +65,15 @@ public class PlayerCameraController : MonoBehaviour
         //m_Camera.transform.rotation = playerQuaternion;
 
         //Camera Position Smooth
-        playerUp = playerTransform.up;
-        playerRight = playerTransform.right;
-        playerForward = playerTransform.forward;
+        _playerUp = playerTransform.up;
+        _playerRight = playerTransform.right;
+        _playerForward = playerTransform.forward;
 
-        cameraTargetPos = playerTransform.position - playerForward * cameraOffset.x - playerUp * cameraOffset.y - playerRight * cameraOffset.z;
+        _cameraTargetPos = playerTransform.position - _playerForward * cameraOffset.x - _playerUp * cameraOffset.y - _playerRight * cameraOffset.z;
 
-        _cameraX = Mathf.Lerp(m_Camera.transform.position.x, cameraTargetPos.x, Time.deltaTime * cameraTension);
-        _cameraY = Mathf.Lerp(m_Camera.transform.position.y, cameraTargetPos.y, Time.deltaTime * cameraTension);
-        _cameraZ = Mathf.Lerp(m_Camera.transform.position.z, cameraTargetPos.z, Time.deltaTime * cameraTension);
+        _cameraX = Mathf.Lerp(m_Camera.transform.position.x, _cameraTargetPos.x, Time.deltaTime * cameraPositionTension);
+        _cameraY = Mathf.Lerp(m_Camera.transform.position.y, _cameraTargetPos.y, Time.deltaTime * cameraPositionTension);
+        _cameraZ = Mathf.Lerp(m_Camera.transform.position.z, _cameraTargetPos.z, Time.deltaTime * cameraPositionTension);
 
         m_Camera.transform.position = new Vector3(_cameraX, _cameraY, _cameraZ);
     }
