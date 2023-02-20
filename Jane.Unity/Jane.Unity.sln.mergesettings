@@ -6,12 +6,14 @@
     <NestedProjects>
         <NestedProject ProjectName="MemoryPack" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="MessagePack" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="MessagePack.Annotations" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="MagicOnion.Abstractions" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="MagicOnion.Client" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="MagicOnion.Serialization.MemoryPack" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="MagicOnion.Unity" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="MagicOnion.Unity.Editor" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="Ulid" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="UniRx" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="UniTask" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="UniTask.Addressables" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="UniTask.DOTween" FolderPath="AssemblyDefinitions" />

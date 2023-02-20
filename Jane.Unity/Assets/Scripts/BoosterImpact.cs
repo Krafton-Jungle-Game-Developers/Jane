@@ -30,9 +30,7 @@ public class BoosterImpact : MonoBehaviour
             StartCoroutine(ActivateImpactParticles());
         }
     }
-
-
-
+    
     IEnumerator ActivateImpactParticles()
     {
         if (_boosterActive)
