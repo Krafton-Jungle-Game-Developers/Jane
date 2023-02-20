@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 public class HUD : MonoBehaviour
 {
@@ -8,7 +10,7 @@ public class HUD : MonoBehaviour
     public RectTransform lineRectTransform;
     public Canvas canvas;
     public Camera camera;
-
+    public float radius;
 
     private void Start()
     {
@@ -17,19 +19,17 @@ public class HUD : MonoBehaviour
     }
     void Update()
     {
-        float x = Input.GetAxis("Mouse X");
-        float y = Input.GetAxis("Mouse Y");
-
-        cursorRectTransform.position += new Vector3(x, y, 0.0f);
         Vector3 screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0.0f);
-        Vector3 crosshairOrigin = cursorRectTransform.position - screenCenter;
+        float distanceFromCenter = Vector2.Distance(screenCenter, Input.mousePosition);
+        Vector3 direction = Input.mousePosition - screenCenter;
 
-        if (crosshairOrigin.magnitude > 100.0f)
+        if (distanceFromCenter < radius)
         {
-            crosshairOrigin.Normalize();
-            crosshairOrigin *= 10.0f;
+            cursorRectTransform.position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, camera.nearClipPlane);
         }
-
-        cursorRectTransform.position = crosshairOrigin + screenCenter;
+        else if (distanceFromCenter >= radius)
+        {
+            cursorRectTransform.position = screenCenter + (direction.normalized * radius);
+        }
     }
 }

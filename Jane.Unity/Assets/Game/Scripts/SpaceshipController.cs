@@ -47,7 +47,6 @@ public class SpaceshipController : MonoBehaviour
         if (steerVersion == 1)
         {
             _lookInput = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f);
-            Debug.Log($"mouse input:{_mouseDistance}");
 
             _mouseDistance.x = (_lookInput.x - _screenCenter.x) / _screenCenter.y;
             _mouseDistance.y = (_lookInput.y - _screenCenter.y) / _screenCenter.y;
