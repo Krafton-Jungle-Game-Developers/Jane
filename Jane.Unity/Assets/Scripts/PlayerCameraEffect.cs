@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
 using SCPE;
+using System.Collections;
 
 public class PlayerCameraEffect : MonoBehaviour
 {
