@@ -32,7 +32,7 @@ public class SpaceshipController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _screenCenter = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0f);
-        _camTransform = GetComponentInChildren<Camera>().transform;
+        //_camTransform = GetComponentInChildren<Camera>().transform;
     }
 
     void Update()
