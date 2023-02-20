@@ -6411,7 +6411,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614893}
   m_ExposedName: Cross_Color
   m_Exposed: 1
-  m_Order: 1
+  m_Order: 2
   m_Category: 
   m_Min:
     m_Type:
@@ -6627,7 +6627,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614928}
   m_ExposedName: WarpAmount
   m_Exposed: 1
-  m_Order: 2
+  m_Order: 3
   m_Category: 
   m_Min:
     m_Type:
