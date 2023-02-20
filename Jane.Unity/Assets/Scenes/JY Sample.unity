@@ -932,7 +932,7 @@ MonoBehaviour:
   maxCAIntensity: 1
   baseMBIntensity: 0
   nowMBIntensity: 0
-  maxMBIntensity: 5
+  maxMBIntensity: 3
   baseBloomIntensity: 1
   nowBloomIntensity: 1
   maxBloomIntensity: 3
@@ -963,12 +963,13 @@ MonoBehaviour:
   m_Camera: {fileID: 0}
   playerTransform: {fileID: 0}
   playerQuaternion: {x: 0, y: 0, z: 0, w: 0}
+  cameraRotationTension: 10
   cameraTargetPos: {x: 0, y: 0, z: 0}
   playerForward: {x: 0, y: 0, z: 0}
   playerUp: {x: 0, y: 0, z: 0}
   playerRight: {x: 0, y: 0, z: 0}
   cameraOffset: {x: 30, y: -10, z: 0}
-  cameraVelocity: {x: 0, y: 0, z: 0}
+  cameraRotationOffset: {x: 0, y: 0, z: 0, w: 0}
   cameraTension: 10
   cameraDistance: 0
 --- !u!1 &583553263
