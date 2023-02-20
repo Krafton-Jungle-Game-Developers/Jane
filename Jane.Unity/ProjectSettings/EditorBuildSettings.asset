@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/ChatScene.unity
-    guid: e2c23b66f27a05447be28887bf318ab9
+    path: Assets/Scenes/Move Test.unity
+    guid: c5b157e204f662247b26144cb3e0d364
   m_configObjects: {}

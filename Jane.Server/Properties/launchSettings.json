@@ -2,7 +2,6 @@
   "profiles": {
     "Jane.Server (Production)": {
       "commandName": "Project",
-      "applicationUrl": "http://jane.jungle-gamedev.com:5000;https://jane.jungle-gamedev.com:5001",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Production"
       }
