@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
 using SCPE;
+using System.Collections;
 
 public class PlayerCameraEffect : MonoBehaviour
 {
@@ -58,6 +59,8 @@ public class PlayerCameraEffect : MonoBehaviour
     private ParticleSystem.EmissionModule _speedParticleEmission;
     [SerializeField] private ParticleSystem _verticalParticleSystem;
     private ParticleSystem.EmissionModule _verticalParticleEmission;
+    [SerializeField] private ParticleSystem _cockpitParticleSystem;
+    private ParticleSystem.EmissionModule _cockpitParticleEmission;
     [Space]
 
     [SerializeField] private float baseParticleIntensity = 0f;
@@ -86,7 +89,9 @@ public class PlayerCameraEffect : MonoBehaviour
         globalVolume.profile.TryGet(out _radialBlur);
         _speedParticleEmission = _speedParticleSystem.emission;
         _verticalParticleEmission = _verticalParticleSystem.emission;
+        _cockpitParticleEmission = _cockpitParticleSystem.emission;
     }
+
 
     private void Update()
     {
@@ -127,15 +132,15 @@ public class PlayerCameraEffect : MonoBehaviour
             //NOTE: Don't use Delta Time (Jittering)
             if (nowFOV > baseFOV)
             {
-                nowFOV -= 0.1f * lastingDuration;
+                nowFOV -= 0.05f * lastingDuration;
             }
             if (nowCAIntensity > baseCAIntensity)
             {
-                nowCAIntensity -= 0.1f * lastingDuration;
+                nowCAIntensity -= 0.05f * lastingDuration;
             }
             if (nowMBIntensity > baseMBIntensity)
             {
-                nowMBIntensity -= 0.1f * lastingDuration;
+                nowMBIntensity -= 0.01f * lastingDuration;
             }
             if (nowBloomIntensity > baseBloomIntensity)
             {
@@ -157,6 +162,7 @@ public class PlayerCameraEffect : MonoBehaviour
         _bloom.intensity.value = nowBloomIntensity;
         _speedParticleEmission.rateOverTime = nowParticleIntensity;
         _verticalParticleEmission.rateOverTime = nowParticleIntensity / 10f;
+        _cockpitParticleEmission.rateOverTime = nowParticleIntensity;
     }
     private void UpsideCameraEffect()
     {

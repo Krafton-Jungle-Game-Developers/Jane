@@ -5,6 +5,9 @@ using UnityEngine;
 public class SpaceshipController : MonoBehaviour
 {
     [SerializeField] private Rigidbody _rb;
+    [SerializeField] private float mouseSensitivity;
+    private float _xRotation;
+    private float _yRotation;
 
     public float forwardSpeed = 25f;
     public float strafeSpeed = 15f;
@@ -17,18 +20,19 @@ public class SpaceshipController : MonoBehaviour
     [SerializeField] private float _hoverAcceleration = 2f;
 
     public float lookRateSpeed = 0.5f;
-    private Vector3 lookInput, screenCenter, mouseDistance;
+    private Vector3 _lookInput, _screenCenter, _mouseDistance;
 
-    private float rollInput;
+    private float _rollInput;
     public float rollSpeed = 5f ;
     public float rollAcceleration = 0.5f;
+    public int steerVersion = 1;
+    private Transform _camTransform;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        screenCenter = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0f);
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = false;
+        _screenCenter = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0f);
+        _camTransform = GetComponentInChildren<Camera>().transform;
     }
 
     void Update()
@@ -39,16 +43,37 @@ public class SpaceshipController : MonoBehaviour
 
     private void MouseSteeringUpdate()
     {
-        lookInput = new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 0f);
+        // Consistent method
+        if (steerVersion == 1)
+        {
+            _lookInput = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f);
+            Debug.Log($"mouse input:{_mouseDistance}");
 
-        mouseDistance.x = (lookInput.x - screenCenter.x) / screenCenter.y;
-        mouseDistance.y = (lookInput.y - screenCenter.y) / screenCenter.y;
+            _mouseDistance.x = (_lookInput.x - _screenCenter.x) / _screenCenter.y;
+            _mouseDistance.y = (_lookInput.y - _screenCenter.y) / _screenCenter.y;
 
-        mouseDistance = Vector3.ClampMagnitude(mouseDistance, 1f);
+            _mouseDistance = Vector3.ClampMagnitude(_mouseDistance, 1f);
 
-        rollInput = Mathf.Lerp(rollInput, Input.GetAxisRaw("Roll"), rollAcceleration * Time.deltaTime);
+            _rollInput = Mathf.Lerp(_rollInput, Input.GetAxisRaw("Roll"), rollAcceleration * Time.deltaTime);
 
-        transform.Rotate(-mouseDistance.y * lookRateSpeed, mouseDistance.x * lookRateSpeed, rollInput * rollSpeed, Space.Self);
+            transform.Rotate(-_mouseDistance.y * lookRateSpeed, _mouseDistance.x * lookRateSpeed, _rollInput * rollSpeed, Space.Self);
+        }
+        // Raw input method
+        else if (steerVersion == 2)
+        {
+            float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity;
+            float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
+
+            _yRotation -= mouseX;
+            _xRotation -= mouseY;
+
+            _mouseDistance = new Vector3(mouseX, mouseX, 0f);
+
+            _rollInput = Mathf.Lerp(_rollInput, Input.GetAxisRaw("Roll"), rollAcceleration * Time.deltaTime);
+
+            transform.rotation = Quaternion.Euler(0, _yRotation, 0);
+            transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
+        }
     }
     private void MovementUpdate()
     {
