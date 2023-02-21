@@ -6,13 +6,20 @@ using UnityEngine;
 public class Booster : MonoBehaviour
 {
     SpaceshipController spaceshipController;
+
+    [Header("Reference and Keys")]
     [SerializeField] private VisualEffect boosterImpactVFX;
     [SerializeField] private VisualEffect boosterLoopVFX;
     [SerializeField] private KeyCode boosterKey = KeyCode.LeftShift;
-    [SerializeField] private float boosterSpeed = 400f;
-    [SerializeField] private float normalSpeed = 200f;
+
+    [Space]
+    [Header("Booster Settings")]
+    [SerializeField] private float _boosterSpeed = 400f;
+    [SerializeField] private float _normalSpeed = 200f;
     [SerializeField] private float _warpRate = 0.02f;
-    private bool _boosterActive;
+    [SerializeField] private bool _instantSpeed = true;
+
+    private bool _isBoosterActive;
 
     private void Awake()
     {
@@ -32,13 +39,13 @@ public class Booster : MonoBehaviour
     {
         if(Input.GetKeyDown(boosterKey))
         {
-            _boosterActive = true;
+            _isBoosterActive = true;
             boosterImpactVFX.Play();
             StartCoroutine(ActivateBooster());
         }
         else if (Input.GetKeyUp(boosterKey))
         {
-            _boosterActive= false;
+            _isBoosterActive= false;
             boosterImpactVFX.Stop();
             StartCoroutine(ActivateBooster());
         }
@@ -46,10 +53,14 @@ public class Booster : MonoBehaviour
     
     IEnumerator ActivateBooster()
     {
-        if (_boosterActive)
+        if (_isBoosterActive)
         {
             yield return new WaitForSeconds(0.6f);
-            spaceshipController.ChangeSpeed(boosterSpeed);
+            if (_instantSpeed)
+            {
+                spaceshipController.ChangeSpeedInstantly(_boosterSpeed);
+            }
+            spaceshipController.ChangeSpeed(_boosterSpeed);
             boosterLoopVFX.Play();
 
             float _warpAmount = boosterLoopVFX.GetFloat("WarpAmount");
@@ -62,7 +73,7 @@ public class Booster : MonoBehaviour
         else
         {
             yield return new WaitForSeconds(0.1f);
-            spaceshipController.ChangeSpeed(normalSpeed);
+            spaceshipController.ChangeSpeed(_normalSpeed);
 
             float _warpAmount = boosterLoopVFX.GetFloat("WarpAmount");
             while (_warpAmount >= _warpRate)

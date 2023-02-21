@@ -81,4 +81,12 @@ public class SpaceshipController : MonoBehaviour
         forwardSpeed= newSpeed;
         Debug.Log("Change Speed : " + forwardSpeed);
     }
+
+    // Method to Instantly change activeForwardSpeed 
+    // by outside Elements
+    // Currently used for BoosterImpact in BOOSTER.cs
+    public void ChangeSpeedInstantly(float newSpeed)
+    {
+        _activeForwardSpeed = newSpeed;
+    }
 }
