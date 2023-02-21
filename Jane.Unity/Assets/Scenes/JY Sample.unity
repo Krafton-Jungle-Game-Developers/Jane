@@ -2903,6 +2903,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boosterImpactVFX: {fileID: 929301106}
   boosterKey: 304
+  boosterSpeed: 400
+  normalSpeed: 200
 --- !u!1001 &2647781519040675604
 PrefabInstance:
   m_ObjectHideFlags: 0
