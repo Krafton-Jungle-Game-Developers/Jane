@@ -4,35 +4,24 @@ using UnityEngine;
 
 public class SpaceshipController : MonoBehaviour
 {
-    [SerializeField] private Rigidbody _rb;
-    [SerializeField] private float mouseSensitivity;
-    private float _xRotation;
-    private float _yRotation;
+    /*    [SerializeField] private Rigidbody _rb;
+        [SerializeField] private float mouseSensitivity;
+        public int steerVersion = 1;
+    */
 
-    public float forwardSpeed = 25f;
-    public float strafeSpeed = 15f;
-    public float hoverSpeed = 15f;
-    private float _activeForwardSpeed;
-    private float _activeStrafeSpeed;
-    private float _activeHoverSpeed;
-    [SerializeField] private float _forwardAcceleration = 5f;
-    [SerializeField] private float _strafeAcceleration = 2f;
-    [SerializeField] private float _hoverAcceleration = 2f;
-
-    public float lookRateSpeed = 0.5f;
-    private Vector3 _lookInput, _screenCenter, _mouseDistance;
-
+    [SerializeField] private float lookRateSpeed = 0.5f;
+    [SerializeField] private float forwardSpeed = 200f, strafeSpeed = 50f, hoverSpeed = 50f, rollSpeed = 5f;
+    private float _activeForwardSpeed, _activeStrafeSpeed, _activeHoverSpeed;
+    [SerializeField] private float _forwardAcceleration = 2f, _strafeAcceleration = 2f, _hoverAcceleration = 2f, rollAcceleration = 0.5f;
     private float _rollInput;
-    public float rollSpeed = 5f ;
-    public float rollAcceleration = 0.5f;
-    public int steerVersion = 1;
-    private Transform _camTransform;
+    private Vector3 _lookInput, _screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f), _mouseDistance;
+
+    public RectTransform cursorRectTransform;
+
 
     void Start()
     {
-        _rb = GetComponent<Rigidbody>();
-        _screenCenter = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0f);
-        //_camTransform = GetComponentInChildren<Camera>().transform;
+        /* _rb = GetComponent<Rigidbody>(); */        
     }
 
     void Update()
@@ -44,21 +33,19 @@ public class SpaceshipController : MonoBehaviour
     private void MouseSteeringUpdate()
     {
         // Consistent method
-        if (steerVersion == 1)
-        {
-            _lookInput = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f);
+        _lookInput = cursorRectTransform.position;
 
-            _mouseDistance.x = (_lookInput.x - _screenCenter.x) / _screenCenter.y;
-            _mouseDistance.y = (_lookInput.y - _screenCenter.y) / _screenCenter.y;
+        _mouseDistance.x = (_lookInput.x - _screenCenter.x) / _screenCenter.y;
+        _mouseDistance.y = (_lookInput.y - _screenCenter.y) / _screenCenter.y;
 
-            _mouseDistance = Vector3.ClampMagnitude(_mouseDistance, 1f);
+        _mouseDistance = Vector3.ClampMagnitude(_mouseDistance, 1f);
 
-            _rollInput = Mathf.Lerp(_rollInput, Input.GetAxisRaw("Roll"), rollAcceleration * Time.deltaTime);
+        _rollInput = Mathf.Lerp(_rollInput, Input.GetAxisRaw("Roll"), rollAcceleration * Time.deltaTime);
 
-            transform.Rotate(-_mouseDistance.y * lookRateSpeed, _mouseDistance.x * lookRateSpeed, _rollInput * rollSpeed, Space.Self);
-        }
+        transform.Rotate(-_mouseDistance.y * lookRateSpeed, _mouseDistance.x * lookRateSpeed, _rollInput * rollSpeed, Space.Self);
+
         // Raw input method
-        else if (steerVersion == 2)
+/*        else if (steerVersion == 2)
         {
             float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity;
             float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
@@ -72,7 +59,7 @@ public class SpaceshipController : MonoBehaviour
 
             transform.rotation = Quaternion.Euler(0, _yRotation, 0);
             transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
-        }
+        }*/
     }
     private void MovementUpdate()
     {

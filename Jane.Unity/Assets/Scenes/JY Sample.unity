@@ -2874,7 +2874,7 @@ MonoBehaviour:
   lookRateSpeed: 0.5
   rollSpeed: 5
   rollAcceleration: 0.5
-  steerVersion: 2
+  steerVersion: 1
 --- !u!54 &2509914176113464012
 Rigidbody:
   m_ObjectHideFlags: 0

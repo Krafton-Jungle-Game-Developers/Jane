@@ -34,5 +34,17 @@ public class HUD : MonoBehaviour
             cursorRectTransform.position = screenCenter + (direction.normalized * radius);
             relativeScreenCenter += (distanceFromCenter - radius) * (direction.normalized);
         }
+
+        lineRectTransform.position = 0.5f * screenCenter + 0.5f * cursorRectTransform.position;
+        lineRectTransform.LookAt(cursorRectTransform, Vector3.Cross(cursorRectTransform.up, (cursorRectTransform.position - lineRectTransform.position).normalized));
+        if(lineRectTransform.anchoredPosition.x < 0f)
+        {
+            lineRectTransform.rotation = Quaternion.Euler(0f, 0f, lineRectTransform.rotation.eulerAngles.x);
+        }
+        else
+        {
+            lineRectTransform.rotation = Quaternion.Euler(0f, 180f, lineRectTransform.rotation.eulerAngles.x);
+        }
+        lineRectTransform.sizeDelta = new Vector2((cursorRectTransform.localPosition - lineRectTransform.localPosition).magnitude * 2 * (1 / lineRectTransform.localScale.x), lineRectTransform.sizeDelta.y);
     }
 }
