@@ -2863,18 +2863,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb705ad60ad00864ca2931652ea9fa4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rb: {fileID: 2509914176113464012}
-  mouseSensitivity: 1
+  lookRateSpeed: 0.5
   forwardSpeed: 200
   strafeSpeed: 50
   hoverSpeed: 50
+  rollSpeed: 5
   _forwardAcceleration: 2
   _strafeAcceleration: 2
   _hoverAcceleration: 2
-  lookRateSpeed: 0.5
-  rollSpeed: 5
   rollAcceleration: 0.5
-  steerVersion: 1
+  cursorRectTransform: {fileID: 1624037100}
 --- !u!54 &2509914176113464012
 Rigidbody:
   m_ObjectHideFlags: 0
