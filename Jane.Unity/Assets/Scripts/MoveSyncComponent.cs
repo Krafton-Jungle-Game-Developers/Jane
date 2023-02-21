@@ -118,7 +118,7 @@ public class MoveSyncComponent : MonoBehaviour, IMovementHubReceiver
 
     public void OnMove(MoveRequest request)
     {
-        Debug.Log($"Mov Id:{request.Id}, x:{request.Position.x}, y:{request.Position.y}, z:{request.Position.z}" +
+        Debug.Log($"Mov Id:{request.Id}, x:{request.Position.x}, y:{request.Position.y}, z:{request.Position.z}\n" +
                          $"Rot x:{request.Rotation.x}, y:{request.Rotation.y}, z:{request.Rotation.z}, w:{request.Rotation.w}");
 
         if (players.TryGetValue(request.Id, out GameObject cube))
