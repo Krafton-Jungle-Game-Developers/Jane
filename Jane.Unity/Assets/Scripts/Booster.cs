@@ -55,7 +55,7 @@ public class Booster : MonoBehaviour
     {
         if (_isBoosterActive)
         {
-            yield return new WaitForSeconds(0.6f);
+            yield return new WaitForSeconds(0.5f);
             if (_instantSpeed)
             {
                 spaceshipController.ChangeSpeedInstantly(_boosterSpeed);
