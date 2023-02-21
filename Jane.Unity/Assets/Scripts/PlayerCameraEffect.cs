@@ -95,8 +95,11 @@ public class PlayerCameraEffect : MonoBehaviour
 
     private void Update()
     {
-        FowordCameraEffect();
-        //UpsideCameraEffect();
+        CameraPropertiesControl();
+        GlovalVolumeControl();
+        ParticleSystemControl();
+
+        //UpsideCameraEffect(); 
     }
 
     private void FixedUpdate()
@@ -114,12 +117,28 @@ public class PlayerCameraEffect : MonoBehaviour
                                         playerRigidbody.position.z);
     }
 
-    private void FowordCameraEffect()
+    private void CameraPropertiesControl()
     {
-        if(playerAcceleration > 1f)
+        if (playerAcceleration > 1f)
         {
             //NOTE: Don't use Delta Time (Jittering)
             nowFOV = Mathf.Lerp(nowFOV, maxFOV, 0.001f * playerAcceleration);
+        }
+        else
+        {
+            //NOTE: Don't use Delta Time (Jittering)
+            if (nowFOV > baseFOV)
+            {
+                nowFOV -= 0.05f * lastingDuration;
+            }
+        }
+        playerCamera.fieldOfView = nowFOV;
+    }
+    private void GlovalVolumeControl()
+    {
+        if (playerAcceleration > 1f)
+        {
+            //NOTE: Don't use Delta Time (Jittering)
             nowCAIntensity = Mathf.Lerp(nowCAIntensity, maxCAIntensity, 0.001f * playerAcceleration);
             nowMBIntensity = Mathf.Lerp(nowMBIntensity, maxMBIntensity, 0.001f * playerAcceleration);
             nowBloomIntensity = Mathf.Lerp(nowBloomIntensity, maxBloomIntensity, 0.001f * playerAcceleration);
@@ -130,10 +149,6 @@ public class PlayerCameraEffect : MonoBehaviour
         else
         {
             //NOTE: Don't use Delta Time (Jittering)
-            if (nowFOV > baseFOV)
-            {
-                nowFOV -= 0.05f * lastingDuration;
-            }
             if (nowCAIntensity > baseCAIntensity)
             {
                 nowCAIntensity -= 0.05f * lastingDuration;
@@ -150,20 +165,35 @@ public class PlayerCameraEffect : MonoBehaviour
             {
                 nowRadialBlurIntensity -= 0.1f * lastingDuration;
             }
-            if (nowParticleIntensity > baseParticleIntensity)
-            {
-                nowParticleIntensity -= 0.1f * lastingDuration;
-            }
         }
         playerCamera.fieldOfView = nowFOV;
         _chromaticAberration.intensity.value = nowCAIntensity;
         _motionBlur.intensity.value = nowMBIntensity;
         _radialBlur.amount.value = nowRadialBlurIntensity;
         _bloom.intensity.value = nowBloomIntensity;
+    }
+    private void ParticleSystemControl()
+    {
+        if (playerAcceleration > 1f)
+        {
+            //NOTE: Don't use Delta Time (Jittering)
+            nowParticleIntensity = Mathf.Lerp(nowParticleIntensity, maxParticleIntensity, 0.1f * playerAcceleration);
+
+        }
+        else
+        {
+            //NOTE: Don't use Delta Time (Jittering)
+            if (nowParticleIntensity > baseParticleIntensity)
+            {
+                nowParticleIntensity -= 0.1f * lastingDuration;
+            }
+        }
         _speedParticleEmission.rateOverTime = nowParticleIntensity;
         _verticalParticleEmission.rateOverTime = nowParticleIntensity / 10f;
         _cockpitParticleEmission.rateOverTime = nowParticleIntensity;
     }
+    
+    //Not Used Function
     private void UpsideCameraEffect()
     {
         //TODO: Change if Condition
