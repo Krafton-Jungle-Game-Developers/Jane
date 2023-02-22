@@ -18,7 +18,7 @@ public class SpaceshipController : MonoBehaviour
     private Vector3 _lookInput, _screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f), _mouseDistance;
 
     public RectTransform cursorRectTransform;
-
+    [HideInInspector] public bool canControl;
 
     void Start()
     {
@@ -27,9 +27,12 @@ public class SpaceshipController : MonoBehaviour
 
     void Update()
     {
-        MouseSteeringUpdate();
-        MovementUpdate();
-        RollUpdate();
+        if (canControl)
+        {
+            MouseSteeringUpdate();
+            MovementUpdate();
+            RollUpdate();
+        }
     }
 
     private void MouseSteeringUpdate()
@@ -53,21 +56,25 @@ public class SpaceshipController : MonoBehaviour
     private void RollUpdate()
     {
         float rollInput = Input.GetAxisRaw("Roll");
-        float xAngle = transform.rotation.eulerAngles.x;
+/*        float xAngle = transform.rotation.eulerAngles.x;
         float yAngle = transform.rotation.eulerAngles.y;
-
+*/
         _activeRollSpeed = Mathf.Lerp(_activeRollSpeed, rollInput, rollAcceleration * Time.deltaTime);
-        if(Mathf.Abs(rollInput) < 0.1f /*&& _mouseDistance.magnitude < 0.1f*/ && (0f < Mathf.Abs(xAngle) && Mathf.Abs(xAngle) < 60f))
+/*        if(Mathf.Abs(rollInput) < 0.1f *//*&& _mouseDistance.magnitude < 0.1f*//* && (0f < Mathf.Abs(xAngle) && Mathf.Abs(xAngle) < 60f))
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(xAngle, yAngle, 0f),
                                                  _rollBackSpeed * Mathf.Abs((xAngle) - 60f) / 60f * Time.deltaTime);
         }
-        else if(Mathf.Abs(rollInput) < 0.1f /*&& _mouseDistance.magnitude < 0.1f*/ && (300f < Mathf.Abs(xAngle) && Mathf.Abs(xAngle) < 360f))
+        else if(Mathf.Abs(rollInput) < 0.1f *//*&& _mouseDistance.magnitude < 0.1f*//* && (300f < Mathf.Abs(xAngle) && Mathf.Abs(xAngle) < 360f))
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(xAngle, yAngle, 0f),
+            transform.rotation = Quaterni/on.Lerp(transform.rotation, Quaternion.Euler(xAngle, yAngle, 0f),
                                                  _rollBackSpeed * Mathf.Abs((xAngle) - 300f) / 60f * Time.deltaTime);
         }
-        transform.Rotate(0f, 0f, _activeRollSpeed * rollSpeed, Space.Self);
+*/        transform.Rotate(0f, 0f, _activeRollSpeed * rollSpeed, Space.Self);
+        if(Mathf.Abs(rollInput) < 0.1f)
+        {
+            transform.Rotate(0f, 0f, 0f, Space.Self);
+        }
     }
 
     private void MovementUpdate()
