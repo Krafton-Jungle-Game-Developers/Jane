@@ -19,7 +19,7 @@ public class Booster : MonoBehaviour
     [SerializeField] private float _warpRate = 0.02f;
     [SerializeField] private bool _instantSpeed = true;
 
-    private bool _isBoosterActive;
+    public bool _isBoosterActive;
 
     private void Awake()
     {
@@ -37,19 +37,21 @@ public class Booster : MonoBehaviour
     
     void Update()
     {
-        if(Input.GetKeyDown(boosterKey))
+        if(spaceshipController.canControl)
         {
-            _isBoosterActive = true;
-            boosterImpactVFX.Play();
-            StartCoroutine(ActivateBooster());
+            if(Input.GetKeyDown(boosterKey))
+            {
+                _isBoosterActive = true;
+                boosterImpactVFX.Play();
+                StartCoroutine(ActivateBooster());
+            }
+            else if (Input.GetKeyUp(boosterKey))
+            {
+                _isBoosterActive= false;
+                boosterImpactVFX.Stop();
+                StartCoroutine(ActivateBooster());
+            }
         }
-        else if (Input.GetKeyUp(boosterKey))
-        {
-            _isBoosterActive= false;
-            boosterImpactVFX.Stop();
-            StartCoroutine(ActivateBooster());
-        }
-
         if (_isBoosterActive)
         {
             // Booster SpeedLine Left/Right Rotation management

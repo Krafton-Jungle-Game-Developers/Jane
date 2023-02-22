@@ -104,7 +104,7 @@ public class PlayerCameraEffect : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //Get player's Velocity & cceleration
+        //Get player's Velocity & acceleration
         playerPosition = new Vector3(playerRigidbody.position.x,
                                      0.0f,
                                      playerRigidbody.position.z);
@@ -192,7 +192,7 @@ public class PlayerCameraEffect : MonoBehaviour
         _verticalParticleEmission.rateOverTime = nowParticleIntensity / 10f;
         _cockpitParticleEmission.rateOverTime = nowParticleIntensity;
     }
-    
+
     //Not Used Function
     private void UpsideCameraEffect()
     {
@@ -200,7 +200,7 @@ public class PlayerCameraEffect : MonoBehaviour
         //if (playerMovementController.state == MovementState.Doublejump)
         if (true)
         {
-            nowVerticalIntensity = Mathf.Lerp(nowVerticalIntensity, maxVerticalIntensity, 0.1f *playerAcceleration);
+            nowVerticalIntensity = Mathf.Lerp(nowVerticalIntensity, maxVerticalIntensity, 0.1f * playerAcceleration);
         }
         else
         {

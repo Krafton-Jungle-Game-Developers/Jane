@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class PlayerCameraController : MonoBehaviour
@@ -33,14 +35,22 @@ public class PlayerCameraController : MonoBehaviour
     private float _cameraY;
     private float _cameraZ;
 
+
     [SerializeField] private float cameraDistance;
 
+    // Booster Camera Shake options 
+    private Booster booster;
+    private float _shakeX = 0f;
+    private float _shakeY = 0f;
+    [SerializeField] private float _shakeMagnitude = 0.1f;
+    
 
     // Start is called before the first frame update
     void Start()
     {
-        m_Camera = GetComponentInParent<Camera>();
+        m_Camera = GetComponent<Camera>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        booster = GameObject.FindGameObjectWithTag("Player").GetComponent<Booster>();
     }
 
     // Update is called once per frame
@@ -50,8 +60,8 @@ public class PlayerCameraController : MonoBehaviour
         cameraDistance = (m_Camera.transform.position - playerTransform.position).magnitude;
 
         //Camera Rotation
-        playerQuaternion = playerTransform.rotation;
-        
+/*        playerQuaternion = playerTransform.rotation;
+*/        
 
         //Camera Rotation Smooth(1)
         _rotationX = Mathf.Lerp(m_Camera.transform.rotation.x, playerTransform.rotation.x, Time.deltaTime * cameraRotationTension);
@@ -75,6 +85,18 @@ public class PlayerCameraController : MonoBehaviour
         _cameraY = Mathf.Lerp(m_Camera.transform.position.y, _cameraTargetPos.y, Time.deltaTime * cameraPositionTension);
         _cameraZ = Mathf.Lerp(m_Camera.transform.position.z, _cameraTargetPos.z, Time.deltaTime * cameraPositionTension);
 
-        m_Camera.transform.position = new Vector3(_cameraX, _cameraY, _cameraZ);
+        if (booster._isBoosterActive)
+        {
+            _shakeX = UnityEngine.Random.Range(1f, -1f) * _shakeMagnitude;
+            _shakeY = UnityEngine.Random.Range(1f, -1f) * _shakeMagnitude;
+        } 
+        else
+        {
+            _shakeX = 0;
+            _shakeY = 0;
+        }
+
+        m_Camera.transform.position = new Vector3(_cameraX + _shakeX, _cameraY + _shakeY, _cameraZ);
     }
+
 }
