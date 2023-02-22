@@ -8,7 +8,6 @@ public class HUD : MonoBehaviour
     public RectTransform cursorRectTransform;
     public RectTransform lineRectTransform;
     public Canvas canvas;
-    public Camera camera;
     public float radius;
 
     private Vector3 screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0.0f);
@@ -16,7 +15,6 @@ public class HUD : MonoBehaviour
 
     private void Start()
     {
-        /*Cursor.lockState = CursorLockMode.Locked;*/
         Cursor.visible = false;
     }
     void Update()
