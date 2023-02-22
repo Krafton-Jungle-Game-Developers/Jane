@@ -96,4 +96,20 @@ public class SpaceshipController : MonoBehaviour
     {
         _activeForwardSpeed = newSpeed;
     }
+
+    // Method to Access Cursor X Position (true if Left)
+    // by outside Elements
+    // Currently used for BOOSTER.cs
+    public bool GetIsCursorLeft()
+    {
+        if (_mouseDistance.x < 0 )
+        {
+            // Cursor is Left
+            return true;
+        } 
+        else
+        {
+            return false;
+        }
+    }
 }

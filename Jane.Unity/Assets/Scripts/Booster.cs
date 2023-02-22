@@ -49,13 +49,26 @@ public class Booster : MonoBehaviour
             boosterImpactVFX.Stop();
             StartCoroutine(ActivateBooster());
         }
+
+        if (_isBoosterActive)
+        {
+            // Booster SpeedLine Left/Right Rotation management
+            if (spaceshipController.GetIsCursorLeft())
+            {
+                boosterLoopVFX.SetBool("isLeft", true);
+            }
+            else
+            {
+                boosterLoopVFX.SetBool("isLeft", false);
+            }
+        }
     }
     
     IEnumerator ActivateBooster()
     {
         if (_isBoosterActive)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.6f);
             if (_instantSpeed)
             {
                 spaceshipController.ChangeSpeedInstantly(_boosterSpeed);
@@ -64,6 +77,8 @@ public class Booster : MonoBehaviour
             boosterLoopVFX.Play();
 
             float _warpAmount = boosterLoopVFX.GetFloat("WarpAmount");
+            
+            // for smooth SpeedLine 
             while(_warpAmount < 1) 
             {
                 _warpAmount += _warpRate;
