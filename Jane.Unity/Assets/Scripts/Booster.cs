@@ -19,7 +19,7 @@ public class Booster : MonoBehaviour
     [SerializeField] private float _warpRate = 0.02f;
     [SerializeField] private bool _instantSpeed = true;
 
-    private bool _isBoosterActive;
+    public bool _isBoosterActive;
 
     private void Awake()
     {
