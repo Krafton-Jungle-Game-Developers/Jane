@@ -13,6 +13,6 @@ public class GateTriggerQuad : MonoBehaviour
         CheckPoints checkPointsArr = GetComponentInParent<CheckPoints>();
 
         checkPointsArr.ControlGates();
+        Destroy(gameObject);
     }
-
 }

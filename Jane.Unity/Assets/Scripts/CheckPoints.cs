@@ -11,7 +11,7 @@ using UnityEngine.VFX;
 public class CheckPoints : MonoBehaviour
 {
     [SerializeField] private GameObject[] checkPointArr;
-    [SerializeField] private int idx = 0;
+    private int idx = 0;
     private GameObject currGate;
     private GameObject nextGate;
 
@@ -26,10 +26,7 @@ public class CheckPoints : MonoBehaviour
         {
             checkPointArr[k].SendMessage("Deactivate");
         }
-        
     }
-
-
 
     public void ControlGates()
     {
@@ -42,10 +39,6 @@ public class CheckPoints : MonoBehaviour
             nextGate.SendMessage("Activate");
         }
 
-
-        
         idx--;
-
     }
-
 }
