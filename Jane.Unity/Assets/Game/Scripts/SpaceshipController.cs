@@ -79,7 +79,7 @@ public class SpaceshipController : MonoBehaviour
     public void ChangeSpeed(float newSpeed)
     {
         forwardSpeed= newSpeed;
-        Debug.Log("Change Speed : " + forwardSpeed);
+        //Debug.Log("Change Speed : " + forwardSpeed);
     }
 
     // Method to Instantly change activeForwardSpeed 
