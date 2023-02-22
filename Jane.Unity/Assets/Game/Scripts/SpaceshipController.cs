@@ -32,7 +32,8 @@ public class SpaceshipController : MonoBehaviour
 
     private void MouseSteeringUpdate()
     {
-        // Consistent method
+/*        if (_lookInput == )
+*/        // Consistent method
         _lookInput = cursorRectTransform.position;
 
         _mouseDistance.x = (_lookInput.x - _screenCenter.x) / _screenCenter.y;
