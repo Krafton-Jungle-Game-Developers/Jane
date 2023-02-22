@@ -6,11 +6,20 @@ using UnityEngine;
 public class Booster : MonoBehaviour
 {
     SpaceshipController spaceshipController;
-    [SerializeField] VisualEffect boosterImpactVFX;
-    [SerializeField] KeyCode boosterKey = KeyCode.LeftShift;
-    [SerializeField] float boosterSpeed = 400f;
-    [SerializeField] float normalSpeed = 200f;
-    private bool _boosterActive;
+
+    [Header("Reference and Keys")]
+    [SerializeField] private VisualEffect boosterImpactVFX;
+    [SerializeField] private VisualEffect boosterLoopVFX;
+    [SerializeField] private KeyCode boosterKey = KeyCode.LeftShift;
+
+    [Space]
+    [Header("Booster Settings")]
+    [SerializeField] private float _boosterSpeed = 400f;
+    [SerializeField] private float _normalSpeed = 200f;
+    [SerializeField] private float _warpRate = 0.02f;
+    [SerializeField] private bool _instantSpeed = true;
+
+    private bool _isBoosterActive;
 
     private void Awake()
     {
@@ -21,6 +30,8 @@ public class Booster : MonoBehaviour
     void Start()
     {
         boosterImpactVFX.Stop();
+        boosterLoopVFX.Stop();
+        boosterLoopVFX.SetFloat("WarpAmount", 0);
     }
 
     
@@ -28,29 +39,66 @@ public class Booster : MonoBehaviour
     {
         if(Input.GetKeyDown(boosterKey))
         {
-            _boosterActive = true;
+            _isBoosterActive = true;
             boosterImpactVFX.Play();
             StartCoroutine(ActivateBooster());
         }
         else if (Input.GetKeyUp(boosterKey))
         {
-            _boosterActive= false;
+            _isBoosterActive= false;
             boosterImpactVFX.Stop();
             StartCoroutine(ActivateBooster());
+        }
+
+        if (_isBoosterActive)
+        {
+            // Booster SpeedLine Left/Right Rotation management
+            if (spaceshipController.GetIsCursorLeft())
+            {
+                boosterLoopVFX.SetBool("isLeft", true);
+            }
+            else
+            {
+                boosterLoopVFX.SetBool("isLeft", false);
+            }
         }
     }
     
     IEnumerator ActivateBooster()
     {
-        if (_boosterActive)
+        if (_isBoosterActive)
         {
             yield return new WaitForSeconds(0.6f);
-            spaceshipController.ChangeSpeed(boosterSpeed);
+            if (_instantSpeed)
+            {
+                spaceshipController.ChangeSpeedInstantly(_boosterSpeed);
+            }
+            spaceshipController.ChangeSpeed(_boosterSpeed);
+            boosterLoopVFX.Play();
+
+            float _warpAmount = boosterLoopVFX.GetFloat("WarpAmount");
+            
+            // for smooth SpeedLine 
+            while(_warpAmount < 1) 
+            {
+                _warpAmount += _warpRate;
+                boosterLoopVFX.SetFloat("WarpAmount", _warpAmount);
+            }
         }
         else
         {
-            yield return new WaitForSeconds(0.1f);
-            spaceshipController.ChangeSpeed(normalSpeed);
+            yield return new WaitForSeconds(0.5f);
+            spaceshipController.ChangeSpeed(_normalSpeed);
+
+            float _warpAmount = boosterLoopVFX.GetFloat("WarpAmount");
+            while (_warpAmount >= _warpRate)
+            {
+                _warpAmount -= _warpRate;
+                boosterLoopVFX.SetFloat("WarpAmount", _warpAmount);
+            }
+            //boosterLoopVFX.SetFloat("WarpAmount", 0);
+
+            boosterLoopVFX.Stop();
         }
     }
 }
