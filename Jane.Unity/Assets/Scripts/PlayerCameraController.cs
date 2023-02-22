@@ -50,8 +50,8 @@ public class PlayerCameraController : MonoBehaviour
         cameraDistance = (m_Camera.transform.position - playerTransform.position).magnitude;
 
         //Camera Rotation
-        playerQuaternion = playerTransform.rotation;
-        
+/*        playerQuaternion = playerTransform.rotation;
+*/        
 
         //Camera Rotation Smooth(1)
         _rotationX = Mathf.Lerp(m_Camera.transform.rotation.x, playerTransform.rotation.x, Time.deltaTime * cameraRotationTension);
