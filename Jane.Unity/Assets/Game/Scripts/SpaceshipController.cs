@@ -15,7 +15,6 @@ public class SpaceshipController : MonoBehaviour
     [SerializeField] private float _forwardAcceleration = 2f, _strafeAcceleration = 2f, _hoverAcceleration = 2f, rollAcceleration = 0.5f;
     private float _activeRollSpeed;
     [SerializeField] private float _rollBackSpeed = 5f;
-    [SerializeField] private AnimationCurve curve;
     private Vector3 _lookInput, _screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f), _mouseDistance;
 
     public RectTransform cursorRectTransform;
@@ -51,14 +50,22 @@ public class SpaceshipController : MonoBehaviour
         transform.Rotate(-_mouseDistance.y * lookRateSpeed, _mouseDistance.x * lookRateSpeed, 0f, Space.Self);
     }
 
-    float t;
     private void RollUpdate()
     {
         float rollInput = Input.GetAxisRaw("Roll");
+        float xAngle = transform.rotation.eulerAngles.x;
+        float yAngle = transform.rotation.eulerAngles.y;
+
         _activeRollSpeed = Mathf.Lerp(_activeRollSpeed, rollInput, rollAcceleration * Time.deltaTime);
-        if(Mathf.Abs(rollInput) < 0.1f)
+        if(Mathf.Abs(rollInput) < 0.1f /*&& _mouseDistance.magnitude < 0.1f*/ && (0f < Mathf.Abs(xAngle) && Mathf.Abs(xAngle) < 60f))
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f), Mathf.Exp(_rollBackSpeed * 0.1f) * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(xAngle, yAngle, 0f),
+                                                 _rollBackSpeed * Mathf.Abs((xAngle) - 60f) / 60f * Time.deltaTime);
+        }
+        else if(Mathf.Abs(rollInput) < 0.1f /*&& _mouseDistance.magnitude < 0.1f*/ && (300f < Mathf.Abs(xAngle) && Mathf.Abs(xAngle) < 360f))
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(xAngle, yAngle, 0f),
+                                                 _rollBackSpeed * Mathf.Abs((xAngle) - 300f) / 60f * Time.deltaTime);
         }
         transform.Rotate(0f, 0f, _activeRollSpeed * rollSpeed, Space.Self);
     }
