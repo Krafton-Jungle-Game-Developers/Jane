@@ -12,17 +12,19 @@ public class CheckPoints : MonoBehaviour
 {
     [SerializeField] private GameObject[] checkPointArr;
     private int idx = 0;
+    private int gateCount;
     private GameObject currGate;
     private GameObject nextGate;
 
     // Start is called before the first frame update
     void Start()
     {
-        idx = checkPointArr.Length - 1;
+        idx = 0;
+        gateCount = checkPointArr.Length;
         currGate= checkPointArr[idx];
         currGate.SendMessage("Activate");
 
-        for (int k = idx - 1; k >= 0; k--)
+        for (int k = 1; k  < gateCount ; k++)
         {
             checkPointArr[k].SendMessage("Deactivate");
         }
@@ -33,12 +35,12 @@ public class CheckPoints : MonoBehaviour
         currGate = checkPointArr[idx];
         currGate.SendMessage("Deactivate");
 
-        if (idx != 0)
+        if (idx != gateCount)
         {
-            nextGate= checkPointArr[idx - 1];
+            nextGate= checkPointArr[idx + 1];
             nextGate.SendMessage("Activate");
         }
 
-        idx--;
+        idx++;
     }
 }
