@@ -28,6 +28,7 @@ public class SpaceshipController : MonoBehaviour
     {
         MouseSteeringUpdate();
         MovementUpdate();
+        Debug.Log("Active Forward Speed : " + _activeForwardSpeed);
     }
 
     private void MouseSteeringUpdate()
@@ -71,5 +72,22 @@ public class SpaceshipController : MonoBehaviour
         transform.position += (transform.forward * _activeForwardSpeed * Time.deltaTime) +
                               (transform.right * _activeStrafeSpeed * Time.deltaTime) +
                               (transform.up * _activeHoverSpeed * Time.deltaTime);
+    }
+
+
+    // Method for Controlling Speed by outside elements 
+    // Currently used by BOOSTER.cs 
+    public void ChangeSpeed(float newSpeed)
+    {
+        forwardSpeed= newSpeed;
+        Debug.Log("Change Speed : " + forwardSpeed);
+    }
+
+    // Method to Instantly change activeForwardSpeed 
+    // by outside Elements
+    // Currently used for BoosterImpact in BOOSTER.cs
+    public void ChangeSpeedInstantly(float newSpeed)
+    {
+        _activeForwardSpeed = newSpeed;
     }
 }
