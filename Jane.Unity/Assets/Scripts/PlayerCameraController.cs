@@ -48,7 +48,7 @@ public class PlayerCameraController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_Camera = GetComponentInParent<Camera>();
+        m_Camera = GetComponent<Camera>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         booster = GameObject.FindGameObjectWithTag("Player").GetComponent<Booster>();
     }
