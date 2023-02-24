@@ -4,13 +4,22 @@ using UnityEngine;
 
 public class SpaceshipController : MonoBehaviour
 {
-    /*    [SerializeField] private Rigidbody _rb;
-        [SerializeField] private float mouseSensitivity;
-        public int steerVersion = 1;
-    */
+    private Rigidbody _rb;
+
+    [Header("Movement")]
+    [SerializeField] private float yawRotation = 500f;
+    [SerializeField] private float pitchRotation = 1000f;
+    [SerializeField] private float rollRotation = 1000f;
+    [SerializeField] private Vector3 maxMovementSpeed = new Vector3(400f, 400f, 400f);
+    private Vector3 _currentMovementSpeed = Vector3.zero;
+    [SerializeField, Range(0.001f, 0.999f)] private float forwardDeceleration, strafeDeceleration, hoverDeceleration;
+    private Vector3 playerInput;
+    private Vector2 pitchYawInput;
+    private float rollInput;
+    private Vector3 glide = new Vector3(0f, 0f, 0f);
 
     [SerializeField] private float lookRateSpeed = 0.5f;
-    [SerializeField] private float forwardSpeed = 200f, strafeSpeed = 50f, hoverSpeed = 50f, rollSpeed = 5f;
+    [SerializeField] private float rollSpeed = 5f;
     private float _activeForwardSpeed, _activeStrafeSpeed, _activeHoverSpeed;
     [SerializeField] private float _forwardAcceleration = 2f, _strafeAcceleration = 2f, _hoverAcceleration = 2f, rollAcceleration = 0.5f;
     private float _activeRollSpeed;
@@ -22,17 +31,34 @@ public class SpaceshipController : MonoBehaviour
 
     void Start()
     {
-        /* _rb = GetComponent<Rigidbody>(); */        
+        _rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
         if (canControl)
         {
-            MouseSteeringUpdate();
-            MovementUpdate();
-            RollUpdate();
         }
+    }
+
+    void FixedUpdate()
+    {
+        MouseSteeringUpdate();
+        RollUpdate();
+        MyInput();
+        MovementUpdate();
+    }
+
+    private void MyInput()
+    {
+        playerInput = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Hover"), Input.GetAxisRaw("Vertical"));
+        Debug.Log($"{playerInput}");
+        rollInput = Input.GetAxisRaw("Roll");
+
+        Vector3 mouseLocation = cursorRectTransform.position;
+        pitchYawInput.x = (mouseLocation.x - _screenCenter.x) / _screenCenter.y;
+        pitchYawInput.y = (mouseLocation.y - _screenCenter.y) / _screenCenter.y;
+        pitchYawInput = Vector3.ClampMagnitude(pitchYawInput, 1f);
     }
 
     private void MouseSteeringUpdate()
@@ -56,44 +82,50 @@ public class SpaceshipController : MonoBehaviour
     private void RollUpdate()
     {
         float rollInput = Input.GetAxisRaw("Roll");
-/*        float xAngle = transform.rotation.eulerAngles.x;
-        float yAngle = transform.rotation.eulerAngles.y;
-*/
+/*        _rb.AddRelativeTorque(Vector3.forward * rollRotation * rollInput * Time.deltaTime);
+        _rb.AddRelativeTorque(Vector3.right * Mathf.Clamp(-pitchYawInput.y, -1f, 1f) * pitchRotation * Time.deltaTime);
+        _rb.AddRelativeTorque(Vector3.up * Mathf.Clamp(pitchYawInput.x, -1f, 1f) * yawRotation * Time.deltaTime);
+*/        /*        float xAngle = transform.rotation.eulerAngles.x;
+                float yAngle = transform.rotation.eulerAngles.y;
+
+
+        */
         _activeRollSpeed = Mathf.Lerp(_activeRollSpeed, rollInput, rollAcceleration * Time.deltaTime);
-/*        if(Mathf.Abs(rollInput) < 0.1f *//*&& _mouseDistance.magnitude < 0.1f*//* && (0f < Mathf.Abs(xAngle) && Mathf.Abs(xAngle) < 60f))
+/*        if (Mathf.Abs(rollInput) < 0.1f && _mouseDistance.magnitude < 0.1f && (0f < Mathf.Abs(xAngle) && Mathf.Abs(xAngle) < 60f))
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(xAngle, yAngle, 0f),
                                                  _rollBackSpeed * Mathf.Abs((xAngle) - 60f) / 60f * Time.deltaTime);
         }
-        else if(Mathf.Abs(rollInput) < 0.1f *//*&& _mouseDistance.magnitude < 0.1f*//* && (300f < Mathf.Abs(xAngle) && Mathf.Abs(xAngle) < 360f))
+        else if (Mathf.Abs(rollInput) < 0.1f && _mouseDistance.magnitude < 0.1f && (300f < Mathf.Abs(xAngle) && Mathf.Abs(xAngle) < 360f))
         {
-            transform.rotation = Quaterni/on.Lerp(transform.rotation, Quaternion.Euler(xAngle, yAngle, 0f),
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(xAngle, yAngle, 0f),
                                                  _rollBackSpeed * Mathf.Abs((xAngle) - 300f) / 60f * Time.deltaTime);
         }
 */        transform.Rotate(0f, 0f, _activeRollSpeed * rollSpeed, Space.Self);
-        if(Mathf.Abs(rollInput) < 0.1f)
+        if (Mathf.Abs(rollInput) < 0.1f)
         {
             transform.Rotate(0f, 0f, 0f, Space.Self);
         }
+
     }
 
     private void MovementUpdate()
     {
-        _activeForwardSpeed = Mathf.Lerp(_activeForwardSpeed, Input.GetAxisRaw("Vertical") * forwardSpeed, Time.deltaTime * _forwardAcceleration);
-        _activeStrafeSpeed = Mathf.Lerp(_activeStrafeSpeed, Input.GetAxisRaw("Horizontal") * strafeSpeed, Time.deltaTime * _strafeAcceleration);
-        _activeHoverSpeed = Mathf.Lerp(_activeHoverSpeed, Input.GetAxisRaw("Hover") * hoverSpeed, Time.deltaTime * _hoverAcceleration);
 
-        transform.position += (transform.forward * _activeForwardSpeed * Time.deltaTime) +
-                              (transform.right * _activeStrafeSpeed * Time.deltaTime) +
-                              (transform.up * _activeHoverSpeed * Time.deltaTime);
+        Vector3 nextMovementSpeed = Vector3.Scale(playerInput, maxMovementSpeed * 100f);
+
+        nextMovementSpeed = Vector3.Lerp(_currentMovementSpeed, nextMovementSpeed, 5f * Time.deltaTime);
+        _currentMovementSpeed = nextMovementSpeed;
+
+        _rb.AddRelativeForce(nextMovementSpeed);
     }
 
     // Method for Controlling Speed by outside elements 
     // Currently used by BOOSTER.cs 
     public void ChangeSpeed(float newSpeed)
     {
-        forwardSpeed= newSpeed;
-        //Debug.Log("Change Speed : " + forwardSpeed);
+/*        forwardSpeed= newSpeed;
+*/        //Debug.Log("Change Speed : " + forwardSpeed);
     }
 
     // Method to Instantly change activeForwardSpeed 
@@ -101,8 +133,8 @@ public class SpaceshipController : MonoBehaviour
     // Currently used for BoosterImpact in BOOSTER.cs
     public void ChangeSpeedInstantly(float newSpeed)
     {
-        _activeForwardSpeed = newSpeed;
-    }
+/*        _activeForwardSpeed = newSpeed;
+*/    }
 
     // Method to Access Cursor X Position (true if Left)
     // by outside Elements
