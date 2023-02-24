@@ -35,7 +35,7 @@ public class CheckPoints : MonoBehaviour
         currGate = checkPointArr[idx];
         currGate.SendMessage("Deactivate");
 
-        if (idx != gateCount)
+        if (idx != gateCount - 1)
         {
             nextGate= checkPointArr[idx + 1];
             nextGate.SendMessage("Activate");
