@@ -10974,16 +10974,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb705ad60ad00864ca2931652ea9fa4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookRateSpeed: 1
-  forwardSpeed: 400
-  strafeSpeed: 100
-  hoverSpeed: 100
-  rollSpeed: 1
+  yawRotation: 10
+  pitchRotation: 20
+  rollRotation: 20
+  maxMovementSpeed: {x: 5, y: 5, z: 10}
+  currentMovementSpeed: {x: 0, y: 0, z: 0}
+  forwardDeceleration: 0.3
+  strafeDeceleration: 0.3
+  hoverDeceleration: 0.3
+  lookRateSpeed: 5
+  rollSpeed: 2
   _forwardAcceleration: 2
   _strafeAcceleration: 2
   _hoverAcceleration: 2
-  rollAcceleration: 2
-  _rollBackSpeed: 3
+  rollAcceleration: 0.5
+  _rollBackSpeed: 5
   cursorRectTransform: {fileID: 1624037100}
   canControl: 0
 --- !u!54 &2509914176113464012
@@ -10995,8 +11000,8 @@ Rigidbody:
   m_GameObject: {fileID: 909330138672319347}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 3
+  m_AngularDrag: 4
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
