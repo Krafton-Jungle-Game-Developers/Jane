@@ -4,6 +4,9 @@
         <SolutionFolder FolderPath="AssemblyDefinitions" Guid="{C4909EDB-060D-4AD1-AA47-685ACDF10BB2}"/>
     </SolutionFolders>
     <NestedProjects>
+        <NestedProject ProjectName="DOTween.Modules" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="DOTweenPro.EditorScripts" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="DOTweenPro.Scripts" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="MemoryPack" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="MessagePack" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="MessagePack.Annotations" FolderPath="AssemblyDefinitions" />
@@ -20,5 +23,7 @@
         <NestedProject ProjectName="UniTask.Editor" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="UniTask.Linq" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="UniTask.TextMeshPro" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="sc.posteffects.editor" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="sc.posteffects.runtime" FolderPath="AssemblyDefinitions" />
     </NestedProjects>
 </SlnMergeSettings>

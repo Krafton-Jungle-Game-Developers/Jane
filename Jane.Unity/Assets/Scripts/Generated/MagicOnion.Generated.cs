@@ -85,9 +85,9 @@ namespace MagicOnion
                 {
                     factory = ((global::MagicOnion.Client.StreamingHubClientFactoryDelegate<global::Jane.Unity.ServerShared.Hubs.IChatHub, global::Jane.Unity.ServerShared.Hubs.IChatHubReceiver>)((a, _, b, c, d, e) => new Jane.Unity.ServerShared.Hubs.ChatHubClient(a, b, c, d, e)));
                 }
-                if (typeof(TStreamingHub) == typeof(global::Jane.Unity.ServerShared.Hubs.IMovementHub) && typeof(TReceiver) == typeof(global::Jane.Unity.ServerShared.Hubs.IMovementHubReceiver))
+                if (typeof(TStreamingHub) == typeof(global::Jane.Unity.ServerShared.Hubs.IGameHub) && typeof(TReceiver) == typeof(global::Jane.Unity.ServerShared.Hubs.IGameHubReceiver))
                 {
-                    factory = ((global::MagicOnion.Client.StreamingHubClientFactoryDelegate<global::Jane.Unity.ServerShared.Hubs.IMovementHub, global::Jane.Unity.ServerShared.Hubs.IMovementHubReceiver>)((a, _, b, c, d, e) => new Jane.Unity.ServerShared.Hubs.MovementHubClient(a, b, c, d, e)));
+                    factory = ((global::MagicOnion.Client.StreamingHubClientFactoryDelegate<global::Jane.Unity.ServerShared.Hubs.IGameHub, global::Jane.Unity.ServerShared.Hubs.IGameHubReceiver>)((a, _, b, c, d, e) => new Jane.Unity.ServerShared.Hubs.MovementHubClient(a, b, c, d, e)));
                 }
 
                 Factory = (global::MagicOnion.Client.StreamingHubClientFactoryDelegate<TStreamingHub, TReceiver>)factory;
@@ -323,7 +323,7 @@ namespace Jane.Unity.ServerShared.Hubs
     using global::MessagePack;
     
     [global::MagicOnion.Ignore]
-    public class MovementHubClient : global::MagicOnion.Client.StreamingHubClientBase<global::Jane.Unity.ServerShared.Hubs.IMovementHub, global::Jane.Unity.ServerShared.Hubs.IMovementHubReceiver>, global::Jane.Unity.ServerShared.Hubs.IMovementHub
+    public class MovementHubClient : global::MagicOnion.Client.StreamingHubClientBase<global::Jane.Unity.ServerShared.Hubs.IGameHub, global::Jane.Unity.ServerShared.Hubs.IGameHubReceiver>, global::Jane.Unity.ServerShared.Hubs.IGameHub
     {
         protected override global::Grpc.Core.Method<global::System.Byte[], global::System.Byte[]> DuplexStreamingAsyncMethod { get; }
         
@@ -341,18 +341,18 @@ namespace Jane.Unity.ServerShared.Hubs
         public global::System.Threading.Tasks.ValueTask MoveAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MoveRequest request)
             => new global::System.Threading.Tasks.ValueTask(base.WriteMessageWithResponseAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.MoveRequest, global::MessagePack.Nil>(-99261176, request));
         
-        public global::Jane.Unity.ServerShared.Hubs.IMovementHub FireAndForget()
+        public global::Jane.Unity.ServerShared.Hubs.IGameHub FireAndForget()
             => new FireAndForgetClient(this);
         
         [global::MagicOnion.Ignore]
-        class FireAndForgetClient : global::Jane.Unity.ServerShared.Hubs.IMovementHub
+        class FireAndForgetClient : global::Jane.Unity.ServerShared.Hubs.IGameHub
         {
             readonly MovementHubClient parent;
         
             public FireAndForgetClient(MovementHubClient parent)
                 => this.parent = parent;
         
-            public global::Jane.Unity.ServerShared.Hubs.IMovementHub FireAndForget() => this;
+            public global::Jane.Unity.ServerShared.Hubs.IGameHub FireAndForget() => this;
             public global::System.Threading.Tasks.Task DisposeAsync() => throw new global::System.NotSupportedException();
             public global::System.Threading.Tasks.Task WaitForDisconnect() => throw new global::System.NotSupportedException();
         

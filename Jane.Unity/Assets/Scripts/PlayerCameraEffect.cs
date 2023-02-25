@@ -77,7 +77,6 @@ public class PlayerCameraEffect : MonoBehaviour
     private MotionBlur _motionBlur;
     private RadialBlur _radialBlur;
 
-
     private void Awake()
     {
         spaceshipController = GetComponent<SpaceshipController>();
@@ -91,7 +90,6 @@ public class PlayerCameraEffect : MonoBehaviour
         _verticalParticleEmission = _verticalParticleSystem.emission;
         _cockpitParticleEmission = _cockpitParticleSystem.emission;
     }
-
 
     private void Update()
     {
@@ -134,6 +132,7 @@ public class PlayerCameraEffect : MonoBehaviour
         }
         playerCamera.fieldOfView = nowFOV;
     }
+
     private void GlovalVolumeControl()
     {
         if (playerAcceleration > 1f)
@@ -144,7 +143,6 @@ public class PlayerCameraEffect : MonoBehaviour
             nowBloomIntensity = Mathf.Lerp(nowBloomIntensity, maxBloomIntensity, 0.001f * playerAcceleration);
             nowRadialBlurIntensity = Mathf.Lerp(nowRadialBlurIntensity, maxRadialBlurIntensity, 0.001f * playerAcceleration);
             nowParticleIntensity = Mathf.Lerp(nowParticleIntensity, maxParticleIntensity, 0.1f * playerAcceleration);
-
         }
         else
         {
@@ -172,6 +170,7 @@ public class PlayerCameraEffect : MonoBehaviour
         _radialBlur.amount.value = nowRadialBlurIntensity;
         _bloom.intensity.value = nowBloomIntensity;
     }
+
     private void ParticleSystemControl()
     {
         if (playerAcceleration > 1f)

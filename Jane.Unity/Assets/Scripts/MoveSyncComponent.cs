@@ -10,12 +10,12 @@ using UnityEngine;
 using Jane.Unity.ServerShared.Hubs;
 using Jane.Unity.ServerShared.MemoryPackObjects;
 
-public class MoveSyncComponent : MonoBehaviour, IMovementHubReceiver
+public class MoveSyncComponent : MonoBehaviour, IGameHubReceiver
 {
     private Dictionary<Ulid, GameObject> players = new();
     private readonly CancellationTokenSource _shutdownCts = new();
     private ChannelBase _channel;
-    private IMovementHub streamingClient;
+    private IGameHub streamingClient;
 
     private Ulid _roomId = Ulid.MinValue;
     private Ulid _userId;
@@ -62,7 +62,7 @@ public class MoveSyncComponent : MonoBehaviour, IMovementHubReceiver
             try
             {
                 Debug.Log("Connecting to the server...");
-                streamingClient = await StreamingHubClient.ConnectAsync<IMovementHub, IMovementHubReceiver>(_channel,
+                streamingClient = await StreamingHubClient.ConnectAsync<IGameHub, IGameHubReceiver>(_channel,
                                                                                                     this,
                                                                                                             cancellationToken: token);
                 Debug.Log("Connection established!");
@@ -90,7 +90,7 @@ public class MoveSyncComponent : MonoBehaviour, IMovementHubReceiver
         {
             if (player.Id == userId) { continue; }
             
-            (this as IMovementHubReceiver).OnJoin(player);
+            (this as IGameHubReceiver).OnJoin(player);
         }
 
         return players[userId];
