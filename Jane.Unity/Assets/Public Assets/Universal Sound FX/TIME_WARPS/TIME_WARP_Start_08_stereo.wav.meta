@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: 834182a0f6ba07d4dadd3654e1499430
+labels:
+- imphenzia
+- usfx
+- stereo
+- time
+- warp
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 0
+    quality: 0
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

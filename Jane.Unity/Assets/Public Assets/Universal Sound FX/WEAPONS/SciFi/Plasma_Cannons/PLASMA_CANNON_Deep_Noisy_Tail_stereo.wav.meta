@@ -1,0 +1,28 @@
+fileFormatVersion: 2
+guid: 31091636e55f2f74585c5c1d6786caf0
+labels:
+- usfx
+- imphenzia
+- weapon
+- plasma
+- cannon
+- energy
+- stereo
+- fire
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 0
+    quality: 0
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

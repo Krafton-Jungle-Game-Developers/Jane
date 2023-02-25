@@ -1,0 +1,29 @@
+fileFormatVersion: 2
+guid: 13b7017496ed23a44a1e9a7470e685d2
+labels:
+- imphenzia
+- usfx
+- mono
+- loop
+- spacecraft
+- engine
+- spaceship
+- scifi
+- cartoon
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 0
+    quality: 0
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,28 @@
+fileFormatVersion: 2
+guid: bd4e216b6f3a8da458224b40d4d5b756
+labels:
+- usfx
+- imphenzia
+- user interface
+- ui
+- gui
+- stereo
+- beep
+- bleep
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 0
+    quality: 0
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
