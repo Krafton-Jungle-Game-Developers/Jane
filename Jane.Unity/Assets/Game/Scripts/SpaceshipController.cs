@@ -82,26 +82,27 @@ public class SpaceshipController : MonoBehaviour
     private void RollUpdate()
     {
         float rollInput = Input.GetAxisRaw("Roll");
-/*        _rb.AddRelativeTorque(Vector3.forward * rollRotation * rollInput * Time.deltaTime);
-        _rb.AddRelativeTorque(Vector3.right * Mathf.Clamp(-pitchYawInput.y, -1f, 1f) * pitchRotation * Time.deltaTime);
-        _rb.AddRelativeTorque(Vector3.up * Mathf.Clamp(pitchYawInput.x, -1f, 1f) * yawRotation * Time.deltaTime);
-*/        /*        float xAngle = transform.rotation.eulerAngles.x;
-                float yAngle = transform.rotation.eulerAngles.y;
+        /*        _rb.AddRelativeTorque(Vector3.forward * rollRotation * rollInput * Time.deltaTime);
+                _rb.AddRelativeTorque(Vector3.right * Mathf.Clamp(-pitchYawInput.y, -1f, 1f) * pitchRotation * Time.deltaTime);
+                _rb.AddRelativeTorque(Vector3.up * Mathf.Clamp(pitchYawInput.x, -1f, 1f) * yawRotation * Time.deltaTime);
+        */        /*        float xAngle = transform.rotation.eulerAngles.x;
+                        float yAngle = transform.rotation.eulerAngles.y;
 
 
-        */
+                */
         _activeRollSpeed = Mathf.Lerp(_activeRollSpeed, rollInput, rollAcceleration * Time.deltaTime);
-/*        if (Mathf.Abs(rollInput) < 0.1f && _mouseDistance.magnitude < 0.1f && (0f < Mathf.Abs(xAngle) && Mathf.Abs(xAngle) < 60f))
-        {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(xAngle, yAngle, 0f),
-                                                 _rollBackSpeed * Mathf.Abs((xAngle) - 60f) / 60f * Time.deltaTime);
-        }
-        else if (Mathf.Abs(rollInput) < 0.1f && _mouseDistance.magnitude < 0.1f && (300f < Mathf.Abs(xAngle) && Mathf.Abs(xAngle) < 360f))
-        {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(xAngle, yAngle, 0f),
-                                                 _rollBackSpeed * Mathf.Abs((xAngle) - 300f) / 60f * Time.deltaTime);
-        }
-*/        transform.Rotate(0f, 0f, _activeRollSpeed * rollSpeed, Space.Self);
+        /*        if (Mathf.Abs(rollInput) < 0.1f && _mouseDistance.magnitude < 0.1f && (0f < Mathf.Abs(xAngle) && Mathf.Abs(xAngle) < 60f))
+                {
+                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(xAngle, yAngle, 0f),
+                                                         _rollBackSpeed * Mathf.Abs((xAngle) - 60f) / 60f * Time.deltaTime);
+                }
+                else if (Mathf.Abs(rollInput) < 0.1f && _mouseDistance.magnitude < 0.1f && (300f < Mathf.Abs(xAngle) && Mathf.Abs(xAngle) < 360f))
+                {
+                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(xAngle, yAngle, 0f),
+                                                         _rollBackSpeed * Mathf.Abs((xAngle) - 300f) / 60f * Time.deltaTime);
+                }
+        */
+        transform.Rotate(0f, 0f, _activeRollSpeed * rollSpeed, Space.Self);
         if (Mathf.Abs(rollInput) < 0.1f)
         {
             transform.Rotate(0f, 0f, 0f, Space.Self);
@@ -124,8 +125,8 @@ public class SpaceshipController : MonoBehaviour
     // Currently used by BOOSTER.cs 
     public void ChangeSpeed(float newSpeed)
     {
-/*        forwardSpeed= newSpeed;
-*/        //Debug.Log("Change Speed : " + forwardSpeed);
+        /*        forwardSpeed= newSpeed;
+        */        //Debug.Log("Change Speed : " + forwardSpeed);
     }
 
     // Method to Instantly change activeForwardSpeed 
@@ -133,19 +134,20 @@ public class SpaceshipController : MonoBehaviour
     // Currently used for BoosterImpact in BOOSTER.cs
     public void ChangeSpeedInstantly(float newSpeed)
     {
-/*        _activeForwardSpeed = newSpeed;
-*/    }
+        /*        _activeForwardSpeed = newSpeed;
+        */
+    }
 
     // Method to Access Cursor X Position (true if Left)
     // by outside Elements
     // Currently used for BOOSTER.cs
     public bool GetIsCursorLeft()
     {
-        if (_mouseDistance.x < 0 )
+        if (_mouseDistance.x < 0)
         {
             // Cursor is Left
             return true;
-        } 
+        }
         else
         {
             return false;

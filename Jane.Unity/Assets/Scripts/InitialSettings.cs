@@ -5,7 +5,6 @@ using MagicOnion.Serialization;
 using MagicOnion.Serialization.MemoryPack;
 using UnityEngine;
 using MagicOnion;
-using MessagePack.Resolvers;
 
 namespace Assets.Scripts
 {
@@ -21,8 +20,6 @@ namespace Assets.Scripts
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void OnRuntimeInitialize()
         {
-            // Initialize gRPC channel provider when the application is loaded.
-            // NOTE: If you want to use self-signed certificate for SSL/TLS connection
             SslCredentials credentials =
                 new(File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "server.crt")));
             

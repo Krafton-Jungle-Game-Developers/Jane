@@ -1,0 +1,28 @@
+fileFormatVersion: 2
+guid: 1d56a9e9d82eb4047b14720e74b60bd2
+labels:
+- usfx
+- imphenzia
+- impact
+- hit
+- metal
+- mono
+- pipe
+- drop
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 0
+    quality: 0
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

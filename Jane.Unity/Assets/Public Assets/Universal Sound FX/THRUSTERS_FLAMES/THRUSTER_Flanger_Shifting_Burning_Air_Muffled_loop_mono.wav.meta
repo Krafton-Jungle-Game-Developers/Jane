@@ -1,0 +1,31 @@
+fileFormatVersion: 2
+guid: 476e3119106b99746bca727635d00a14
+labels:
+- usfx
+- imphenzia
+- thruster
+- flame
+- flame thrower
+- thrust
+- jet
+- force
+- afterburner
+- loop
+- mono
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 0
+    quality: 0
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

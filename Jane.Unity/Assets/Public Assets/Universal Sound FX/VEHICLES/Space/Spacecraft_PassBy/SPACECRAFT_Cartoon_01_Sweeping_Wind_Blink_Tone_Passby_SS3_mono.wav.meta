@@ -1,0 +1,31 @@
+fileFormatVersion: 2
+guid: 03d8e2b6b1fc15848a854d4d21ec5f81
+labels:
+- imphenzia
+- usfx
+- mono
+- spacecraft
+- engine
+- spaceship
+- scifi
+- passby
+- whoosh
+- swisch
+- flyby
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 0
+    quality: 0
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

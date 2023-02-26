@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: e4b9da47652c87e4395f7129b45c1cf3
+labels:
+- usfx
+- imphenzia
+- explosion
+- explode
+- bang
+- stereo
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 0
+    quality: 0
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
