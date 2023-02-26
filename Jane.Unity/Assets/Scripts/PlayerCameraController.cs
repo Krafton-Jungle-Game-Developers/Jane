@@ -75,10 +75,11 @@ public class PlayerCameraController : MonoBehaviour
         CameraControlMovement();
         CameraBoosterMovement();
 
-        //m_Camera.transform.position = new Vector3(_cameraX + _shakeX + _gimbalX, _cameraY + _shakeY + _gimbalY, _cameraZ);
         m_Camera.transform.position = InverseTransformPoint;
 
         //TODO: Delete
+        //m_Camera.transform.position = new Vector3(_cameraX + _shakeX + _gimbalX, _cameraY + _shakeY + _gimbalY, _cameraZ);
+
         //cameraRotationReal.x = m_Camera.transform.rotation.x - playerTransform.rotation.x;
         //cameraRotationReal.y = m_Camera.transform.rotation.y - playerTransform.rotation.y;
         //cameraRotationReal.z = m_Camera.transform.rotation.z - playerTransform.rotation.z;
@@ -113,7 +114,7 @@ public class PlayerCameraController : MonoBehaviour
         _playerForward = playerTransform.forward;
 
         TransformPoint = m_Camera.transform.InverseTransformPoint(playerTransform.position);
-        TransformPoint = new Vector3(TransformPoint.x + cameraOffset.x + _gimbalX, TransformPoint.y + cameraOffset.y + _gimbalY, TransformPoint.z + cameraOffset.z);
+        TransformPoint = new Vector3(TransformPoint.x + cameraOffset.x + _gimbalX + _shakeX, TransformPoint.y + cameraOffset.y + _gimbalY, TransformPoint.z + cameraOffset.z + _shakeY);
         InverseTransformPoint = m_Camera.transform.TransformPoint(TransformPoint);
 
 
