@@ -5,16 +5,17 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float _speed;
+    [SerializeField] private int _damage;
     [SerializeField] private GameObject impactPrefab;
     private Rigidbody _rigidbody;
+    private bool _hasCollided = false;
 
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
     }
 
-
-    void FixedUpdate()
+    void Update()
     {
         _rigidbody.position += transform.forward * (_speed * Time.deltaTime);
         Destroy(gameObject, 1f);
@@ -22,15 +23,16 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag == "Destroyable")
+        if (!_hasCollided && other.gameObject.CompareTag("Destroyable"))
         {
-            // destroy collided object
+            if (impactPrefab != null)
+            {
+                var impactVFX = Instantiate(impactPrefab, transform.position, transform.rotation);
+                Destroy(impactVFX, 3);
+            }
+            _hasCollided = true;
+            other.gameObject.GetComponent<Destroyable>().durability -= _damage;
+            Destroy(gameObject);
         }
-        if (impactPrefab != null)
-        {
-            var impactVFX = Instantiate(impactPrefab, transform.position, transform.rotation);
-            Destroy(impactVFX, 3);
-        }
-        Destroy(gameObject);
     }
 }

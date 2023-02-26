@@ -129,4 +129,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 1000
+  _damage: 1
   impactPrefab: {fileID: 0}

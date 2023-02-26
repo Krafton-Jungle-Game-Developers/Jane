@@ -4918,12 +4918,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4839058931604694502}
-  - component: {fileID: 7272343777537456030}
   - component: {fileID: 4424844717588073903}
   - component: {fileID: 8476240238450105598}
+  - component: {fileID: -2821850906034804559}
+  - component: {fileID: 5917183979028535151}
   m_Layer: 0
   m_Name: Meteor
-  m_TagString: Untagged
+  m_TagString: Destroyable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4946,20 +4947,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7272343777537456030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3367040749032044191}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce9227e0aefe8074f8ab20a01e8abc94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _speed: 1500
-  impactPrefab: {fileID: 0}
 --- !u!54 &4424844717588073903
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4989,6 +4976,34 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 120
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-2821850906034804559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3367040749032044191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ac597a3e4f051d41ba38e6468784620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  durability: 10
+  destroyPrefab: {fileID: 0}
+--- !u!114 &5917183979028535151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3367040749032044191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce9227e0aefe8074f8ab20a01e8abc94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 0
+  impactPrefab: {fileID: 0}
 --- !u!1 &6610242936981584568
 GameObject:
   m_ObjectHideFlags: 0

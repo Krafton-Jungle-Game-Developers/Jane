@@ -39,6 +39,6 @@ public class ProjectileMove : MonoBehaviour
         }
 
 
-        Destroy(gameObject);
-    }
+/*        Destroy(gameObject);
+*/    }
 }
