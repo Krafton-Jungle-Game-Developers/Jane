@@ -38,6 +38,7 @@ public class SpaceshipController : MonoBehaviour
     {
         if (canControl)
         {
+            MyInput();
         }
     }
 
@@ -45,7 +46,6 @@ public class SpaceshipController : MonoBehaviour
     {
         MouseSteeringUpdate();
         RollUpdate();
-        MyInput();
         MovementUpdate();
     }
 
@@ -54,11 +54,6 @@ public class SpaceshipController : MonoBehaviour
         playerInput = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Hover"), Input.GetAxisRaw("Vertical"));
         Debug.Log($"{playerInput}");
         rollInput = Input.GetAxisRaw("Roll");
-
-        Vector3 mouseLocation = cursorRectTransform.position;
-        pitchYawInput.x = (mouseLocation.x - _screenCenter.x) / _screenCenter.y;
-        pitchYawInput.y = (mouseLocation.y - _screenCenter.y) / _screenCenter.y;
-        pitchYawInput = Vector3.ClampMagnitude(pitchYawInput, 1f);
     }
 
     private void MouseSteeringUpdate()
