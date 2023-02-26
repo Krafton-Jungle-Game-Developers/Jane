@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PlayerCameraController : MonoBehaviour
 {
@@ -26,7 +27,7 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField] private float cameraPositionTension = 10;
     [SerializeField] private float cameraRotationTension = 10;
 
-    //TEMP: Inspector See
+    //TEMP: Show Inspector
     //[SerializeField] private Quaternion cameraRotationReal;
     //[SerializeField] private Vector3 cameraPositionReal;
     //[SerializeField] private Vector3 playerPositionNow;
@@ -35,6 +36,9 @@ public class PlayerCameraController : MonoBehaviour
     private float _cameraX;
     private float _cameraY;
     private float _cameraZ;
+
+    [SerializeField] private Vector3 TransformPoint;
+    [SerializeField] private Vector3 InverseTransformPoint;
 
 
     [SerializeField] private float cameraDistance;
@@ -45,8 +49,10 @@ public class PlayerCameraController : MonoBehaviour
     private float _shakeY = 0f;
     [SerializeField] private float _shakeMagnitude = 0.1f;
 
-    //Camera Jimbal Movement Variable
-    [SerializeField] private Vector3 mouseInput;
+    //Camera Gimbal Movement Variable
+    public SpaceshipController spaceshipController;
+    public RectTransform cursorRectTransform;
+    private Vector3 _screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f), _mouseDistance;
     [SerializeField] private float _gimbalX = 0f;
     [SerializeField] private float _gimbalY = 0f;
 
@@ -65,18 +71,15 @@ public class PlayerCameraController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
+        CameraGimbalMovement();
         CameraControlMovement();
         CameraBoosterMovement();
-        CameraGimbalMovement();
 
-        m_Camera.transform.position = new Vector3(_cameraX + _shakeX + _gimbalX, _cameraY + _shakeY + _gimbalY, _cameraZ);
-
-        //Tracking Value
-        mouseInput = Input.mousePosition;
-        //Screen.
-
+        m_Camera.transform.position = InverseTransformPoint;
 
         //TODO: Delete
+        //m_Camera.transform.position = new Vector3(_cameraX + _shakeX + _gimbalX, _cameraY + _shakeY + _gimbalY, _cameraZ);
+
         //cameraRotationReal.x = m_Camera.transform.rotation.x - playerTransform.rotation.x;
         //cameraRotationReal.y = m_Camera.transform.rotation.y - playerTransform.rotation.y;
         //cameraRotationReal.z = m_Camera.transform.rotation.z - playerTransform.rotation.z;
@@ -110,6 +113,12 @@ public class PlayerCameraController : MonoBehaviour
         _playerRight = playerTransform.right;
         _playerForward = playerTransform.forward;
 
+        TransformPoint = m_Camera.transform.InverseTransformPoint(playerTransform.position);
+        TransformPoint = new Vector3(TransformPoint.x + cameraOffset.x + _gimbalX + _shakeX, TransformPoint.y + cameraOffset.y + _gimbalY, TransformPoint.z + cameraOffset.z + _shakeY);
+        InverseTransformPoint = m_Camera.transform.TransformPoint(TransformPoint);
+
+
+        //TODO: Change Local Axis Orientation
         _cameraTargetPos = playerTransform.position - (_playerForward * (cameraOffset.x + _gimbalX)) - (_playerUp * (cameraOffset.y + _gimbalY) - (_playerRight * cameraOffset.z));
         _cameraX = Mathf.Lerp(m_Camera.transform.position.x, _cameraTargetPos.x, Time.deltaTime * cameraPositionTension);
         _cameraY = Mathf.Lerp(m_Camera.transform.position.y, _cameraTargetPos.y, Time.deltaTime * cameraPositionTension);
@@ -133,8 +142,30 @@ public class PlayerCameraController : MonoBehaviour
 
     private void CameraGimbalMovement()
     {
-        Vector3 eulerAngles = playerTransform.rotation.eulerAngles;
-        Debug.Log("transform.rotation angles x: " + eulerAngles.x + " y: " + eulerAngles.y + " z: " + eulerAngles.z);
+        cursorRectTransform = spaceshipController.cursorRectTransform;
+
+        _mouseDistance.x = (cursorRectTransform.position.x - _screenCenter.x) / _screenCenter.y;
+        _mouseDistance.y = (cursorRectTransform.position.y - _screenCenter.y) / _screenCenter.y;
+
+        _mouseDistance = Vector3.ClampMagnitude(_mouseDistance, 1f);
+
+        Mathf.Clamp(_gimbalX, -20f, 20f);
+        Mathf.Clamp(_gimbalY, -10f, 5f);
+
+        if (_mouseDistance.x > 0.1f)
+            _gimbalX = Mathf.Lerp(_gimbalX, 20f, Time.deltaTime * 1f);
+        else if (_mouseDistance.x < -0.1f)
+            _gimbalX = Mathf.Lerp(_gimbalX, -20f, Time.deltaTime * 1f);
+        else
+            _gimbalX = Mathf.Lerp(_gimbalX, 0f, Time.deltaTime * 1f);
+
+        if (_mouseDistance.y > 0.1f)
+            _gimbalY = Mathf.Lerp(_gimbalY, 5f, Time.deltaTime * 2f);
+        else if (_mouseDistance.y < -0.1f)
+            _gimbalY = Mathf.Lerp(_gimbalY, -10f, Time.deltaTime * 2f);
+        else
+            _gimbalY = Mathf.Lerp(_gimbalY, 0f, Time.deltaTime * 2f);
+
 
     }
 }

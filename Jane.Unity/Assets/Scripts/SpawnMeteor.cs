@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SpawnMeteor : MonoBehaviour
 {
-    [SerializeField] private GameObject meteorVFX;
+    public GameObject meteorVFX;
     [SerializeField] private Transform startPoint;
     [SerializeField] private Transform endPoint;
     

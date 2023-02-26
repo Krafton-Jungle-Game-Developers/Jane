@@ -6,13 +6,16 @@ public class ProjectileMove : MonoBehaviour
 {
     [SerializeField] private float _speed;
     [SerializeField] private GameObject impactPrefab;
+    
 
+    
     private Rigidbody _rigidbody;
 
     
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
+
     }
 
 
@@ -24,6 +27,7 @@ public class ProjectileMove : MonoBehaviour
         }
     }
 
+    // Play VFX & Play SFX 
     private void OnCollisionEnter(Collision collision)
     {
         _speed = 0;
@@ -38,7 +42,11 @@ public class ProjectileMove : MonoBehaviour
             Destroy(impactVFX, 3);
         }
 
-
         Destroy(gameObject);
+
+
     }
+
+
+    
 }
