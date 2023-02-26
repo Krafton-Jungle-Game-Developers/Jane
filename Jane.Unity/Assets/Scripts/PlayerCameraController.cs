@@ -27,7 +27,7 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField] private float cameraPositionTension = 10;
     [SerializeField] private float cameraRotationTension = 10;
 
-    //TEMP: Inspector See
+    //TEMP: Show Inspector
     //[SerializeField] private Quaternion cameraRotationReal;
     //[SerializeField] private Vector3 cameraPositionReal;
     //[SerializeField] private Vector3 playerPositionNow;
@@ -36,6 +36,9 @@ public class PlayerCameraController : MonoBehaviour
     private float _cameraX;
     private float _cameraY;
     private float _cameraZ;
+
+    [SerializeField] private Vector3 TransformPoint;
+    [SerializeField] private Vector3 InverseTransformPoint;
 
 
     [SerializeField] private float cameraDistance;
@@ -50,8 +53,6 @@ public class PlayerCameraController : MonoBehaviour
     public SpaceshipController spaceshipController;
     public RectTransform cursorRectTransform;
     private Vector3 _screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f), _mouseDistance;
-
-    [SerializeField] private Vector3 mouseInput;
     [SerializeField] private float _gimbalX = 0f;
     [SerializeField] private float _gimbalY = 0f;
 
@@ -74,12 +75,8 @@ public class PlayerCameraController : MonoBehaviour
         CameraControlMovement();
         CameraBoosterMovement();
 
-        m_Camera.transform.position = new Vector3(_cameraX + _shakeX + _gimbalX, _cameraY + _shakeY + _gimbalY, _cameraZ);
-
-        //Tracking Value
-        mouseInput = Input.mousePosition;
-        //Screen.
-
+        //m_Camera.transform.position = new Vector3(_cameraX + _shakeX + _gimbalX, _cameraY + _shakeY + _gimbalY, _cameraZ);
+        m_Camera.transform.position = InverseTransformPoint;
 
         //TODO: Delete
         //cameraRotationReal.x = m_Camera.transform.rotation.x - playerTransform.rotation.x;
@@ -115,6 +112,11 @@ public class PlayerCameraController : MonoBehaviour
         _playerRight = playerTransform.right;
         _playerForward = playerTransform.forward;
 
+        TransformPoint = m_Camera.transform.InverseTransformPoint(playerTransform.position);
+        TransformPoint = new Vector3(TransformPoint.x + cameraOffset.x + _gimbalX, TransformPoint.y + cameraOffset.y + _gimbalY, TransformPoint.z + cameraOffset.z);
+        InverseTransformPoint = m_Camera.transform.TransformPoint(TransformPoint);
+
+
         //TODO: Change Local Axis Orientation
         _cameraTargetPos = playerTransform.position - (_playerForward * (cameraOffset.x + _gimbalX)) - (_playerUp * (cameraOffset.y + _gimbalY) - (_playerRight * cameraOffset.z));
         _cameraX = Mathf.Lerp(m_Camera.transform.position.x, _cameraTargetPos.x, Time.deltaTime * cameraPositionTension);
@@ -146,20 +148,20 @@ public class PlayerCameraController : MonoBehaviour
 
         _mouseDistance = Vector3.ClampMagnitude(_mouseDistance, 1f);
 
-        Mathf.Clamp(_gimbalX, -3f, 3f);
-        Mathf.Clamp(_gimbalY, -3f, 3f);
+        Mathf.Clamp(_gimbalX, -20f, 20f);
+        Mathf.Clamp(_gimbalY, -10f, 5f);
 
         if (_mouseDistance.x > 0.1f)
-            _gimbalX = Mathf.Lerp(_gimbalX, 3f, Time.deltaTime * 2f);
+            _gimbalX = Mathf.Lerp(_gimbalX, 20f, Time.deltaTime * 1f);
         else if (_mouseDistance.x < -0.1f)
-            _gimbalX = Mathf.Lerp(_gimbalX, -3f, Time.deltaTime * 2f);
+            _gimbalX = Mathf.Lerp(_gimbalX, -20f, Time.deltaTime * 1f);
         else
-            _gimbalX = Mathf.Lerp(_gimbalX, 0f, Time.deltaTime * 2f);
+            _gimbalX = Mathf.Lerp(_gimbalX, 0f, Time.deltaTime * 1f);
 
         if (_mouseDistance.y > 0.1f)
-            _gimbalY = Mathf.Lerp(_gimbalY, 3f, Time.deltaTime * 2f);
+            _gimbalY = Mathf.Lerp(_gimbalY, 5f, Time.deltaTime * 2f);
         else if (_mouseDistance.y < -0.1f)
-            _gimbalY = Mathf.Lerp(_gimbalY, -3f, Time.deltaTime * 2f);
+            _gimbalY = Mathf.Lerp(_gimbalY, -10f, Time.deltaTime * 2f);
         else
             _gimbalY = Mathf.Lerp(_gimbalY, 0f, Time.deltaTime * 2f);
 
