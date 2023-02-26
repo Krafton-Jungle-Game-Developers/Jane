@@ -180,7 +180,7 @@ Material:
     - _Planet_Tiling: 0.001
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _RimPower: 2.95
+    - _RimPower: 1.5
     - _Scale: -0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -192,7 +192,7 @@ Material:
     - __dirty: 0
     - _frez: 16.33
     m_Colors:
-    - Color_7C11588D: {r: 0.5083358, g: 1, b: 0.07075471, a: 1}
+    - Color_7C11588D: {r: 0.5248349, g: 0.6698113, b: 0.3949359, a: 1}
     - _ASEOutlineColor: {r: 0.5181034, g: 0.4426903, b: 0.6764706, a: 0}
     - _BaseColor: {r: 0.77205884, g: 0.5565714, b: 0.28384516, a: 0}
     - _CloudColor: {r: 0.75735295, g: 0.15035684, b: 0.15035684, a: 0}

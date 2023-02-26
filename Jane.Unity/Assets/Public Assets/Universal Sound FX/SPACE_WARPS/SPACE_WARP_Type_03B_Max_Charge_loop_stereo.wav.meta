@@ -1,0 +1,35 @@
+fileFormatVersion: 2
+guid: 3e9652f5ad527364c8b2716f072f3972
+labels:
+- usfx
+- imphenzia
+- space
+- warp
+- energy
+- force
+- jump
+- lightspeed
+- hyper
+- hyperjump
+- charge
+- scifi
+- sci-fi
+- stereo
+- loop
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 0
+    quality: 0
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

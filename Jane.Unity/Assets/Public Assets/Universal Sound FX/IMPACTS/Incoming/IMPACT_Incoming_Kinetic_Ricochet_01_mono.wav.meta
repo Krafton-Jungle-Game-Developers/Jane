@@ -1,0 +1,33 @@
+fileFormatVersion: 2
+guid: ad4a3796aa65ef444ac32b39d256ad25
+labels:
+- usfx
+- imphenzia
+- mono
+- impact
+- incoming
+- whoosh
+- swhoosh
+- whizz
+- whine
+- bang
+- flyby
+- whipby
+- ricochet
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 0
+    quality: 0
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
