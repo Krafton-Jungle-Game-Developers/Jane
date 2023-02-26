@@ -2726,15 +2726,15 @@ MonoBehaviour:
   m_Camera: {fileID: 0}
   playerTransform: {fileID: 0}
   playerQuaternion: {x: 0, y: 0, z: 0, w: 0}
-  cameraOffset: {x: 0, y: -8, z: 25}
+  cameraOffset: {x: 25, y: -8, z: 0}
   cameraRotationOffset: {x: 0, y: 0, z: 0, w: 0}
   cameraPositionTension: 35
   cameraRotationTension: 10
-  cameraRotationReal: {x: 0, y: 0, z: 0, w: 0}
-  cameraPositionReal: {x: 0, y: 0, z: 0}
   cameraDistance: 0
   _shakeMagnitude: 0.1
   mouseInput: {x: 0, y: 0, z: 0}
+  _gimbalX: 0
+  _gimbalY: 0
 --- !u!1 &435190492
 GameObject:
   m_ObjectHideFlags: 0
@@ -11311,9 +11311,6 @@ MonoBehaviour:
   _hoverAcceleration: 2
   rollAcceleration: 0.5
   _rollBackSpeed: 5
-  _lookInput: {x: 0, y: 0, z: 0}
-  _screenCenter: {x: 655.5, y: 176, z: 0}
-  _mouseDistance: {x: 0, y: 0, z: 0}
   cursorRectTransform: {fileID: 1624037100}
   canControl: 0
 --- !u!54 &2509914176113464012

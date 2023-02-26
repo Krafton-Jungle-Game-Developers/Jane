@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+
 public class HUDCursor : MonoBehaviour
 {
     [SerializeField] private Camera HUDCamera;
@@ -50,12 +51,12 @@ public class HUDCursor : MonoBehaviour
             canvasRectTransform = canvas.GetComponent<RectTransform>();
         }
     }
-    
+
     public void CenterCursor()
     {
         SetViewportPosition(new Vector3(0.5f, 0.5f, worldSpaceDistanceFromCamera));
     }
-    
+
     public void SetViewportPosition(Vector3 viewportPosition)
     {
         bool worldSpace = (canvas == null) || (canvas.renderMode == RenderMode.WorldSpace);

@@ -9,14 +9,14 @@ public class SpaceshipMovementManager : MonoBehaviour
     [SerializeField] public Vector3 movementInputs;
     [SerializeField] public Vector3 steeringInputs;
     [SerializeField] public Vector3 boostInputs;
-    
+
     [SerializeField] private Vector3 minMovementInputs = new(-1f, -1f, -0.1f);
     [SerializeField] private Vector3 maxMovementInputs = new(1f, 1f, 1f);
 
     [Header("Movement & Steering Forces")]
     [SerializeField] private bool enginesActivated = false;
     [SerializeField] private Rigidbody m_rigidbody;
-    
+
     [SerializeField] private Vector3 maxMovementForces = new(400f, 400f, 400f);
     [SerializeField] private Vector3 maxSteeringForces = new(16f, 16f, 25f);
     [SerializeField] private Vector3 maxBoostForces = new(800f, 800f, 800f);
@@ -31,8 +31,8 @@ public class SpaceshipMovementManager : MonoBehaviour
     [Tooltip("A coefficient that is multiplied by the steering during boost. Used instead of the Steering By Speed Curve when boost is activated.")]
     [SerializeField] private float boostSteeringCoefficient = 1;
 
-    [Header("Resource Handlers")]
-    [SerializeField] private List<ResourceHandler> boostResourceHandlers = new();
+    //[Header("Resource Handlers")]
+    //[SerializeField] private List<ResourceHandler> boostResourceHandlers = new();
 
     private void Awake() => TryGetComponent(out m_rigidbody);
 
@@ -67,6 +67,7 @@ public class SpaceshipMovementManager : MonoBehaviour
     /// <returns>The maximum speed.</returns>
     public static float GetSpeedFromForce(float force, Rigidbody rBody)
     {
+        /// Calculate the maximum speed of this Rigidbody for a given force
         return (force / rBody.drag - force * Time.fixedDeltaTime) / rBody.mass; // Subtracting (force * Time.fixedDeltaTime) / rBody.mass because drag is applied AFTER force is added
     }
 
@@ -124,30 +125,29 @@ public class SpaceshipMovementManager : MonoBehaviour
 
     public void SetSpeedXAxis(float speed)
     {
-        SetMovementInputs(new ((speed * m_rigidbody.mass * m_rigidbody.drag) / maxMovementForces.x, movementInputs.y, movementInputs.z));
+        SetMovementInputs(new((speed * m_rigidbody.mass * m_rigidbody.drag) / maxMovementForces.x, movementInputs.y, movementInputs.z));
     }
 
     public void SetSpeedYAxis(float speed)
     {
-        SetMovementInputs(new (movementInputs.x, (speed * m_rigidbody.mass * m_rigidbody.drag) / maxMovementForces.y, movementInputs.z));
+        SetMovementInputs(new(movementInputs.x, (speed * m_rigidbody.mass * m_rigidbody.drag) / maxMovementForces.y, movementInputs.z));
     }
 
     public void SetSpeedZAxis(float speed)
     {
-        SetMovementInputs(new (movementInputs.x, movementInputs.y, (speed * m_rigidbody.mass * m_rigidbody.drag) / maxMovementForces.z));
+        SetMovementInputs(new(movementInputs.x, movementInputs.y, (speed * m_rigidbody.mass * m_rigidbody.drag) / maxMovementForces.z));
     }
-    
+
     public void SetBoostInputs(Vector3 newValuesByAxis)
     {
-        
-        for (int i = 0; i < boostResourceHandlers.Count; ++i)
-        {
-            if (!boostResourceHandlers[i].Ready())
-            {
-                newValuesByAxis = Vector3.zero;
-                break;
-            }
-        }
+        //for (int i = 0; i < boostResourceHandlers.Count; ++i)
+        //{
+        //    if (!boostResourceHandlers[i].Ready())
+        //    {
+        //        newValuesByAxis = Vector3.zero;
+        //        break;
+        //    }
+        //}
 
         if (controlsDisabled) return;
 
@@ -155,36 +155,36 @@ public class SpaceshipMovementManager : MonoBehaviour
         boostInputs.y = Mathf.Clamp(newValuesByAxis.y, -1f, 1f);
         boostInputs.z = Mathf.Clamp(newValuesByAxis.z, -1f, 1f);
     }
-    
+
     private void Update()
     {
         // Use resources during boost
-        if (boostInputs.magnitude != 0)
-        {
-            for (int i = 0; i < boostResourceHandlers.Count; ++i)
-            {
-                if (boostResourceHandlers[i].Ready())
-                {
-                    boostResourceHandlers[i].Implement();
-                }
-                else
-                {
-                    if (controlsDisabled) return;
-                    
-                    boostInputs.x = Mathf.Clamp(0f, -1f, 1f);
-                    boostInputs.y = Mathf.Clamp(0f, -1f, 1f);
-                    boostInputs.z = Mathf.Clamp(0f, -1f, 1f);
-                }
-            }
-        }
+        //if (boostInputs.magnitude != 0f)
+        //{
+        //    for (int i = 0; i < boostResourceHandlers.Count; ++i)
+        //    {
+        //        if (boostResourceHandlers[i].Ready())
+        //        {
+        //            boostResourceHandlers[i].Implement();
+        //        }
+        //        else
+        //        {
+        //            if (controlsDisabled) return;
+
+        //            boostInputs.x = Mathf.Clamp(0f, -1f, 1f);
+        //            boostInputs.y = Mathf.Clamp(0f, -1f, 1f);
+        //            boostInputs.z = Mathf.Clamp(0f, -1f, 1f);
+        //        }
+        //    }
+        //}
     }
-    
+
     private void FixedUpdate()
     {
         if (enginesActivated is false) return;
 
         // Implement steering torques
-        float steeringSpeedMultiplier = 1;
+        float steeringSpeedMultiplier = 1f;
         if (boostInputs.z > 0.5f)
         {
             steeringSpeedMultiplier = boostSteeringCoefficient;
@@ -192,9 +192,9 @@ public class SpaceshipMovementManager : MonoBehaviour
         else
         {
             float topSpeed = GetCurrentMaxSpeedByAxis(false).z;
-            if (!Mathf.Approximately(topSpeed, 0))
+            if (!Mathf.Approximately(topSpeed, 0f))
             {
-                float topSpeedAmount = Mathf.Clamp(Mathf.Abs(m_rigidbody.velocity.z / topSpeed), 0, 1);
+                float topSpeedAmount = Mathf.Clamp(Mathf.Abs(m_rigidbody.velocity.z / topSpeed), 0f, 1f);
                 steeringSpeedMultiplier = steeringBySpeedCurve.Evaluate(topSpeedAmount);
             }
         }

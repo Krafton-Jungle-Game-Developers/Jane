@@ -19,11 +19,6 @@ public class GameController : MonoBehaviour
         StartGame();
     }
 
-    private async UniTask WaitForPlayersAsync(CancellationToken token)
-    {
-
-    }
-
     private void StartGame()
     {
         StartCoroutine(CountdownStart());
