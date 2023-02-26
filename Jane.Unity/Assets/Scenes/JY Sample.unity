@@ -2757,13 +2757,16 @@ MonoBehaviour:
   m_Camera: {fileID: 0}
   playerTransform: {fileID: 0}
   playerQuaternion: {x: 0, y: 0, z: 0, w: 0}
-  cameraOffset: {x: 25, y: -8, z: 0}
+  cameraOffset: {x: 0, y: 10, z: -25}
   cameraRotationOffset: {x: 0, y: 0, z: 0, w: 0}
   cameraPositionTension: 35
   cameraRotationTension: 10
+  TransformPoint: {x: 0, y: 0, z: 0}
+  InverseTransformPoint: {x: 0, y: 0, z: 0}
   cameraDistance: 0
   _shakeMagnitude: 0.1
-  mouseInput: {x: 0, y: 0, z: 0}
+  spaceshipController: {fileID: 2509914176113464011}
+  cursorRectTransform: {fileID: 1624037100}
   _gimbalX: 0
   _gimbalY: 0
 --- !u!1 &435190492
