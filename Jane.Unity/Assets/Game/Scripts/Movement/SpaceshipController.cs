@@ -52,7 +52,6 @@ public class SpaceshipController : MonoBehaviour
     private void MyInput()
     {
         playerInput = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Hover"), Input.GetAxisRaw("Vertical"));
-        Debug.Log($"{playerInput}");
         rollInput = Input.GetAxisRaw("Roll");
     }
 
