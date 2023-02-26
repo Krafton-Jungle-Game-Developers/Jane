@@ -24,12 +24,12 @@ public class SpaceshipInputManager : MonoBehaviour
     [SerializeField] private bool centerMouseOnInputEnabled = true;
     
     private string rollAxisInput = "Roll";
-    [SerializeField] private float yawRollRatio = 1;
+    [SerializeField] private float yawRollRatio = 1f;
 
     [Header("Throttle")]
     [SerializeField] private KeyCode throttleUpKey = KeyCode.W;
     [SerializeField] private KeyCode throttleDownKey = KeyCode.S;
-    [SerializeField] private float throttleSensitivity = 1;
+    [SerializeField] private float throttleSensitivity = 1f;
 
     [Header("Strafe")]
     private string strafeVerticalInput = "Strafe Vertical";
@@ -44,7 +44,7 @@ public class SpaceshipInputManager : MonoBehaviour
 
     private SpaceshipMovementManager movementManager;
     private HUDCursor hudCursor;
-    private Vector3 reticleViewportPosition = new(0.5f, 0.5f, 0);
+    private Vector3 reticleViewportPosition = new(0.5f, 0.5f, 0f);
 
     private void Awake()
     {
@@ -59,7 +59,7 @@ public class SpaceshipInputManager : MonoBehaviour
 
     private void ProcessInput()
     {
-        UpdateReticlePosition(new Vector3(Input.GetAxis(mouseDeltaXAxis), Input.GetAxis(mouseDeltaYAxis), 0));
+        UpdateReticlePosition(new Vector3(Input.GetAxis(mouseDeltaXAxis), Input.GetAxis(mouseDeltaYAxis), 0f));
 
         if (steeringEnabled)
         {
@@ -91,7 +91,7 @@ public class SpaceshipInputManager : MonoBehaviour
         // Convert back to proper viewport
         centeredReticleViewportPosition.x /= (float)Screen.width / Screen.height;
 
-        reticleViewportPosition = centeredReticleViewportPosition + new Vector3(0.5f, 0.5f, 0);
+        reticleViewportPosition = centeredReticleViewportPosition + new Vector3(0.5f, 0.5f, 0f);
     }
 
     private void ProcessMouseSteering()
@@ -99,7 +99,7 @@ public class SpaceshipInputManager : MonoBehaviour
         if (mouseSteeringEnabled is false) { return; }
 
         Vector3 screenInputs = Vector3.zero;
-        Vector3 centeredViewportPos = reticleViewportPosition - new Vector3(0.5f, 0.5f, 0);
+        Vector3 centeredViewportPos = reticleViewportPosition - new Vector3(0.5f, 0.5f, 0f);
 
         centeredViewportPos.x *= (float)Screen.width / Screen.height;
 
