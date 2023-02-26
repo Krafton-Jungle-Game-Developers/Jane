@@ -1,13 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.VersionControl;
 using UnityEngine;
+using UnityEngine.VFX;
 
-/// <summary>
-/// Used by GateTriggerQuad Objects inside gate prefab. 
-/// </summary>
-public class GateTriggerQuad : MonoBehaviour
+public class SpeedGate : MonoBehaviour
 {
+    [SerializeField] private VisualEffect gateActivateVFX;
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -18,4 +16,11 @@ public class GateTriggerQuad : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    IEnumerator Warp()
+    {
+        yield return null;
+    }
 }
+
+

@@ -14,8 +14,9 @@ public class GoalController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other)
+        if (other.gameObject.CompareTag("Player"))
         {
+            Debug.Log("a");
             _gameController.EndGame();
         }
     }

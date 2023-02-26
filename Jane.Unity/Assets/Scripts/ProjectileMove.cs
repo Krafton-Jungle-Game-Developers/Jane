@@ -6,16 +6,12 @@ public class ProjectileMove : MonoBehaviour
 {
     [SerializeField] private float _speed;
     [SerializeField] private GameObject impactPrefab;
-    
-
-    
     private Rigidbody _rigidbody;
 
     
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
-
     }
 
 
@@ -41,12 +37,6 @@ public class ProjectileMove : MonoBehaviour
             var impactVFX = Instantiate(impactPrefab, position, rotation) as GameObject;
             Destroy(impactVFX, 3);
         }
-
         Destroy(gameObject);
-
-
     }
-
-
-    
 }
