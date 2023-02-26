@@ -10978,7 +10978,6 @@ MonoBehaviour:
   pitchRotation: 20
   rollRotation: 20
   maxMovementSpeed: {x: 5, y: 5, z: 10}
-  currentMovementSpeed: {x: 0, y: 0, z: 0}
   forwardDeceleration: 0.3
   strafeDeceleration: 0.3
   hoverDeceleration: 0.3
