@@ -134,7 +134,5 @@ public class PlayerCameraController : MonoBehaviour
     private void CameraGimbalMovement()
     {
         Vector3 eulerAngles = playerTransform.rotation.eulerAngles;
-        Debug.Log("transform.rotation angles x: " + eulerAngles.x + " y: " + eulerAngles.y + " z: " + eulerAngles.z);
-
     }
 }

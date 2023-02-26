@@ -11,6 +11,7 @@ public class SpaceshipController : MonoBehaviour
     [SerializeField] private float pitchRotation = 1000f;
     [SerializeField] private float rollRotation = 1000f;
     [SerializeField] private Vector3 maxMovementSpeed = new Vector3(400f, 400f, 400f);
+    [SerializeField] private Vector3 maxSteeringForce = new Vector3(16f, 16f, 25f);
     private Vector3 _currentMovementSpeed = Vector3.zero;
     [SerializeField, Range(0.001f, 0.999f)] private float forwardDeceleration, strafeDeceleration, hoverDeceleration;
     private Vector3 playerInput;
@@ -60,8 +61,8 @@ public class SpaceshipController : MonoBehaviour
         // Consistent method
         _lookInput = cursorRectTransform.position;
 
-        _mouseDistance.x = (_lookInput.x - _screenCenter.x) / _screenCenter.y;
-        _mouseDistance.y = (_lookInput.y - _screenCenter.y) / _screenCenter.y;
+        _mouseDistance.y = (_lookInput.x - _screenCenter.x) / _screenCenter.y;
+        _mouseDistance.x = -((_lookInput.y - _screenCenter.y) / _screenCenter.y);
 
         _mouseDistance = Vector3.ClampMagnitude(_mouseDistance, 1f);
 
@@ -69,8 +70,7 @@ public class SpaceshipController : MonoBehaviour
         {
             return;
         }
-
-        transform.Rotate(-_mouseDistance.y * lookRateSpeed, _mouseDistance.x * lookRateSpeed, 0f, Space.Self);
+        _rb.AddRelativeTorque(lookRateSpeed * Vector3.Scale(_mouseDistance, maxSteeringForce), ForceMode.Acceleration);
     }
 
     private void RollUpdate()
