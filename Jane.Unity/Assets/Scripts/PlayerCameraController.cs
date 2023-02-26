@@ -29,7 +29,7 @@ public class PlayerCameraController : MonoBehaviour
     [Space]
     //Inspector Edit
     [SerializeField] private Vector3 cameraOffset;
-    [SerializeField] private Quaternion cameraRotationOffset = new Quaternion(0f, 0f, 0f, 0f);
+    [SerializeField] private Quaternion cameraRotationOffset;
     [SerializeField] private float cameraPositionTension = 10;
     [SerializeField] private float cameraRotationTension = 10;
 
@@ -69,7 +69,8 @@ public class PlayerCameraController : MonoBehaviour
         booster = GameObject.FindGameObjectWithTag("Player").GetComponent<Booster>();
     }
 
-    void FixedUpdate()
+    // Update is called once per frame
+    void LateUpdate()
     {
         CameraControlMovement();
         CameraBoosterMovement();

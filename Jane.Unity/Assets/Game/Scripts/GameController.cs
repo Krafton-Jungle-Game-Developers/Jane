@@ -16,7 +16,7 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         _spaceshipController = GameObject.FindGameObjectWithTag("Player").GetComponent<SpaceshipController>();
-        
+        StartGame();
     }
 
     private async UniTask WaitForPlayersAsync(CancellationToken token)

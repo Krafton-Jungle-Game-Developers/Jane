@@ -2726,7 +2726,7 @@ MonoBehaviour:
   m_Camera: {fileID: 0}
   playerTransform: {fileID: 0}
   playerQuaternion: {x: 0, y: 0, z: 0, w: 0}
-  cameraOffset: {x: 25, y: -8, z: 0}
+  cameraOffset: {x: 0, y: -8, z: 25}
   cameraRotationOffset: {x: 0, y: 0, z: 0, w: 0}
   cameraPositionTension: 35
   cameraRotationTension: 10
@@ -3419,7 +3419,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 583553263}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
@@ -11329,7 +11329,7 @@ Rigidbody:
   m_AngularDrag: 4
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &2509914176113464013
