@@ -1,0 +1,29 @@
+fileFormatVersion: 2
+guid: dac30f2e8d460514c8e6e9fc50ad75c3
+labels:
+- imphenzia
+- usfx
+- mono
+- loop
+- spacecraft
+- engine
+- spaceship
+- scifi
+- mechanic
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 0
+    quality: 0
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

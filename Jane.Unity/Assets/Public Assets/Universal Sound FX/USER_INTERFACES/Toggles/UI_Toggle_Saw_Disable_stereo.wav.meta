@@ -1,0 +1,28 @@
+fileFormatVersion: 2
+guid: 9a99d9a6cc875344e9808918fa25626d
+labels:
+- usfx
+- imphenzia
+- user interface
+- ui
+- gui
+- stereo
+- switch
+- toggle
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 0
+    quality: 0
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

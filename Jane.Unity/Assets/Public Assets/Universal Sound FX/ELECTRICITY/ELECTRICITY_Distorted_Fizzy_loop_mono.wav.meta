@@ -1,0 +1,30 @@
+fileFormatVersion: 2
+guid: dced26bb7d24ec84c8a7461aee6e3935
+labels:
+- usfx
+- imphenzia
+- electricity
+- energy
+- loop
+- mono
+- beam
+- force
+- force field
+- distortion
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 0
+    quality: 0
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

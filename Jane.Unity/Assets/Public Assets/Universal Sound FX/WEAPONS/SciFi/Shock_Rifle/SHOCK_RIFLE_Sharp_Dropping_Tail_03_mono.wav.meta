@@ -1,0 +1,32 @@
+fileFormatVersion: 2
+guid: a5e32bee2dece3d4ca01a30ad630a3c0
+labels:
+- usfx
+- imphenzia
+- stereo
+- weapon
+- scifi
+- shock
+- rifle
+- energy
+- fire
+- firing
+- shoot
+- shooting
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 0
+    quality: 0
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

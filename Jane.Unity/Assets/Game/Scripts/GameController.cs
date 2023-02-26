@@ -1,20 +1,27 @@
 using System.Collections;
-using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField] private TMP_Text connectingText;
     public TextMeshProUGUI countdownText;
     public TextMeshProUGUI endGameText;
     public GameObject hud;
     private int _countdownTime = 3;
     private SpaceshipController _spaceshipController;
 
-    void Start()
+    private void Start()
     {
         _spaceshipController = GameObject.FindGameObjectWithTag("Player").GetComponent<SpaceshipController>();
-        StartGame();
+        
+    }
+
+    private async UniTask WaitForPlayersAsync(CancellationToken token)
+    {
+
     }
 
     private void StartGame()
