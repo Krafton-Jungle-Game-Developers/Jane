@@ -32,7 +32,7 @@ public class WarpGate : MonoBehaviour
 
         while(timeElapsed < duration)
         {
-            float newFOV = Mathf.Lerp(startingFOV, maxFOV, Mathf.Pow(timeElapsed / duration, 3f));
+            float newFOV = Mathf.Lerp(startingFOV, maxFOV, Mathf.Pow(timeElapsed / duration, 5f));
             float newBloomIntensity = Mathf.Lerp(startingBloom, maxBloomIntensity, Mathf.Pow(timeElapsed / duration, 2f));
             playerCameraEffect.nowFOV = newFOV;
             playerCameraEffect.nowBloomIntensity = newBloomIntensity;
@@ -46,7 +46,7 @@ public class WarpGate : MonoBehaviour
         while(timeElapsed < duration)
         {
             float newFOV = Mathf.Lerp(maxFOV, playerCameraEffect.baseFOV, Mathf.Pow(timeElapsed / duration, 4f));
-            float newBloomIntensity = Mathf.Lerp(maxBloomIntensity, playerCameraEffect.baseBloomIntensity, Mathf.Pow(timeElapsed / duration, 2f));
+            float newBloomIntensity = Mathf.Lerp(maxBloomIntensity, playerCameraEffect.baseBloomIntensity, Mathf.Pow(timeElapsed / duration, 0.5f));
             playerCameraEffect.nowFOV = newFOV;
             playerCameraEffect.nowBloomIntensity = newBloomIntensity;
             timeElapsed += Time.deltaTime;

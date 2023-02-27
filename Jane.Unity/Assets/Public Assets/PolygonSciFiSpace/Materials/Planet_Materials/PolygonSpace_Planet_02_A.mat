@@ -180,7 +180,7 @@ Material:
     - _Planet_Tiling: 123.13
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _RimPower: 2.95
+    - _RimPower: 15
     - _Scale: -0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -203,7 +203,7 @@ Material:
     - _PlanetBaseColor: {r: 0.9558824, g: 0, b: 0, a: 0}
     - _PlanetRimColor: {r: 0, g: 0, b: 0, a: 0}
     - _PlanetSecondColor: {r: 0.50735295, g: 0.10818557, b: 0.10818557, a: 0}
-    - _RimColor: {r: 1, g: 0.18396229, b: 0.9193271, a: 1}
+    - _RimColor: {r: 0.44705886, g: 0.48627454, b: 0.47450984, a: 1}
     - _SecondColor: {r: 0.39511245, g: 0.85294116, b: 0.8163149, a: 0}
     - _Second_Color: {r: 0.31617647, g: 0.25890556, b: 0.22783305, a: 0}
     - _Size: {r: 0, g: 0, b: 0, a: 0}
