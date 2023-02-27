@@ -12296,6 +12296,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gateActivateVFX: {fileID: 7812829350766592785}
   swirlGreen: {fileID: 4552111828781709425}
+  audioSource: {fileID: 0}
+  activateSFX: {fileID: 0}
+  gateClearSFX: {fileID: 0}
 --- !u!1001 &2967083953664722717
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12387,6 +12390,7 @@ GameObject:
   - component: {fileID: 7436762201906607313}
   - component: {fileID: 4974956762014245046}
   - component: {fileID: 9037742228503012168}
+  - component: {fileID: 9169660761280265155}
   m_Layer: 0
   m_Name: GateTriggerQuad
   m_TagString: Untagged
@@ -18006,3 +18010,17 @@ Transform:
   m_Father: {fileID: 2606470562064322361}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 89.694, y: -53.413, z: 32.885}
+--- !u!114 &9169660761280265155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3024903687816362118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f531fcdbd4835544b88cf3b9d6c8236b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  warpVFX: {fileID: 0}
+  warpDestination: {x: 0, y: 0, z: 0}

@@ -5,22 +5,28 @@ using UnityEngine.VFX;
 
 public class SpeedGate : MonoBehaviour
 {
-    [SerializeField] private VisualEffect gateActivateVFX;
+    [SerializeField] private VisualEffect warpVFX;
+    public GameObject warpDestination;
+    private GameObject player;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            CheckPoints checkPointsArr = GetComponentInParent<CheckPoints>();
-
-            checkPointsArr.ControlGates();
-            Destroy(gameObject);
+            player = other.gameObject;
+            StartCoroutine(Warp());
         }
     }
 
     IEnumerator Warp()
     {
+/*        player.GetComponent<SpaceshipController>
+*/        if(warpVFX != null)
+        {
+            Instantiate(warpVFX);
+            // wait for visual effect to end
+        }
+        player.transform.position = warpDestination.transform.position;
         yield return null;
     }
 }
-
-
