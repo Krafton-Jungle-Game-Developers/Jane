@@ -1,0 +1,373 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b70abea511859e248a1cf2c44035e321, type: 3}
+  m_Name: English (en-US)
+  m_EditorClassIdentifier: 
+  localizationSettings: {fileID: 11400000, guid: 2cbd73cf0fc79bf4ab2e27e18b1ba7c8,
+    type: 2}
+  languageID: en-US
+  languageName: English
+  localizedName: English (US)
+  tableList:
+  - table: {fileID: 11400000, guid: c4d223e438e911a44aecec230da547ea, type: 2}
+    tableContent:
+    - key: AchievementsTitle
+      value: Achievements
+    - key: AchievementTotal
+      value: Total
+    - key: AchievementLegendary
+      value: Legendary
+    - key: AchievementRare
+      value: Rare
+    - key: AchievementCommon
+      value: Common
+    - key: ButtonAll
+      value: All
+    - key: PAK_Part1
+      value: Press
+    - key: PAK_Key
+      value: Any Key
+    - key: PAK_Part2
+      value: To Start
+    - key: ButtonGoBack
+      value: // Go Back
+    - key: StoryModeTitle
+      value: Story Mode
+    - key: MultiplayerTitle
+      value: Multiplayer
+    - key: ExitTitle
+      value: Exit
+    - key: ExtrasTitle
+      value: Extras
+    - key: SettingsTitle
+      value: Settings
+    - key: GeneralTitle
+      value: General
+    - key: ControlsTitle
+      value: Controls
+    - key: AudioTitle
+      value: Audio
+    - key: VisualsTitle
+      value: Visuals
+    - key: MultiplayerSearchingLabel
+      value: Searching for games...
+    - key: LanguageTitle
+      value: Language
+    - key: NewsTitle
+      value: News
+    - key: ButtonMoreDetails
+      value: More Details
+    - key: NewsItemTitle1
+      value: Welcome to Reach UI
+    - key: NewsItemDescription1
+      value: This is a panel which you can show the latest updates, changelog and
+        more.
+    - key: NewsItemTitle2
+      value: Fully customizable
+    - key: NewsItemDescription2
+      value: You can add new items, change the size or change the appearance of the
+        panel by tweaking the news item preset.
+    - key: NewsItemTitle3
+      value: Easily add new content
+    - key: NewsItemDescription3
+      value: You can easily add new slider items using the 'News Slider' component
+        which is added to the slider object.
+    - key: AchievementHiddenTitle
+      value: Hidden Achievement
+    - key: AchievementHiddenDesc
+      value: This is a hidden achievement and must be unlocked to preview.
+    - key: AchievementSampleTitle
+      value: Sample Achievement
+    - key: AchievementSampleDesc
+      value: This is a sample achievement made for demo purposes.
+    - key: DiscordDescription
+      value: Join us on Discord
+    - key: TwitterDescription
+      value: Follow us on Twitter
+    - key: ChapterContinue
+      value: Continue
+    - key: ChapterPlay
+      value: Play
+    - key: ChapterReplay
+      value: Replay
+    - key: ChapterCompleted
+      value: Completed
+    - key: ChapterUnlocked
+      value: Unlocked
+    - key: ChapterLocked
+      value: Locked
+    - key: Chapter1Title
+      value: Chapter 1
+    - key: Chapter1Description
+      value: This is a description field. You can say something about the chapter
+        here. This is a multi-line field and is automatically sized depending on
+        its content. You can also use any TMP-supported rich text. You can use the
+        'Chapter Manager' component to make any changes to the chapter panel. Don't
+        worry, it's really easy to use!
+    - key: Chapter2Title
+      value: Chapter 2
+    - key: Chapter2Description
+      value: This is a description field. You can say something about the chapter
+        here. This is a multi-line field and is automatically sized depending on
+        its content. You can also use any TMP-supported rich text. You can use the
+        'Chapter Manager' component to make any changes to the chapter panel. Don't
+        worry, it's really easy to use!
+    - key: Chapter3Title
+      value: Chapter 3
+    - key: Chapter3Description
+      value: This is a description field. You can say something about the chapter
+        here. This is a multi-line field and is automatically sized depending on
+        its content. You can also use any TMP-supported rich text. You can use the
+        'Chapter Manager' component to make any changes to the chapter panel. Don't
+        worry, it's really easy to use!
+    - key: Chapter4Title
+      value: Chapter 4
+    - key: Chapter4Description
+      value: This is a description field. You can say something about the chapter
+        here. This is a multi-line field and is automatically sized depending on
+        its content. You can also use any TMP-supported rich text. You can use the
+        'Chapter Manager' component to make any changes to the chapter panel. Don't
+        worry, it's really easy to use!
+    - key: ButtonCancel
+      value: Cancel
+    - key: ButtonConfirm
+      value: Confirm
+    - key: ExitModalDescription
+      value: Are you sure you want to exit? This action cannot be undone.
+    - key: LabelOn
+      value: On
+    - key: LabelOff
+      value: Off
+    - key: CreditsTitle
+      value: Credits
+    - key: SelectLabel
+      value: Select
+    - key: NavigateLabel
+      value: Navigate
+    - key: PrevChapterLabel
+      value: Previous Chapter
+    - key: NextChapterLabel
+      value: Next Chapter
+    - key: GoBackLabel
+      value: Go Back
+    - key: PrevCategoryLabel
+      value: Previous Category
+    - key: NextCategoryLabel
+      value: Next Category
+    - key: BoostCreditsLabel
+      value: Boost (Hold)
+    - key: CloseLabel
+      value: Close
+    - key: ControllerLayoutTitle
+      value: Controller Layout
+    - key: CreditsVoiceover
+      value: Voiceover
+    - key: CreditsCreatedBy
+      value: Created by
+    - key: CreditsArtDesign
+      value: Art Design
+    - key: CreditsProgrammer
+      value: Programming
+    - key: CreditsSoundDesign
+      value: Sound Design
+    - key: CreditsConceptArtist
+      value: Concept Artist
+    - key: CreditsVFXArtist
+      value: VFX Artist
+    - key: CreditsUI
+      value: User Interface
+    - key: CreditsPlaytesters
+      value: Playtesters
+    - key: WebsiteDescription
+      value: Check our website
+    - key: RedditDescription
+      value: Follow us on Reddit
+    - key: YouTubeDescription
+      value: Subscribe us on YouTube
+    - key: EnableHintsLabel
+      value: Enable Hints
+    - key: EnableTutorialsLabel
+      value: Enable Tutorials
+    - key: UIScaleLabel
+      value: UI Scale
+    - key: SubtitleScaleLabel
+      value: Subtitle Scale
+    - key: EnableSubtitlesLabel
+      value: Enable Subtitles
+    - key: VolumeHeader
+      value: Volume
+    - key: MasterVolumeLabel
+      value: Master Volume
+    - key: MusicVolumeLabel
+      value: Music Volume
+    - key: SFXVolumeLabel
+      value: SFX Volume
+    - key: UIVolumeLabel
+      value: UI Volume
+    - key: DisplayHeader
+      value: Display
+    - key: ResolutionLabel
+      value: Resolution
+    - key: EnableHintsDesc
+      value: 'First timer? Want to learn some new stuff while playing? If so, you
+        can enable this.
+
+
+        *This is a non-functional placeholder.'
+    - key: EnableSubtitlesDesc
+      value: 'See what people saying on the screen.
+
+
+        *This is a non-functional
+        placeholder.'
+    - key: LanguageDesc
+      value: Select a language that you prefer.
+    - key: UIScaleDesc
+      value: Too big? Too small? That's what she said? Well, you can manage UI size
+        here.
+    - key: SubtitleScaleDesc
+      value: 'Too big? Too small? That''s what she said? Well, you can manage subtitle
+        size here.
+
+
+        *This is a non-functional placeholder.'
+    - key: MasterVolumeDesc
+      value: If you want to decrease or increase the general volume of the game,
+        you can play with this slider.
+    - key: MusicVolumeDesc
+      value: If you want to decrease or increase the music volume of the game, you
+        can play with this slider.
+    - key: SFXVolumeDesc
+      value: If you want to decrease or increase the effect volume of the game, you
+        can play with this slider.
+    - key: UIVolumeDesc
+      value: If you want to decrease or increase the UI of the game, you can play
+        with this slider.
+    - key: ResolutionDesc
+      value: Higher resolution screens are capable of producing sharper, clearer,
+        more detailed images. You can choose any resolution you desire.
+    - key: SettingsDesc
+      value: Tweak some options and make your gameplay experience even better! You
+        can change between categories using the buttons on the top.
+    - key: VSyncLabel
+      value: VSync
+    - key: VSyncDesc
+      value: VSync is the graphics technology responsible for synchronizing the frame
+        rate of a game to the refresh rate of a monitor. This synchronization delivers
+        smooth, uninterrupted gameplay for graphics-heavy 3D games.
+    - key: FrameRateLabel
+      value: Frame Rate
+    - key: FrameRateDesc
+      value: Limit the frame rate. It is recommended to match this option with the
+        refresh rate of your monitor. Note that this option has no effect when VSync
+        is enabled.
+    - key: FrameRateUnlimited
+      value: Unlimited
+    - key: WindowModeLabel
+      value: Window Mode
+    - key: WindowModeDesc
+      value: Select the preferred window mode. If you're experiencing input lags,
+        you can try the <b>Fullscreen</b> mode.
+    - key: BorderlessLabel
+      value: Borderless
+    - key: FullscreenLabel
+      value: Fullscreen
+    - key: WindowedLabel
+      value: Windowed
+    - key: CreditsLogoDescription
+      value: 'Optional footnote goes here.
+
+        You can add additional information
+        or license details here.'
+    - key: AccessibilityTitle
+      value: Accessibility
+    - key: SearchLabel
+      value: Search
+    - key: CancelSearchLabel
+      value: Cancel Search
+    - key: GameModeLabel
+      value: Game Mode
+    - key: PlayLabel
+      value: Play
+    - key: SearchingLabel
+      value: Searching...
+    - key: DeathmatchLabel
+      value: Deathmatch
+    - key: CTFLabel
+      value: Capture the flag
+    - key: ConquestLabel
+      value: Conquest
+    - key: PauseMenuContinue
+      value: Continue
+    - key: ExitMainMenuTitle
+      value: Exit to main menu
+    - key: ExitMainMenuDescription
+      value: Are you sure you want to exit to the main menu? Any unsaved progress
+        will be lost.
+    - key: QuestTextSample
+      value: Example quest description
+    - key: NotificationTextSample
+      value: Task completed <b>[+50 XP]</b>
+    - key: PausedLabel
+      value: Paused
+    - key: TextureQualityLabel
+      value: Texture Quality
+    - key: TextureQualityDesc
+      value: Higher quality textures result in significantly deeper details, but
+        also require more VRAM and video processing hardware.
+    - key: SettingsGraphicsLow
+      value: Low
+    - key: SettingsGraphicsMedium
+      value: Medium
+    - key: SettingsGraphicsHigh
+      value: High
+    - key: SettingsGraphicsUltra
+      value: Ultra
+    - key: AnisotropicFilteringLabel
+      value: Anisotropic filtering
+    - key: AnisotropicFilteringDesc
+      value: Texture filtering makes distant objects in games look sharper. It works
+        by improving the appearance of textures viewed at a steep angle.
+    - key: CamAndPlayerLabel
+      value: Camera & Player
+    - key: CamSensitivityLabel
+      value: Camera sensitivity
+    - key: CamSensitivityDesc
+      value: Adjust camera sensitivity.
+    - key: SprintModeLabel
+      value: Sprint mode
+    - key: SprintModeLabelDesc
+      value: Set whether you want to sprint by holding the button or toggling.
+    - key: SprintToggleLabel
+      value: Toggle
+    - key: SprintHoldLabel
+      value: Hold
+    - key: ReverseLookLabel
+      value: Reverse look
+    - key: ReverseLookDesc
+      value: Inverts camera look when enabled.
+    - key: KeyBindingsHeader
+      value: Key Bindings
+    - key: AdvancedHeader
+      value: Advanced
+    - key: ScrollLabel
+      value: Scroll
+    - key: LobbyLabel
+      value: Lobby
+    - key: ReadyLabel
+      value: Ready
+    - key: NotReadyLabel
+      value: Not Ready
+    - key: UnreadyLabel
+      value: Unready
+    - key: PAK_Touchscreen
+      value: Touchscreen
