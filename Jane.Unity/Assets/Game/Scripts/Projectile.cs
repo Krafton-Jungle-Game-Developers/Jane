@@ -7,12 +7,14 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private int _damage;
     [SerializeField] private GameObject impactPrefab;
+    [SerializeField] private AudioSource birthAudio;
     private Rigidbody _rigidbody;
     private bool _hasCollided = false;
 
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        birthAudio.Play();
     }
 
     void Update()
