@@ -28,8 +28,11 @@ public class WarpGate : MonoBehaviour
         float startingFOV = playerCameraEffect.nowFOV;
         float startingBloom = playerCameraEffect.nowBloomIntensity;
 
-        // Play Warping SFX 
-        audioSource.Play();
+        if(audioSource != null)
+        {
+            // Play Warping SFX 
+            audioSource.Play();
+        }
 
         //some method in controller that stops player input & movement
         _player.GetComponent<SpaceshipController>().canControl = false;
