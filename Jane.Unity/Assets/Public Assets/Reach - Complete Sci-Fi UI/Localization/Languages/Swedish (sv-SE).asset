@@ -1,0 +1,369 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b70abea511859e248a1cf2c44035e321, type: 3}
+  m_Name: Swedish (sv-SE)
+  m_EditorClassIdentifier: 
+  localizationSettings: {fileID: 11400000, guid: 2cbd73cf0fc79bf4ab2e27e18b1ba7c8,
+    type: 2}
+  languageID: sv-SE
+  languageName: Swedish
+  localizedName: Svenska
+  tableList:
+  - table: {fileID: 11400000, guid: c4d223e438e911a44aecec230da547ea, type: 2}
+    tableContent:
+    - key: AchievementsTitle
+      value: Prestationer
+    - key: AchievementTotal
+      value: Total
+    - key: AchievementLegendary
+      value: Legendarisk
+    - key: AchievementRare
+      value: "S\xE4llsynt"
+    - key: AchievementCommon
+      value: "Allm\xE4nning"
+    - key: ButtonAll
+      value: Allt
+    - key: PAK_Part1
+      value: Tryck
+    - key: PAK_Key
+      value: En Nyckel
+    - key: PAK_Part2
+      value: "Att B\xF6rja"
+    - key: ButtonGoBack
+      value: "// G\xE5 Tillbaka"
+    - key: StoryModeTitle
+      value: "Ber\xE4ttelsel\xE4ge"
+    - key: MultiplayerTitle
+      value: Multiplayer
+    - key: ExitTitle
+      value: "Utg\xE5ng"
+    - key: ExtrasTitle
+      value: Extrafunktioner
+    - key: SettingsTitle
+      value: "Inst\xE4llningar"
+    - key: GeneralTitle
+      value: "Allm\xE4n"
+    - key: ControlsTitle
+      value: Kontroller
+    - key: AudioTitle
+      value: Audio
+    - key: VisualsTitle
+      value: Visuals
+    - key: MultiplayerSearchingLabel
+      value: "S\xF6ker efter spel..."
+    - key: LanguageTitle
+      value: "Spr\xE5k"
+    - key: NewsTitle
+      value: Nyheter
+    - key: ButtonMoreDetails
+      value: Fler detaljer
+    - key: NewsItemTitle1
+      value: "V\xE4lkommen till Reach UI"
+    - key: NewsItemDescription1
+      value: "Detta \xE4r en panel d\xE4r du kan visa de senaste uppdateringarna,
+        \xE4ndringsloggen och mer."
+    - key: NewsItemTitle2
+      value: Fullt anpassningsbar
+    - key: NewsItemDescription2
+      value: "Du kan l\xE4gga till nya objekt, \xE4ndra storleken eller \xE4ndra
+        panelens utseende genom att justera f\xF6rinst\xE4llningen f\xF6r nyhetsinslag."
+    - key: NewsItemTitle3
+      value: "L\xE4gg enkelt till nytt inneh\xE5ll"
+    - key: NewsItemDescription3
+      value: "Du kan enkelt l\xE4gga till nya skjutreglage med hj\xE4lp av komponenten
+        'News Slider' som l\xE4ggs till i skjutreglaget."
+    - key: AchievementHiddenTitle
+      value: Dold prestation
+    - key: AchievementHiddenDesc
+      value: "Detta \xE4r en dold prestation och m\xE5ste l\xE5sas upp f\xF6r att
+        kunna f\xF6rhandsgranskas."
+    - key: AchievementSampleTitle
+      value: "Exempel p\xE5 prestation"
+    - key: AchievementSampleDesc
+      value: "Detta \xE4r en exempelprestation gjord f\xF6r demo\xE4ndam\xE5l."
+    - key: DiscordDescription
+      value: "G\xE5 med i v\xE5r Discord server"
+    - key: TwitterDescription
+      value: "F\xF6lj oss p\xE5 Twitter"
+    - key: ChapterContinue
+      value: "Forts\xE4tta"
+    - key: ChapterPlay
+      value: Spela
+    - key: ChapterReplay
+      value: Repris
+    - key: ChapterCompleted
+      value: Avslutad
+    - key: ChapterUnlocked
+      value: "Ol\xE5st"
+    - key: ChapterLocked
+      value: "L\xE5st"
+    - key: Chapter1Title
+      value: Kapitel 1
+    - key: Chapter1Description
+      value: "Detta \xE4r beskrivningsf\xE4ltet. Du kan s\xE4ga n\xE5got om kapitlet
+        h\xE4r. Detta \xE4r ett f\xE4lt med flera rader och storleksanpassas automatiskt
+        beroende p\xE5 dess inneh\xE5ll. Du kan ocks\xE5 anv\xE4nda valfri TMP-st\xF6dd
+        rik text. Du kan anv\xE4nda komponenten \"Kapitelhanterare\" f\xF6r att g\xF6ra
+        \xE4ndringar i kapitelpanelen. Oroa dig inte, det \xE4r verkligen l\xE4tt
+        att anv\xE4nda!"
+    - key: Chapter2Title
+      value: Kapitel 2
+    - key: Chapter2Description
+      value: "Detta \xE4r beskrivningsf\xE4ltet. Du kan s\xE4ga n\xE5got om kapitlet
+        h\xE4r. Detta \xE4r ett f\xE4lt med flera rader och storleksanpassas automatiskt
+        beroende p\xE5 dess inneh\xE5ll. Du kan ocks\xE5 anv\xE4nda valfri TMP-st\xF6dd
+        rik text. Du kan anv\xE4nda komponenten \"Kapitelhanterare\" f\xF6r att g\xF6ra
+        \xE4ndringar i kapitelpanelen. Oroa dig inte, det \xE4r verkligen l\xE4tt
+        att anv\xE4nda!"
+    - key: Chapter3Title
+      value: Kapitel 3
+    - key: Chapter3Description
+      value: "Detta \xE4r beskrivningsf\xE4ltet. Du kan s\xE4ga n\xE5got om kapitlet
+        h\xE4r. Detta \xE4r ett f\xE4lt med flera rader och storleksanpassas automatiskt
+        beroende p\xE5 dess inneh\xE5ll. Du kan ocks\xE5 anv\xE4nda valfri TMP-st\xF6dd
+        rik text. Du kan anv\xE4nda komponenten \"Kapitelhanterare\" f\xF6r att g\xF6ra
+        \xE4ndringar i kapitelpanelen. Oroa dig inte, det \xE4r verkligen l\xE4tt
+        att anv\xE4nda!"
+    - key: Chapter4Title
+      value: Kapitel 4
+    - key: Chapter4Description
+      value: "Detta \xE4r beskrivningsf\xE4ltet. Du kan s\xE4ga n\xE5got om kapitlet
+        h\xE4r. Detta \xE4r ett f\xE4lt med flera rader och storleksanpassas automatiskt
+        beroende p\xE5 dess inneh\xE5ll. Du kan ocks\xE5 anv\xE4nda valfri TMP-st\xF6dd
+        rik text. Du kan anv\xE4nda komponenten \"Kapitelhanterare\" f\xF6r att g\xF6ra
+        \xE4ndringar i kapitelpanelen. Oroa dig inte, det \xE4r verkligen l\xE4tt
+        att anv\xE4nda!"
+    - key: ButtonCancel
+      value: Avbryt
+    - key: ButtonConfirm
+      value: "Bekr\xE4fta"
+    - key: ExitModalDescription
+      value: "\xC4r du s\xE4ker p\xE5 att du vill avsluta? Denna \xE5tg\xE4rd kan
+        inte \xE5ngras."
+    - key: LabelOn
+      value: "P\xE5"
+    - key: LabelOff
+      value: Av
+    - key: CreditsTitle
+      value: Krediter
+    - key: SelectLabel
+      value: "V\xE4lj"
+    - key: NavigateLabel
+      value: Navigera
+    - key: PrevChapterLabel
+      value: "F\xF6reg\xE5ende Kapitel"
+    - key: NextChapterLabel
+      value: "N\xE4sta Kapitel"
+    - key: GoBackLabel
+      value: "G\xE5 Tillbaka"
+    - key: PrevCategoryLabel
+      value: "F\xF6reg\xE5ende Kategori"
+    - key: NextCategoryLabel
+      value: "N\xE4sta Kategori"
+    - key: BoostCreditsLabel
+      value: "Boost (H\xE5ll)"
+    - key: CloseLabel
+      value: "St\xE4nga"
+    - key: ControllerLayoutTitle
+      value: Styrenhetens Layout
+    - key: CreditsVoiceover
+      value: Dubbning
+    - key: CreditsCreatedBy
+      value: Skapad av
+    - key: CreditsArtDesign
+      value: Konstdesign
+    - key: CreditsProgrammer
+      value: Programmering
+    - key: CreditsSoundDesign
+      value: Ljuddesign
+    - key: CreditsConceptArtist
+      value: "Konceptkonstn\xE4r"
+    - key: CreditsVFXArtist
+      value: VFX artist
+    - key: CreditsUI
+      value: "Anv\xE4ndargr\xE4nssnitt"
+    - key: CreditsPlaytesters
+      value: Playtesters
+    - key: WebsiteDescription
+      value: "Kolla v\xE5r hemsida"
+    - key: RedditDescription
+      value: "F\xF6lj oss p\xE5 Reddit"
+    - key: YouTubeDescription
+      value: "Prenumerera p\xE5 YouTube"
+    - key: EnableHintsLabel
+      value: Aktivera tips
+    - key: EnableTutorialsLabel
+      value: "Aktivera sj\xE4lvstudier"
+    - key: UIScaleLabel
+      value: UI-skala
+    - key: SubtitleScaleLabel
+      value: Undertextskala
+    - key: EnableSubtitlesLabel
+      value: Aktivera undertexter
+    - key: VolumeHeader
+      value: Volym
+    - key: MasterVolumeLabel
+      value: Master Volym
+    - key: MusicVolumeLabel
+      value: Musikvolym
+    - key: SFXVolumeLabel
+      value: SFX volym
+    - key: UIVolumeLabel
+      value: UI-volym
+    - key: DisplayHeader
+      value: Visa
+    - key: ResolutionLabel
+      value: "Uppl\xF6sning"
+    - key: EnableHintsDesc
+      value: "F\xF6rsta g\xE5ngen? Vill du l\xE4ra dig nya saker medan du spelar?
+        Om s\xE5 \xE4r fallet kan du aktivera detta."
+    - key: EnableSubtitlesDesc
+      value: "Se vad folk s\xE4ger p\xE5 sk\xE4rmen."
+    - key: LanguageDesc
+      value: "V\xE4lj ett spr\xE5k som du f\xF6redrar."
+    - key: UIScaleDesc
+      value: "F\xF6r stor? F\xF6r liten? Det \xE4r vad hon sa? Tja, du kan hantera
+        UI-storlek h\xE4r."
+    - key: SubtitleScaleDesc
+      value: "F\xF6r stor? F\xF6r liten? Det \xE4r vad hon sa? Tja, du kan hantera
+        undertextstorlek h\xE4r."
+    - key: MasterVolumeDesc
+      value: "Om du vill minska eller \xF6ka spelets allm\xE4nna volym kan du spela
+        med det h\xE4r reglaget."
+    - key: MusicVolumeDesc
+      value: "Om du vill minska eller \xF6ka spelets musikvolym kan du spela med
+        det h\xE4r reglaget."
+    - key: SFXVolumeDesc
+      value: "Om du vill minska eller \xF6ka spelets effektvolym kan du spela med
+        det h\xE4r reglaget."
+    - key: UIVolumeDesc
+      value: "Om du vill minska eller \xF6ka spelets gr\xE4nssnitt kan du spela med
+        det h\xE4r reglaget."
+    - key: ResolutionDesc
+      value: "Sk\xE4rmar med h\xF6gre uppl\xF6sning kan producera skarpare, tydligare
+        och mer detaljerade bilder. Du kan v\xE4lja vilken uppl\xF6sning du vill."
+    - key: SettingsDesc
+      value: "Justera n\xE5gra alternativ och g\xF6r din spelupplevelse \xE4nnu b\xE4ttre!
+        Du kan v\xE4xla mellan kategorier med knapparna p\xE5 toppen."
+    - key: VSyncLabel
+      value: VSync
+    - key: VSyncDesc
+      value: "VSync \xE4r den grafikteknik som ansvarar f\xF6r att synkronisera bildfrekvensen
+        f\xF6r ett spel med uppdateringsfrekvensen f\xF6r en bildsk\xE4rm. Denna
+        synkronisering ger ett smidigt, oavbrutet spelande f\xF6r grafiktunga 3D-spel."
+    - key: FrameRateLabel
+      value: Bildhastighet
+    - key: FrameRateDesc
+      value: "Begr\xE4nsa bildfrekvensen. Vi rekommenderar att du matchar det h\xE4r
+        alternativet med bildsk\xE4rmens uppdateringsfrekvens. Observera att det
+        h\xE4r alternativet inte har n\xE5gon effekt n\xE4r VSync \xE4r aktiverat."
+    - key: FrameRateUnlimited
+      value: "Obegr\xE4nsat"
+    - key: WindowModeLabel
+      value: "F\xF6nsterl\xE4ge"
+    - key: WindowModeDesc
+      value: "V\xE4lj \xF6nskat f\xF6nsterl\xE4ge. Om du upplever inmatningsf\xF6rdr\xF6jningar
+        kan du prova <b>Helsk\xE4rmsl\xE4ge</b>."
+    - key: BorderlessLabel
+      value: "Gr\xE4nsl\xF6s"
+    - key: FullscreenLabel
+      value: "Fullsk\xE4rm"
+    - key: WindowedLabel
+      value: "F\xF6nster"
+    - key: CreditsLogoDescription
+      value: "Valfri fotnot finns h\xE4r.\r\nDu kan l\xE4gga till ytterligare information
+        eller licensdetaljer h\xE4r."
+    - key: AccessibilityTitle
+      value: "Tillg\xE4nglighet"
+    - key: SearchLabel
+      value: "S\xF6k"
+    - key: CancelSearchLabel
+      value: "Avbryt S\xF6kning"
+    - key: GameModeLabel
+      value: "Spell\xE4ge\r"
+    - key: PlayLabel
+      value: Spela
+    - key: SearchingLabel
+      value: "S\xF6kande..."
+    - key: DeathmatchLabel
+      value: "D\xF6ds match"
+    - key: CTFLabel
+      value: "F\xE5nga flaggan"
+    - key: ConquestLabel
+      value: "Er\xF6vring"
+    - key: PauseMenuContinue
+      value: "Forts\xE4tta"
+    - key: ExitMainMenuTitle
+      value: Avsluta till huvudmenyn
+    - key: ExitMainMenuDescription
+      value: "\xC4r du s\xE4ker p\xE5 att du vill avsluta till huvudmenyn? Alla osparade
+        framsteg kommer att g\xE5 f\xF6rlorade."
+    - key: QuestTextSample
+      value: Exempel quest text
+    - key: NotificationTextSample
+      value: "Uppgiften slutf\xF6rd <b>[+50 XP]</b>"
+    - key: PausedLabel
+      value: Pausad
+    - key: TextureQualityLabel
+      value: Texturkvalitet
+    - key: TextureQualityDesc
+      value: "Texturer av h\xF6gre kvalitet resulterar i betydligt djupare detaljer,
+        men kr\xE4ver mer VRAM och h\xE5rdvara f\xF6r videobehandling."
+    - key: SettingsGraphicsLow
+      value: Niedrig
+    - key: SettingsGraphicsMedium
+      value: Medium
+    - key: SettingsGraphicsHigh
+      value: "H\xF6g"
+    - key: SettingsGraphicsUltra
+      value: Ultra
+    - key: AnisotropicFilteringLabel
+      value: Anisotropisk filtrering
+    - key: AnisotropicFilteringDesc
+      value: "Texturfiltrering g\xF6r att avl\xE4gsna objekt i spel ser skarpare
+        ut. Det fungerar genom att f\xF6rb\xE4ttra utseendet p\xE5 texturer sett
+        i en brant vinkel."
+    - key: CamAndPlayerLabel
+      value: Kamera & Spelare
+    - key: CamSensitivityLabel
+      value: "Kamerak\xE4nslighet"
+    - key: CamSensitivityDesc
+      value: "Justera kamerak\xE4nsligheten."
+    - key: SprintModeLabel
+      value: "Sprintl\xE4ge"
+    - key: SprintModeLabelDesc
+      value: "St\xE4ll in om du vill sprinta genom att h\xE5lla ned knappen eller
+        v\xE4xla."
+    - key: SprintToggleLabel
+      value: "V\xE4xla"
+    - key: SprintHoldLabel
+      value: "H\xE5ll"
+    - key: ReverseLookLabel
+      value: "Omv\xE4nd look"
+    - key: ReverseLookDesc
+      value: "Inverterar kamerautseendet n\xE4r det \xE4r aktiverat."
+    - key: KeyBindingsHeader
+      value: Nyckelbindningar
+    - key: AdvancedHeader
+      value: Avancerad
+    - key: ScrollLabel
+      value: Skrolla
+    - key: LobbyLabel
+      value: Lobby
+    - key: ReadyLabel
+      value: Redo
+    - key: NotReadyLabel
+      value: Inte Redo
+    - key: UnreadyLabel
+      value: Oklar
+    - key: PAK_Touchscreen
+      value: "Peksk\xE4rm"

@@ -1,0 +1,374 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b70abea511859e248a1cf2c44035e321, type: 3}
+  m_Name: German (de-DE)
+  m_EditorClassIdentifier: 
+  localizationSettings: {fileID: 11400000, guid: 2cbd73cf0fc79bf4ab2e27e18b1ba7c8,
+    type: 2}
+  languageID: de-DE
+  languageName: German
+  localizedName: Deutsch
+  tableList:
+  - table: {fileID: 11400000, guid: c4d223e438e911a44aecec230da547ea, type: 2}
+    tableContent:
+    - key: AchievementsTitle
+      value: Erfolge
+    - key: AchievementTotal
+      value: Gesamt
+    - key: AchievementLegendary
+      value: "Legend\xE4r"
+    - key: AchievementRare
+      value: "Selten\r"
+    - key: AchievementCommon
+      value: Verbreitet
+    - key: ButtonAll
+      value: Alle
+    - key: PAK_Part1
+      value: "Dr\xFCcken Sie"
+    - key: PAK_Key
+      value: "Ein Schl\xFCssel"
+    - key: PAK_Part2
+      value: Anfangen
+    - key: ButtonGoBack
+      value: "// Geh Zur\xFCck"
+    - key: StoryModeTitle
+      value: Geschichtsmodus
+    - key: MultiplayerTitle
+      value: Mehrspieler
+    - key: ExitTitle
+      value: Ausgang
+    - key: ExtrasTitle
+      value: Extras
+    - key: SettingsTitle
+      value: Einstellungen
+    - key: GeneralTitle
+      value: Allgemein
+    - key: ControlsTitle
+      value: Kontrollen
+    - key: AudioTitle
+      value: Audio
+    - key: VisualsTitle
+      value: Visuals
+    - key: MultiplayerSearchingLabel
+      value: Suche nach spielen...
+    - key: LanguageTitle
+      value: Sprache
+    - key: NewsTitle
+      value: "Nachrichten\r"
+    - key: ButtonMoreDetails
+      value: Mehr Details
+    - key: NewsItemTitle1
+      value: Willkommen bei der Reach UI
+    - key: NewsItemDescription1
+      value: "Dies ist ein Bereich, in dem Sie die neuesten Updates, \xC4nderungsprotokolle
+        und mehr anzeigen k\xF6nnen."
+    - key: NewsItemTitle2
+      value: "Vollst\xE4ndig anpassbar"
+    - key: NewsItemDescription2
+      value: "Sie k\xF6nnen neue Elemente hinzuf\xFCgen, die Gr\xF6\xDFe \xE4ndern
+        oder das Erscheinungsbild des Bereichs \xE4ndern, indem Sie die Voreinstellung
+        f\xFCr Nachrichtenelemente anpassen."
+    - key: NewsItemTitle3
+      value: "F\xFCgen Sie einfach neue Inhalte hinzu"
+    - key: NewsItemDescription3
+      value: "Sie k\xF6nnen ganz einfach neue Slider-Elemente hinzuf\xFCgen, indem
+        Sie die Komponente \u201ENews Slider\u201C verwenden, die dem Slider-Objekt
+        hinzugef\xFCgt wird."
+    - key: AchievementHiddenTitle
+      value: Versteckte Leistung
+    - key: AchievementHiddenDesc
+      value: "Dies ist ein versteckter Erfolg und muss f\xFCr die Vorschau freigeschaltet
+        werden."
+    - key: AchievementSampleTitle
+      value: Beispielleistung
+    - key: AchievementSampleDesc
+      value: Dies ist ein Beispielerfolg, der zu Demozwecken erstellt wurde.
+    - key: DiscordDescription
+      value: Tritt unserem Discord server bei
+    - key: TwitterDescription
+      value: Folge uns auf Twitter
+    - key: ChapterContinue
+      value: Fortsetzen
+    - key: ChapterPlay
+      value: Spielen
+    - key: ChapterReplay
+      value: Wiederholung
+    - key: ChapterCompleted
+      value: Abgeschlossen
+    - key: ChapterUnlocked
+      value: Entsperrt
+    - key: ChapterLocked
+      value: Gesperrt
+    - key: Chapter1Title
+      value: Kapitel 1
+    - key: Chapter1Description
+      value: "Dies ist das Beschreibungsfeld. Hier k\xF6nnen Sie etwas zum Kapitel
+        sagen. Dies ist ein mehrzeiliges Feld und wird abh\xE4ngig von seinem Inhalt
+        automatisch in der Gr\xF6\xDFe angepasst. Sie k\xF6nnen auch beliebigen TMP-unterst\xFCtzten
+        Rich-Text verwenden. Sie k\xF6nnen die Komponente \u201EKapitel-Manager\u201C
+        verwenden, um \xC4nderungen am Kapitelbereich vorzunehmen. Keine Sorge, es
+        ist wirklich einfach zu bedienen!"
+    - key: Chapter2Title
+      value: Kapitel 2
+    - key: Chapter2Description
+      value: "Dies ist das Beschreibungsfeld. Hier k\xF6nnen Sie etwas zum Kapitel
+        sagen. Dies ist ein mehrzeiliges Feld und wird abh\xE4ngig von seinem Inhalt
+        automatisch in der Gr\xF6\xDFe angepasst. Sie k\xF6nnen auch beliebigen TMP-unterst\xFCtzten
+        Rich-Text verwenden. Sie k\xF6nnen die Komponente \u201EKapitel-Manager\u201C
+        verwenden, um \xC4nderungen am Kapitelbereich vorzunehmen. Keine Sorge, es
+        ist wirklich einfach zu bedienen!"
+    - key: Chapter3Title
+      value: Kapitel 3
+    - key: Chapter3Description
+      value: "Dies ist das Beschreibungsfeld. Hier k\xF6nnen Sie etwas zum Kapitel
+        sagen. Dies ist ein mehrzeiliges Feld und wird abh\xE4ngig von seinem Inhalt
+        automatisch in der Gr\xF6\xDFe angepasst. Sie k\xF6nnen auch beliebigen TMP-unterst\xFCtzten
+        Rich-Text verwenden. Sie k\xF6nnen die Komponente \u201EKapitel-Manager\u201C
+        verwenden, um \xC4nderungen am Kapitelbereich vorzunehmen. Keine Sorge, es
+        ist wirklich einfach zu bedienen!"
+    - key: Chapter4Title
+      value: Kapitel 4
+    - key: Chapter4Description
+      value: "Dies ist das Beschreibungsfeld. Hier k\xF6nnen Sie etwas zum Kapitel
+        sagen. Dies ist ein mehrzeiliges Feld und wird abh\xE4ngig von seinem Inhalt
+        automatisch in der Gr\xF6\xDFe angepasst. Sie k\xF6nnen auch beliebigen TMP-unterst\xFCtzten
+        Rich-Text verwenden. Sie k\xF6nnen die Komponente \u201EKapitel-Manager\u201C
+        verwenden, um \xC4nderungen am Kapitelbereich vorzunehmen. Keine Sorge, es
+        ist wirklich einfach zu bedienen!"
+    - key: ButtonCancel
+      value: Absagen
+    - key: ButtonConfirm
+      value: "Best\xE4tigen"
+    - key: ExitModalDescription
+      value: "Sie sind sicher, dass Sie beenden wollen? Diese Aktion kann nicht r\xFCckg\xE4ngig
+        gemacht werden."
+    - key: LabelOn
+      value: An
+    - key: LabelOff
+      value: Aus
+    - key: CreditsTitle
+      value: Kredite
+    - key: SelectLabel
+      value: "Ausw\xE4hlen"
+    - key: NavigateLabel
+      value: Navigieren
+    - key: PrevChapterLabel
+      value: Vorheriges Kapitel
+    - key: NextChapterLabel
+      value: "N\xE4chstes Kapitel"
+    - key: GoBackLabel
+      value: "Geh Zur\xFCck"
+    - key: PrevCategoryLabel
+      value: Vorherige Kategorie
+    - key: NextCategoryLabel
+      value: "N\xE4chste Kategorie"
+    - key: BoostCreditsLabel
+      value: Steigern (Halten)
+    - key: CloseLabel
+      value: Nah Dran
+    - key: ControllerLayoutTitle
+      value: Controller-Layout
+    - key: CreditsVoiceover
+      value: "Voice-over\r"
+    - key: CreditsCreatedBy
+      value: "Erstellt von\r"
+    - key: CreditsArtDesign
+      value: Kunstdesign
+    - key: CreditsProgrammer
+      value: Programmierung
+    - key: CreditsSoundDesign
+      value: Audiogestaltung
+    - key: CreditsConceptArtist
+      value: "Konzeptk\xFCnstler"
+    - key: CreditsVFXArtist
+      value: "VFX-K\xFCnstler"
+    - key: CreditsUI
+      value: "Benutzeroberfl\xE4che"
+    - key: CreditsPlaytesters
+      value: Spieletester
+    - key: WebsiteDescription
+      value: "\xDCberpr\xFCfen Sie unsere Website"
+    - key: RedditDescription
+      value: Folgen Sie uns auf Reddit
+    - key: YouTubeDescription
+      value: Abonnieren Sie uns auf YouTube
+    - key: EnableHintsLabel
+      value: Hinweise aktivieren
+    - key: EnableTutorialsLabel
+      value: Tutorials aktivieren
+    - key: UIScaleLabel
+      value: UI-Skala
+    - key: SubtitleScaleLabel
+      value: Untertitelskala
+    - key: EnableSubtitlesLabel
+      value: Untertitel aktivieren
+    - key: VolumeHeader
+      value: Volumen
+    - key: MasterVolumeLabel
+      value: "Master-Lautst\xE4rke"
+    - key: MusicVolumeLabel
+      value: "Musiklautst\xE4rke"
+    - key: SFXVolumeLabel
+      value: "SFX-Lautst\xE4rke"
+    - key: UIVolumeLabel
+      value: "UI-Lautst\xE4rke"
+    - key: DisplayHeader
+      value: Anzeige
+    - key: ResolutionLabel
+      value: "Aufl\xF6sung"
+    - key: EnableHintsDesc
+      value: "Erstbesucher? M\xF6chten Sie beim Spielen etwas Neues lernen? Wenn
+        ja, k\xF6nnen Sie dies aktivieren."
+    - key: EnableSubtitlesDesc
+      value: Sehen Sie, was die Leute auf dem Bildschirm sagen.
+    - key: LanguageDesc
+      value: "W\xE4hlen Sie eine Sprache aus, die Sie bevorzugen."
+    - key: UIScaleDesc
+      value: "Zu gro\xDF? Zu klein? Das hat sie gesagt? Nun, Sie k\xF6nnen die Gr\xF6\xDFe
+        der Benutzeroberfl\xE4che hier verwalten."
+    - key: SubtitleScaleDesc
+      value: "Zu gro\xDF? Zu klein? Das hat sie gesagt? Nun, Sie k\xF6nnen die Untertitelgr\xF6\xDFe
+        hier verwalten."
+    - key: MasterVolumeDesc
+      value: "Wenn Sie die allgemeine Lautst\xE4rke des Spiels verringern oder erh\xF6hen
+        m\xF6chten, k\xF6nnen Sie mit diesem Schieberegler spielen."
+    - key: MusicVolumeDesc
+      value: "Wenn Sie die Musiklautst\xE4rke des Spiels verringern oder erh\xF6hen
+        m\xF6chten, k\xF6nnen Sie mit diesem Schieberegler spielen."
+    - key: SFXVolumeDesc
+      value: "Wenn Sie die Effektlautst\xE4rke des Spiels verringern oder erh\xF6hen
+        m\xF6chten, k\xF6nnen Sie mit diesem Schieberegler spielen."
+    - key: UIVolumeDesc
+      value: "Wenn Sie die Benutzeroberfl\xE4che des Spiels verringern oder erh\xF6hen
+        m\xF6chten, k\xF6nnen Sie mit diesem Schieberegler spielen."
+    - key: ResolutionDesc
+      value: "Bildschirme mit h\xF6herer Aufl\xF6sung k\xF6nnen sch\xE4rfere, klarere
+        und detailliertere Bilder erzeugen. Sie k\xF6nnen jede gew\xFCnschte Aufl\xF6sung
+        w\xE4hlen."
+    - key: SettingsDesc
+      value: "Optimieren Sie einige Optionen und machen Sie Ihr Spielerlebnis noch
+        besser! Mit den Schaltfl\xE4chen oben k\xF6nnen Sie zwischen den Kategorien
+        wechseln."
+    - key: VSyncLabel
+      value: VSync
+    - key: VSyncDesc
+      value: "VSync ist die Grafiktechnologie, die f\xFCr die Synchronisierung der
+        Bildrate eines Spiels mit der Bildwiederholfrequenz eines Monitors verantwortlich
+        ist. Diese Synchronisation liefert ein fl\xFCssiges, unterbrechungsfreies
+        Gameplay f\xFCr grafiklastige 3D-Spiele."
+    - key: FrameRateLabel
+      value: Bildrate
+    - key: FrameRateDesc
+      value: Begrenzen Sie die Bildrate. Es wird empfohlen, diese Option an die Bildwiederholfrequenz
+        Ihres Monitors anzupassen. Beachten Sie, dass diese Option keine Auswirkung
+        hat, wenn VSync aktiviert ist.
+    - key: FrameRateUnlimited
+      value: Unbegrenzt
+    - key: WindowModeLabel
+      value: Fenstermodus
+    - key: WindowModeDesc
+      value: "W\xE4hlen Sie den bevorzugten Fenstermodus. Wenn Sie Eingabeverz\xF6gerungen
+        feststellen, k\xF6nnen Sie den Modus <b>Vollbild</b> ausprobieren."
+    - key: BorderlessLabel
+      value: Randlos
+    - key: FullscreenLabel
+      value: Ganzer Bildschirm
+    - key: WindowedLabel
+      value: Gefenstert
+    - key: CreditsLogoDescription
+      value: "Hier steht eine optionale Fu\xDFnote.\r\nHier k\xF6nnen Sie zus\xE4tzliche
+        Informationen oder Lizenzdetails hinzuf\xFCgen."
+    - key: AccessibilityTitle
+      value: Barrierefreiheit
+    - key: SearchLabel
+      value: Suche
+    - key: CancelSearchLabel
+      value: Suche Abbrechen
+    - key: GameModeLabel
+      value: Spielmodus
+    - key: PlayLabel
+      value: Spielen
+    - key: SearchingLabel
+      value: Suche...
+    - key: DeathmatchLabel
+      value: Todeskampf
+    - key: CTFLabel
+      value: Erobere die Flagge
+    - key: ConquestLabel
+      value: Eroberung
+    - key: PauseMenuContinue
+      value: Fortsetzen
+    - key: ExitMainMenuTitle
+      value: "Zur\xFCck zum hauptmen\xFC"
+    - key: ExitMainMenuDescription
+      value: "M\xF6chten Sie wirklich zum Hauptmen\xFC zur\xFCckkehren? Nicht gespeicherter
+        Fortschritt geht verloren."
+    - key: QuestTextSample
+      value: Beispiel missionstext
+    - key: NotificationTextSample
+      value: Aufgabe erledigt <b>[+50 XP]</b>
+    - key: PausedLabel
+      value: Angehalten
+    - key: TextureQualityLabel
+      value: "Texturqualit\xE4t"
+    - key: TextureQualityDesc
+      value: "Texturen mit h\xF6herer Qualit\xE4t f\xFChren zu wesentlich tieferen
+        Details, erfordern jedoch mehr VRAM und Videoverarbeitungshardware."
+    - key: SettingsGraphicsLow
+      value: "L\xE5g"
+    - key: SettingsGraphicsMedium
+      value: Mittel
+    - key: SettingsGraphicsHigh
+      value: Hoch
+    - key: SettingsGraphicsUltra
+      value: Ultra
+    - key: AnisotropicFilteringLabel
+      value: Anisotrope filterung
+    - key: AnisotropicFilteringDesc
+      value: "Die Texturfilterung l\xE4sst entfernte Objekte in Spielen sch\xE4rfer
+        erscheinen. Es funktioniert, indem es das Erscheinungsbild von Texturen verbessert,
+        die in einem steilen Winkel betrachtet werden."
+    - key: CamAndPlayerLabel
+      value: Kamera & Player
+    - key: CamSensitivityLabel
+      value: Kameraempfindlichkeit
+    - key: CamSensitivityDesc
+      value: Passen Sie die Kameraempfindlichkeit an.
+    - key: SprintModeLabel
+      value: Sprint-Modus
+    - key: SprintModeLabelDesc
+      value: "Legen Sie fest, ob Sie sprinten m\xF6chten, indem Sie die Taste gedr\xFCckt
+        halten oder umschalten."
+    - key: SprintToggleLabel
+      value: Umschalten
+    - key: SprintHoldLabel
+      value: Halt
+    - key: ReverseLookLabel
+      value: Umgekehrter Blick
+    - key: ReverseLookDesc
+      value: Kehrt den Kamerablick um, wenn aktiviert.
+    - key: KeyBindingsHeader
+      value: Tastenbelegungen
+    - key: AdvancedHeader
+      value: Fortschrittlich
+    - key: ScrollLabel
+      value: Scrollen
+    - key: LobbyLabel
+      value: Empfangshalle
+    - key: ReadyLabel
+      value: Bereit
+    - key: NotReadyLabel
+      value: Nicht Bereit
+    - key: UnreadyLabel
+      value: Unbereit
+    - key: PAK_Touchscreen
+      value: Touchscreen
