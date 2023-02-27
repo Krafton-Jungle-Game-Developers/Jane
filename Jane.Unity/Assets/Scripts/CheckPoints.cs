@@ -7,6 +7,10 @@ using UnityEngine;
 public class CheckPoints : MonoBehaviour
 {
     [SerializeField] private GameObject[] checkPointArr;
+    [SerializeField] private AudioSource audioSource;
+    //[SerializeField] private AudioClip activateSFX;
+    [SerializeField] private AudioClip gateClearSFX;    // Used for user Feedback
+
     private int idx = 0;
     private int gateCount;
     private GameObject currGate;
@@ -28,6 +32,9 @@ public class CheckPoints : MonoBehaviour
 
     public void ControlGates()
     {
+        audioSource.clip = gateClearSFX;
+        audioSource.Play();
+        
         currGate = checkPointArr[idx];
         currGate.SendMessage("Deactivate");
 
