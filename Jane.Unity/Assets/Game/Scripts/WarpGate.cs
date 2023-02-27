@@ -9,6 +9,7 @@ public class WarpGate : MonoBehaviour
     [SerializeField] private float maxBloomIntensity;
     [SerializeField] private float duration;
     [SerializeField] private PlayerCameraEffect playerCameraEffect;
+    [SerializeField] private AudioSource audioSource;
     public GameObject warpDestination;
     private GameObject _player;
 
@@ -26,6 +27,9 @@ public class WarpGate : MonoBehaviour
         float timeElapsed = 0f;
         float startingFOV = playerCameraEffect.nowFOV;
         float startingBloom = playerCameraEffect.nowBloomIntensity;
+
+        // Play Warping SFX 
+        audioSource.Play();
 
         //some method in controller that stops player input & movement
         _player.GetComponent<SpaceshipController>().canControl = false;
