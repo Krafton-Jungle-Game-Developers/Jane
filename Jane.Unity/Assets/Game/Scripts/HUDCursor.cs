@@ -1,22 +1,21 @@
 ﻿using UnityEngine;
 
-
 public class HUDCursor : MonoBehaviour
 {
     [SerializeField] private Camera HUDCamera;
     [SerializeField] private Canvas canvas;
+    [SerializeField] private RectTransform cursorRectTransform;
+    [SerializeField] private RectTransform lineRectTransform;
     private RectTransform canvasRectTransform;
-    private RectTransform cursorRectTransform;
-    private RectTransform lineRectTransform;
     
     public virtual Vector3 ViewportPosition
     {
         get
         {
-            if (HUDCamera == null) { return new Vector3(0, 0, 1); }
+            if (HUDCamera == null) { return new Vector3(0f, 0f, 1f); }
             
             Vector3 canvasPos = cursorRectTransform.anchoredPosition + (0.5f * canvasRectTransform.sizeDelta);
-            return (new Vector3(canvasPos.x / canvasRectTransform.sizeDelta.x, canvasPos.y / canvasRectTransform.sizeDelta.y, 1));
+            return (new Vector3(canvasPos.x / canvasRectTransform.sizeDelta.x, canvasPos.y / canvasRectTransform.sizeDelta.y, 1f));
         }
     }
 
@@ -37,7 +36,7 @@ public class HUDCursor : MonoBehaviour
     public void SetViewportPosition(Vector3 viewportPosition)
     {
         // Set cursor position
-        cursorRectTransform.anchoredPosition = Vector3.Scale(viewportPosition - new Vector3(0.5f, 0.5f, 0), canvasRectTransform.sizeDelta);
+        cursorRectTransform.anchoredPosition = Vector3.Scale(viewportPosition - new Vector3(0.5f, 0.5f, 0f), canvasRectTransform.sizeDelta);
 
         // Set line position
         lineRectTransform.anchoredPosition = 0.5f * cursorRectTransform.anchoredPosition;
@@ -52,7 +51,7 @@ public class HUDCursor : MonoBehaviour
         }
         else
         {
-            lineRectTransform.sizeDelta = new Vector2(0, lineRectTransform.sizeDelta.y);
+            lineRectTransform.sizeDelta = new Vector2(0f, lineRectTransform.sizeDelta.y);
         }
     }
 }
