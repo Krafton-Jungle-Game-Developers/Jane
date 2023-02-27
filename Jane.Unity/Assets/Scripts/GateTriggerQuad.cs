@@ -10,9 +10,12 @@ public class GateTriggerQuad : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        CheckPoints checkPointsArr = GetComponentInParent<CheckPoints>();
+        if (other.gameObject.CompareTag("Player"))
+        {
+            CheckPoints checkPointsArr = GetComponentInParent<CheckPoints>();
 
-        checkPointsArr.ControlGates();
-        Destroy(gameObject);
+            checkPointsArr.ControlGates();
+            Destroy(gameObject);
+        }
     }
 }

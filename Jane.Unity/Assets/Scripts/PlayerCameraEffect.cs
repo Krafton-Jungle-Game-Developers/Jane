@@ -25,9 +25,9 @@ public class PlayerCameraEffect : MonoBehaviour
     [Space]
 
     [Header("FOV")]
-    [SerializeField] private float baseFOV = 60f;
-    [SerializeField] private float nowFOV = 60f;
-    [SerializeField] private float maxFOV = 80f;
+    [SerializeField] public float baseFOV = 60f;
+    [SerializeField] public float nowFOV = 60f;
+    [SerializeField] public float maxFOV = 80f;
     [Space]
 
     [Header("Chromatic Aberration")]
@@ -43,9 +43,9 @@ public class PlayerCameraEffect : MonoBehaviour
     [Space]
 
     [Header("Bloom")]
-    [SerializeField] private float baseBloomIntensity = 0f;
-    [SerializeField] private float nowBloomIntensity = 0f;
-    [SerializeField] private float maxBloomIntensity = 0.5f;
+    [SerializeField] public float baseBloomIntensity = 0f;
+    [SerializeField] public float nowBloomIntensity = 0f;
+    [SerializeField] public float maxBloomIntensity = 0.5f;
     [Space]
 
     [Header("RadialBlur")]

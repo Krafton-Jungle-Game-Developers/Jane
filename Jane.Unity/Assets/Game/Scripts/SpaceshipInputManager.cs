@@ -3,9 +3,9 @@
 public class SpaceshipInputManager : MonoBehaviour
 {
     [Header("Control Scheme")]
-    private bool inputEnabled = true;
-    private bool steeringEnabled = true;
-    private bool movementEnabled = true;
+    [SerializeField] private bool inputEnabled = true;
+    [SerializeField] private bool steeringEnabled = true;
+    [SerializeField] private bool movementEnabled = true;
 
     [Header("Mouse Steering")]
     [Tooltip("Whether the mouse position should control the steering.")]
@@ -42,16 +42,10 @@ public class SpaceshipInputManager : MonoBehaviour
     private Vector3 movementInputs = Vector3.zero;
     private Vector3 boostInputs = Vector3.zero;
 
-    private SpaceshipMovementManager movementManager;
-    private HUDCursor hudCursor;
+    [SerializeField] private SpaceshipMovementManager movementManager;
+    [SerializeField] private HUDCursor hudCursor;
     private Vector3 reticleViewportPosition = new(0.5f, 0.5f, 0f);
-
-    private void Awake()
-    {
-        movementManager = GetComponent<SpaceshipMovementManager>();
-        hudCursor = GetComponentInChildren<HUDCursor>();
-    }
-
+    
     private void Update()
     {
         if (inputEnabled) { ProcessInput(); }
