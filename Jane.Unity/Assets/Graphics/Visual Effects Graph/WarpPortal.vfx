@@ -71,8 +71,8 @@ MonoBehaviour:
   - title: Beam Flash
     position:
       serializedVersion: 2
-      x: 640
-      y: -1966
+      x: 620
+      y: -2005
       width: 712
       height: 1701
     contents:
@@ -4535,7 +4535,7 @@ MonoBehaviour:
   m_Children:
   - {fileID: 8926484042661614759}
   - {fileID: 8926484042661614770}
-  m_UIPosition: {x: 903, y: -1532}
+  m_UIPosition: {x: 883, y: -1571}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
@@ -5438,7 +5438,7 @@ MonoBehaviour:
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: 903, y: -1138}
+  m_UIPosition: {x: 883, y: -1177}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
@@ -5474,7 +5474,7 @@ MonoBehaviour:
   m_Parent: {fileID: 114350483966674976}
   m_Children:
   - {fileID: 8926484042661614949}
-  m_UIPosition: {x: 903, y: -1907}
+  m_UIPosition: {x: 883, y: -1946}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
@@ -5512,7 +5512,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614785}
   - {fileID: 8926484042661614796}
   - {fileID: 8926484042661614790}
-  m_UIPosition: {x: 903, y: -1007}
+  m_UIPosition: {x: 883, y: -1046}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
@@ -11408,7 +11408,7 @@ MonoBehaviour:
     linkedSlots:
     - outputSlot: {fileID: 8926484042661615018}
       inputSlot: {fileID: 8926484042661614786}
-    position: {x: 665, y: -635}
+    position: {x: 645, y: -674}
     expandedSlots: []
     expanded: 0
   - m_Id: 2
