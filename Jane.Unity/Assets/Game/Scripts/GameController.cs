@@ -53,9 +53,4 @@ public class GameController : MonoBehaviour
 
         countdownText.gameObject.SetActive(false);
     }
-
-    IEnumerator SpawnMeteor()
-    {
-        yield return null;
-    }
 }
