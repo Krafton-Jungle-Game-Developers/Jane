@@ -367,3 +367,5 @@ MonoBehaviour:
       value: Oklar
     - key: PAK_Touchscreen
       value: "Peksk\xE4rm"
+    - key: HowToPlayTitle
+      value: How To Play
