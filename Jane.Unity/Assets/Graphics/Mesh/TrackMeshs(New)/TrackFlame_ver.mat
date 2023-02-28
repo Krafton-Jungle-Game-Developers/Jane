@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TrackFlame
+  m_Name: TrackFlame_ver
   m_Shader: {fileID: -6465566751694194690, guid: b2865ce09e7a3b648b68f9c13f077712,
     type: 3}
   m_ValidKeywords: []
@@ -93,9 +93,9 @@ Material:
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DissolveAmount: 0
-    - _DissolveScale: 0.8
+    - _DissolveScale: 1.17
     - _DistortionAmount: 0.5
-    - _DistortionScale: -0.2
+    - _DistortionScale: -1
     - _DstBlend: 0
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
