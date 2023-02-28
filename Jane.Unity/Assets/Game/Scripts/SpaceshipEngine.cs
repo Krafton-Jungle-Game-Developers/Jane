@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class SpaceshipMovementManager : MonoBehaviour
+public class SpaceshipEngine : MonoBehaviour
 {
     [Header("Input")]
     [SerializeField] private bool controlsDisabled = false;
