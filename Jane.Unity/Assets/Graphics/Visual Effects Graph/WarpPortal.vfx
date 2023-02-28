@@ -189,10 +189,10 @@ MonoBehaviour:
   - title: Beam Flash
     position:
       serializedVersion: 2
-      x: 3273
+      x: 3290
       y: -2164
-      width: 724
-      height: 1701
+      width: 707
+      height: 1778
     contents:
     - model: {fileID: 8926484042661615153}
       id: 0
@@ -11415,7 +11415,7 @@ MonoBehaviour:
     linkedSlots:
     - outputSlot: {fileID: 8926484042661615018}
       inputSlot: {fileID: 8926484042661615195}
-    position: {x: 3298, y: -851}
+    position: {x: 3315, y: -742}
     expandedSlots: []
     expanded: 0
 --- !u!114 &8926484042661615018
