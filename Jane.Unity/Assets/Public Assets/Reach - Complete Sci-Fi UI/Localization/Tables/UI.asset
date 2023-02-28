@@ -167,3 +167,4 @@ MonoBehaviour:
   - key: NotReadyLabel
   - key: UnreadyLabel
   - key: PAK_Touchscreen
+  - key: HowToPlayTitle
