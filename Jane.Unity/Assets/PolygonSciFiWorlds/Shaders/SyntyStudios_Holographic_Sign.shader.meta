@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 2b5804ffd3081d344bed894a653e3014
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _HoloLines: {fileID: 2800000, guid: 54b3339ded3457f42945715232faa0bc, type: 3}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

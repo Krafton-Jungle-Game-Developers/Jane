@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 031e5f82c47f1ad4a999675926dfca11
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _TextureSample1: {fileID: 2800000, guid: 965f16c76090fef4b9826d9a5dfb91e3, type: 3}
+  - _Colour_Multiply: {fileID: 2800000, guid: 9067817c10abdf447a27ef2eb7177267, type: 3}
+  - _PolygonSciFiPlanets_Texture_01_A: {fileID: 2800000, guid: d44fa91dd607b2243aac51d78b7922dd,
+      type: 3}
+  - _Colour_Mask_01: {fileID: 2800000, guid: 21e1e09c0ad6bfc488ceb5122f262dea, type: 3}
+  - _Colour_Mask_02: {fileID: 2800000, guid: 1e4e9659725834246a55cb6ffa1cc7de, type: 3}
+  - _skin_Mask: {fileID: 2800000, guid: 485dd52fb681701489fc06c092d4ff7e, type: 3}
+  - _Hair_Mask: {fileID: 2800000, guid: 2be28d1396e389247a1f73fc6f3bbb8e, type: 3}
+  - _Emissive_01: {fileID: 2800000, guid: 03db659f8a637b744943d87d1a6d7c5e, type: 3}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
