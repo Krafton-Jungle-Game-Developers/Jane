@@ -7,6 +7,12 @@ using Cysharp.Threading.Tasks;
 public class GameController : MonoBehaviour
 {
     [SerializeField] private TMP_Text connectingText;
+
+    // BGM Player
+    [SerializeField] AudioSource bgmPlayer;
+    [SerializeField] AudioClip waitingClip;
+    [SerializeField] AudioClip gogoClip;
+
     public TextMeshProUGUI countdownText;
     public TextMeshProUGUI endGameText;
     public GameObject hud;
@@ -15,6 +21,11 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
+        // BGM Player
+        bgmPlayer = GetComponent<AudioSource>();
+        bgmPlayer.clip = waitingClip;
+        bgmPlayer.Play();
+
         _spaceshipController = GameObject.FindGameObjectWithTag("Player").GetComponent<SpaceshipController>();
         StartGame();
     }
@@ -23,6 +34,7 @@ public class GameController : MonoBehaviour
     {
         StartCoroutine(CountdownStart());
         _spaceshipController.canControl = false;
+
     }
 
     public void EndGame()
@@ -52,5 +64,16 @@ public class GameController : MonoBehaviour
         hud.GetComponentInChildren<Canvas>().enabled = true;
 
         countdownText.gameObject.SetActive(false);
+
+
+        // Change bgm to flying clip
+        // bgmPlayer.Stop();
+        bgmPlayer.clip = gogoClip;
+        bgmPlayer.Play();
+    }
+
+    private void ChangeBGM()
+    {
+        
     }
 }
