@@ -31,6 +31,8 @@ Jane.Shared/obj
 ExportedObj/
 .consulo/
 *.unityproj
+*.csproj
+*.sln
 *.suo
 *.tmp
 *.user
@@ -137,3 +139,4 @@ _ReSharper*/
 # NuGet v3's project.json files produces more ignorable files
 *.nuget.props
 *.nuget.targets
+/Jane.Unity/Assembly-CSharp.csproj
