@@ -372,3 +372,5 @@ MonoBehaviour:
       value: Unbereit
     - key: PAK_Touchscreen
       value: Touchscreen
+    - key: HowToPlayTitle
+      value: How To Play

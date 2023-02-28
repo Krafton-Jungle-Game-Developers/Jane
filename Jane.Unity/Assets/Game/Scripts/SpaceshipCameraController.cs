@@ -20,7 +20,7 @@ public class SpaceshipCameraController : MonoBehaviour
     [SerializeField] private LayerMask collisionMask = ~0;
     [SerializeField] private Transform currentViewTarget;
     [SerializeField] private Rigidbody spaceShipRigidbody;
-    [SerializeField] private SpaceshipMovementManager movementManager;
+    [SerializeField] private SpaceshipEngine spaceEngine;
 
     [SerializeField] private float positionFollowStrength = 0.4f;
     public float PositionFollowStrength => positionFollowStrength;

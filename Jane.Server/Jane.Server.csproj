@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Grpc.AspNetCore" Version="2.51.0" />
+		<PackageReference Include="MagicOnion.Serialization.MemoryPack" Version="5.1.2-preview" />
+		<PackageReference Include="MagicOnion.Server" Version="5.1.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="../Jane.Unity/Assets/Scripts/ServerShared/**/*.cs" Link="../Jane.Unity/Assets/Scripts/ServerShared/**/*.cs" />
+	</ItemGroup>
+
+	<Target Name="GenerateMagicOnion" AfterTargets="Build">
+		<PropertyGroup>
+			<_MagicOnionGeneratorArguments>-i ./Jane.Server.csproj -o ../Jane.Unity/Assets/Scripts/Generated/MagicOnion.Generated.cs -s MemoryPack</_MagicOnionGeneratorArguments>
+		</PropertyGroup>
+		<Exec Command="dotnet moc $(_MagicOnionGeneratorArguments)" />
+	</Target>
+
+	<ItemGroup>
+		<None Update="appsettings.Development.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="server.crt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="server.key">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+</Project>

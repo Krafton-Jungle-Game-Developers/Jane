@@ -379,3 +379,5 @@ MonoBehaviour:
       value: "Haz\u0131r De\u011Fil"
     - key: PAK_Touchscreen
       value: Dokunmatik Ekrana
+    - key: HowToPlayTitle
+      value: How To Play

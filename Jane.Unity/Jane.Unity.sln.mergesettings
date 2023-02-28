@@ -25,5 +25,7 @@
         <NestedProject ProjectName="UniTask.TextMeshPro" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="sc.posteffects.editor" FolderPath="AssemblyDefinitions" />
         <NestedProject ProjectName="sc.posteffects.runtime" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="Michsky.UI.Reach.Core" FolderPath="AssemblyDefinitions" />
+        <NestedProject ProjectName="Michsky.UI.Reach.Editor" FolderPath="AssemblyDefinitions" />
     </NestedProjects>
 </SlnMergeSettings>
