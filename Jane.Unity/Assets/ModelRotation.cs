@@ -4,16 +4,11 @@ using UnityEngine;
 
 public class ModelRotation : MonoBehaviour
 {
-    private Quaternion _modelQuat;
-    // Start is called before the first frame update
-    void Start()
-    {
-        _modelQuat = transform.rotation;
-    }
+    [SerializeField] private Vector3 _modelVec;
 
     // Update is called once per frame
     void LateUpdate()
     {
-        _modelQuat.x += 1f;
+        transform.Rotate(_modelVec,Space.Self);
     }
 }

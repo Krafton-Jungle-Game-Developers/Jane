@@ -1,39 +1,60 @@
-﻿//using System;
-//using MagicOnion.Server.Hubs;
-//using Jane.Unity.ServerShared.Hubs;
-//using Jane.Unity.ServerShared.MemoryPackObjects;
-//using MagicOnion.Server;
+﻿using System;
+using MagicOnion.Server.Hubs;
+using Jane.Unity.ServerShared.Hubs;
+using Jane.Unity.ServerShared.MemoryPackObjects;
 
-//namespace Jane.Server.Hubs
-//{
-//    public class MatchMakingHub : StreamingHubBase<IMatchMakingHub, IMatchMakingHubReceiver>, IMatchMakingHub
-//    {
-//        private IGroup matchMakingRoom;
-//        private MatchMakingManager _matchMakingManager;
-//        private Ulid connectionId;
+namespace Jane.Server.Hubs
+{
+    public class MatchMakingHub : StreamingHubBase<IMatchMakingHub, IMatchMakingHubReceiver>, IMatchMakingHub
+    {
+        private IGroup? matchMakingLobby;
+        private MatchMakingLobbyUser self;
+        private IInMemoryStorage<MatchMakingLobbyUser>? storage;
+        private bool isEnrolled;
+        private bool isAllPlayersReady;
+        private Ulid gameId;
 
-//        public MatchMakingHub(MatchMakingManager manager)
-//        {
-//            _matchMakingManager = manager;
-//            connectionId = new Ulid(ConnectionId);
-//        }
+        public async ValueTask<MatchMakingLobbyUser[]?> EnrollAsync(MatchMakingEnrollRequest request)
+        {
+            self = new MatchMakingLobbyUser() { UserId = request.UserId, UniqueId = request.UniqueId };
+            (isEnrolled, matchMakingLobby, storage) = await Group.TryAddAsync("MatchMakingLobby", 4, true, self);
 
-//        public async ValueTask JoinAsync(MatchMakingEnrollRequest request)
-//        {
-//            matchMakingRoom = await Group.AddAsync("MatchMakingRoom");
-
-//            _matchMakingManager.TryMatching(connectionId, Context);
+            if (isEnrolled)
+            {
+                BroadcastExceptSelf(matchMakingLobby).OnEnroll(self);
+                return storage.AllValues.ToArray();
+            }
             
-//        }
+            return null;
+        }
 
-//        public async ValueTask LeaveAsync()
-//        {
-//            throw new NotImplementedException();
-//        }
+        // TODO: 2명 이상? 
+        public async ValueTask ChangeReadyStateAsync(bool isReady)
+        {
+            if (isAllPlayersReady) { return; }
+            self.IsReady = isReady;
+            Broadcast(matchMakingLobby).OnPlayerReadyStateChanged(self.UniqueId, isReady);
 
-//        protected override ValueTask OnDisconnected()
-//        {
-//            _matchMakingManager.RemoveFromMatchMakingEntries();
-//        }
-//    }
-//}
+            isAllPlayersReady = storage.AllValues.All(user => user.IsReady);
+
+            if (isAllPlayersReady)
+            {
+                gameId = Ulid.NewUlid();
+                MatchMakingCompleteResponse response = new() { GameId = gameId };
+                Broadcast(matchMakingLobby).OnMatchMakingComplete(response);
+            }
+        }
+        
+        public async ValueTask LeaveAsync()
+        {
+            await matchMakingLobby.RemoveAsync(Context);
+            Broadcast(matchMakingLobby).OnLeave(self);
+        }
+        
+        protected override ValueTask OnDisconnected()
+        {
+            BroadcastExceptSelf(matchMakingLobby).OnLeave(self);
+            return CompletedTask;
+        }
+    }
+}

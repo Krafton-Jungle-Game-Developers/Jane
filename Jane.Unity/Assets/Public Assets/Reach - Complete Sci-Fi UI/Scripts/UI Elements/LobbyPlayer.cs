@@ -9,8 +9,8 @@ namespace Michsky.UI.Reach
     {
         // Content
         public Sprite playerPicture;
-        public string playerName = "Player";
-        public string additionalText = "LVL. 50";
+        public string playerName = "";
+        public string additionalText = "";
         public ItemState currentState = ItemState.Empty;
 
         // Resources
@@ -42,7 +42,7 @@ namespace Michsky.UI.Reach
             if (pictureReadyImg.sprite != playerPicture) { SetPlayerPicture(playerPicture); }
             if (adtReadyTMP.text != additionalText) { SetAdditionalText(additionalText); }
         }
-
+        
         public void SetPlayerName(string name)
         {
             playerName = name;
@@ -103,5 +103,6 @@ namespace Michsky.UI.Reach
         public void SetEmpty() { SetState(ItemState.Empty); }
         public void SetReady() { SetState(ItemState.Ready); }
         public void SetNotReady() { SetState(ItemState.NotReady); }
+        
     }
 }

@@ -9,9 +9,10 @@ public class SpawnMeteor : MonoBehaviour
     [SerializeField] private float _spawnRate = 1f;
     public GameObject[] objectPrefabs;
     public float destroyTime = 10.0f;
+    private int idxPrefabList = 0;
     
     //public GameObject meteorVFX;
-    public Transform startPoint;
+    public GameObject startPoint;
 
     public GameObject[] middlePoints;
     
@@ -19,20 +20,25 @@ public class SpawnMeteor : MonoBehaviour
     void Start()
     {
         // Spawn objects at spawnrate 
-        InvokeRepeating("SpawnObject", _spawnRate, _spawnRate);
+        InvokeRepeating("SpawnObject", 10f, _spawnRate);
         
     }
 
 
     private void SpawnObject()
     {
-    
-        // Random Spawn from List 
-        int idxPrefabList = UnityEngine.Random.Range (0, objectPrefabs.Length);
-
-        Instantiate(objectPrefabs[idxPrefabList], startPoint.position, Quaternion.identity);
-
         
+        // Random Spawn from List 
+        //int idxPrefabList = UnityEngine.Random.Range (0, objectPrefabs.Length);
+        if (idxPrefabList == objectPrefabs.Length)
+        {
+            idxPrefabList = 0;
+        }
+
+
+        Instantiate(objectPrefabs[idxPrefabList], startPoint.transform.position, Quaternion.identity);
+
+        idxPrefabList++;
     }
 
 

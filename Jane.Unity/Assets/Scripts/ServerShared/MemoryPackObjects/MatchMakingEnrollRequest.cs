@@ -1,9 +1,12 @@
 ﻿using System;
+using MemoryPack;
 
 namespace Jane.Unity.ServerShared.MemoryPackObjects
 {
-    public class MatchMakingEnrollRequest
+    [MemoryPackable()]
+    public partial struct MatchMakingEnrollRequest
     {
-        public Ulid UserId { get; set; }
+        public string UserId { get; set; }
+        public Ulid UniqueId { get; set; }
     }
 }
