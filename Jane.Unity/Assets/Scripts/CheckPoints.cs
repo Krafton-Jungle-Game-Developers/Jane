@@ -6,15 +6,15 @@ using UnityEngine;
 /// </summary>
 public class CheckPoints : MonoBehaviour
 {
-    [SerializeField] private GameObject[] checkPointArr;
+    [SerializeField] public GameObject[] checkPointArr;
     [SerializeField] private AudioSource audioSource;
     //[SerializeField] private AudioClip activateSFX;
     [SerializeField] private AudioClip gateClearSFX;    // Used for user Feedback
 
     private int idx = 0;
     private int gateCount;
-    private GameObject currGate;
-    private GameObject nextGate;
+    public GameObject currGate;
+    public GameObject nextGate;
 
     // Start is called before the first frame update
     void Start()

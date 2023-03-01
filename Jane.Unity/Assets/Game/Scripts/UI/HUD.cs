@@ -1,4 +1,9 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
+using System.Collections.Generic;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
+
 
 public class HUD : MonoBehaviour
 {
@@ -12,9 +17,15 @@ public class HUD : MonoBehaviour
 
     private void Start()
     {
-        Cursor.visible = false;
+        UnityEngine.Cursor.visible = false;
     }
+
     void Update()
+    {
+        UpdateHUD();
+    }
+
+    private void UpdateHUD()
     {
         float distanceFromCenter = Vector2.Distance(relativeScreenCenter, Input.mousePosition);
         Vector3 direction = Input.mousePosition - relativeScreenCenter;
@@ -31,7 +42,8 @@ public class HUD : MonoBehaviour
 
         lineRectTransform.position = 0.5f * screenCenter + 0.5f * cursorRectTransform.position;
         lineRectTransform.LookAt(cursorRectTransform, Vector3.Cross(cursorRectTransform.up, (cursorRectTransform.position - lineRectTransform.position).normalized));
-        if(lineRectTransform.anchoredPosition.x < 0f)
+
+        if (lineRectTransform.anchoredPosition.x < 0f)
         {
             lineRectTransform.rotation = Quaternion.Euler(0f, 0f, lineRectTransform.rotation.eulerAngles.x);
         }
@@ -39,6 +51,7 @@ public class HUD : MonoBehaviour
         {
             lineRectTransform.rotation = Quaternion.Euler(0f, 180f, lineRectTransform.rotation.eulerAngles.x);
         }
+
         lineRectTransform.sizeDelta = new Vector2((cursorRectTransform.localPosition - lineRectTransform.localPosition).magnitude * 2 * (1 / lineRectTransform.localScale.x), lineRectTransform.sizeDelta.y);
     }
 }

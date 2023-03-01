@@ -10,7 +10,6 @@ public class Gate : MonoBehaviour
 {
     [SerializeField] private VisualEffect gateActivateVFX;
     [SerializeField] private ParticleSystem swirlGreen;
-    
 
     public void Activate()
     {
