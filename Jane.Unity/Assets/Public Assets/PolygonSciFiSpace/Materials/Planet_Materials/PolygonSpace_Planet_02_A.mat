@@ -180,7 +180,7 @@ Material:
     - _Planet_Tiling: 123.13
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _RimPower: 3
+    - _RimPower: 1.5
     - _Scale: -0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
