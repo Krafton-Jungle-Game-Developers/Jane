@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 8e3a7be9db42981418988bc59e1916cb
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _GroundMask: {fileID: 2800000, guid: 1b35185671c1afb4cb44f0ff9e46e3d0, type: 3}
+  - _Rock_Mask_Triplanar: {fileID: 2800000, guid: 4c63ce07744d12e40bcac47b1c0f7c6d,
+      type: 3}
+  - _Noise: {fileID: 2800000, guid: d4500c634f3a0684783559e1222d3ab5, type: 3}
+  - _Side_Triplanar: {fileID: 2800000, guid: 358612fdf9c718f4fa6f01d88164b407, type: 3}
+  - _Main_Normals: {fileID: 2800000, guid: 2ee8591f903c8aa4382ef533fa1a51af, type: 3}
+  - _TextureSample0: {fileID: 2800000, guid: 6c2c1457696dd074d955805ba1175e78, type: 3}
+  - _Normal_Triplanar: {fileID: 2800000, guid: 99e0b922816cbe64799f178686a4f5d5, type: 3}
+  - _White_Triplanar: {fileID: 2800000, guid: 4cdae8663588a164f93c95e734dcb6f2, type: 3}
+  - _Normal_Rocks: {fileID: 2800000, guid: ed3b6c1d3e78c9f478c1753a9ab5f2a0, type: 3}
+  - _Emissive_01: {fileID: 2800000, guid: 03db659f8a637b744943d87d1a6d7c5e, type: 3}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

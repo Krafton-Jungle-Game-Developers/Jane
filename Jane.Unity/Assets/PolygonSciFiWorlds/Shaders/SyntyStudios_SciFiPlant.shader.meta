@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: c48a4461fec61fc45a01e7d6a50e520f
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _Tree_NoiseTexture1: {fileID: 2800000, guid: 661313bdb77fa944882bb60df3b5cfb8,
+      type: 3}
+  - _Plant_Mask: {fileID: 2800000, guid: 1fcd00d11947d51428515be1a2f64679, type: 3}
+  - _TextureSample2: {fileID: 2800000, guid: a6cf282deec624741b185ff6bfae5cc6, type: 3}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
