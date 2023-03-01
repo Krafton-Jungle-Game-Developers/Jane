@@ -7,6 +7,7 @@ using UnityEngine;
 public class SpaceshipCameraController : MonoBehaviour
 {
     [SerializeField] private bool isEnabled = true;
+
     public bool IsEnabled => isEnabled;
 
     [SerializeField] private Camera mainCamera;
