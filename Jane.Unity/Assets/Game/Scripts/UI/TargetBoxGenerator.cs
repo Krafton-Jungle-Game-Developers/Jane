@@ -15,7 +15,7 @@ public class TargetBoxGenerator : MonoBehaviour
     [SerializeField]
     private Vector2 minSize = new Vector2(100, 100);
     [SerializeField]
-    private Vector2 sizeMargin = new Vector2(15, 15);
+    private Vector2 sizeMargin = new Vector2(-50, -50);
 
     void Start()
     {
@@ -28,6 +28,7 @@ public class TargetBoxGenerator : MonoBehaviour
             onScreenObjects.Add(Instantiate(targetCanvasPrefab.GetComponentInChildren<HUDTargetBox>().gameObject));
             onScreenObjects[i].transform.parent = transform;
         }
+        SetNextTargetBox(0);
     }
 
     void Update()
@@ -37,27 +38,33 @@ public class TargetBoxGenerator : MonoBehaviour
 
     private void UpdateTargetBox()
     {
-        for (int i = 0; i < targetList.Count; i++)
+        int i = checkPoints.idx;
+        bool isInView = targetList[i].GetComponent<Renderer>().isVisible;
+
+        if (isInView)
         {
-            bool isInView = targetList[i].GetComponent<Renderer>().isVisible;
-            SetIsInView(isInView, i);
+            Rect targetRect = GetBoundsInScreenSpace(targetList[i], mainCam);
+            RectTransform targetRectTransform = onScreenObjects[i].gameObject.GetComponent<RectTransform>();
 
-            if (isInView)
-            {
-                Rect targetRect = GetBoundsInScreenSpace(targetList[i], mainCam);
-                RectTransform targetRectTransform = onScreenObjects[i].gameObject.GetComponent<RectTransform>();
-
-                targetRectTransform.position = new Vector2(targetRect.center.x, targetRect.center.y);
-                targetRectTransform.sizeDelta = new Vector2(Mathf.Max(targetRect.width, minSize.x), Mathf.Max(targetRect.height, minSize.y)) + sizeMargin;
-            }
+            targetRectTransform.position = new Vector2(targetRect.center.x, targetRect.center.y);
+            targetRectTransform.sizeDelta = new Vector2(Mathf.Max(targetRect.width, minSize.x), Mathf.Max(targetRect.height, minSize.y)) + sizeMargin;
+        }
+        else
+        {
         }
     }
 
-    public void SetIsInView(bool isInView, int i)
+    public void ResetTargetBox()
     {
-        onScreenObjects[i].SetActive(isInView);
-        /*        offScreenObjects[i].SetActive(!isInView);
-        */
+        foreach(GameObject obj in onScreenObjects)
+        {
+            obj.SetActive(false);
+        }
+    }
+    public void SetNextTargetBox(int i)
+    {
+        ResetTargetBox();
+        onScreenObjects[i].SetActive(true);
     }
 
     public static Rect GetBoundsInScreenSpace(GameObject targetObj, Camera camera)
