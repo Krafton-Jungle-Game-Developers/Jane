@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class HUDTargetBox : MonoBehaviour
 {
     public Texture checkpointTransform;
-/*    public RectTransform opponentTransform;
-*/    public int targetBoxWidth, targetBoxHeight;
+    public RectTransform checkpointRectTransform;
+    public int targetBoxWidth, targetBoxHeight;
     public GameObject target;
     public Camera camera;
 
@@ -17,14 +17,14 @@ public class HUDTargetBox : MonoBehaviour
 
     void Update()
     {
-        checkpointScreenPos = camera.WorldToScreenPoint(target.transform.position);
-
-        distance = Vector3.Distance(target.transform.position, camera.transform.position);
-    }
+/*        checkpointScreenPos = camera.WorldToScreenPoint(target.transform.position);
+*/        checkpointRectTransform.anchoredPosition = camera.WorldToScreenPoint(transform.position);
+/*        distance = Vector3.Distance(target.transform.position, camera.transform.position);
+*/    }
 
     private void OnGUI()
     {
-        if (target.GetComponent<Renderer>().isVisible)
+/*        if (target.GetComponent<Renderer>().isVisible)
         {
             Debug.Log("working");
             float posX = checkpointScreenPos.x - (targetBoxWidth / 2) / distance;
@@ -34,5 +34,5 @@ public class HUDTargetBox : MonoBehaviour
 
             GUI.Box(new Rect(posX, posY, width, height), checkpointTransform);
         }
-    }
+*/    }
 }
