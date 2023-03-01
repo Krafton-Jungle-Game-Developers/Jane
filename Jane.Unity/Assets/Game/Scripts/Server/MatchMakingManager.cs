@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
@@ -12,6 +13,8 @@ using Jane.Unity.ServerShared.MemoryPackObjects;
 using MagicOnion;
 using MagicOnion.Client;
 using Cysharp.Threading.Tasks;
+using System.Xml;
+using static UnityEngine.Rendering.DebugUI;
 
 public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
 {
@@ -26,9 +29,8 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
     [SerializeField] private ButtonManager lobbyPlayButton;
     [SerializeField] private ButtonManager lobbyStopSearchButton;
     [SerializeField] private TMP_Text lobbyPlayerCountText;
-    [SerializeField] private LobbyPlayer myLobbyPlayerUI;
-    [SerializeField] private LobbyPlayer[] otherLobbyPlayers = new LobbyPlayer[3];
-    [SerializeField] private MatchMakingLobbyUser[] lobbyUsers;
+    [SerializeField] private List<MatchMakingLobbyUser> lobbyUsers;
+    [SerializeField] private LobbyPlayer[] lobbyUserUIPanels;
     [SerializeField] private HotkeyEvent readyInputEvent;
     [SerializeField] private HotkeyEvent unReadyInputEvent;
 
@@ -95,7 +97,7 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
         MatchMakingEnrollRequest request = new() { UserId = UserInfo.UserId, UniqueId = UserInfo.UniqueId };
         try
         {
-            lobbyUsers = await _matchMakingHub.EnrollAsync(request);
+            lobbyUsers = new(await _matchMakingHub.EnrollAsync(request));
         }
         catch (Exception e)
         {
@@ -103,18 +105,11 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
             throw;
         }
 
-        MatchMakingLobbyUser self = lobbyUsers.FirstOrDefault(user => user.UniqueId.Equals(UserInfo.UniqueId));
-        myLobbyPlayerUI.SetPlayerName(self.UserId);
-        myLobbyPlayerUI.SetAdditionalText(self.UniqueId.ToString());
-        myLobbyPlayerUI.SetState(LobbyPlayer.ItemState.NotReady);
-
-        for (int i = 0; i < lobbyUsers.Length; i++)
+        for (int i = 0; i < lobbyUsers.Count; i++)
         {
-            if (lobbyUsers[i].UniqueId.Equals(self.UniqueId)) { continue; }
-
-            otherLobbyPlayers[i].SetPlayerName(lobbyUsers[i].UserId);
-            otherLobbyPlayers[i].SetAdditionalText(lobbyUsers[i].UniqueId.ToString());
-            otherLobbyPlayers[i].SetState(LobbyPlayer.ItemState.NotReady);
+            lobbyUserUIPanels[i].SetPlayerName(lobbyUsers[i].UserId);
+            lobbyUserUIPanels[i].SetAdditionalText(lobbyUsers[i].UniqueId.ToString());
+            lobbyUserUIPanels[i].SetState(LobbyPlayer.ItemState.NotReady);
         }
     }
 
@@ -147,55 +142,47 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
     
     public void OnEnroll(MatchMakingLobbyUser user)
     {
-        var emptySlot = lobbyUsers.FirstOrDefault(user => user is null || user.UniqueId.Equals(Ulid.Empty));
-        if (emptySlot is null) { emptySlot = new(); }
+        if (lobbyUsers.Any(lobbyUser => lobbyUser.UniqueId.Equals(user.UniqueId))) { return; }
+        lobbyUsers.Add(user);
 
-        emptySlot.UserId = user.UserId;
-        emptySlot.UniqueId = user.UniqueId;
-        emptySlot.IsReady = user.IsReady;
+        var emptySlot = lobbyUserUIPanels.FirstOrDefault(panel => panel.currentState is LobbyPlayer.ItemState.Empty);
 
-        var emptyUISlot = otherLobbyPlayers.FirstOrDefault(user => user.currentState is LobbyPlayer.ItemState.Empty);
-        emptyUISlot.SetPlayerName(user.UserId);
-        emptyUISlot.SetAdditionalText(user.UniqueId.ToString());
-        emptyUISlot.SetState(LobbyPlayer.ItemState.NotReady);
+        emptySlot?.SetPlayerName(user.UserId);
+        emptySlot?.SetAdditionalText(user.UniqueId.ToString());
+        emptySlot?.SetState(LobbyPlayer.ItemState.NotReady);
     }
 
     public void OnLeave(MatchMakingLobbyUser leftUser)
     {
-        // TODO: me
         if (leftUser.UniqueId.Equals(UserInfo.UniqueId))
         {
             lobbyUsers = null;
-
-            myLobbyPlayerUI.SetPlayerName(string.Empty);
-            myLobbyPlayerUI.SetAdditionalText(string.Empty);
-            myLobbyPlayerUI.SetState(LobbyPlayer.ItemState.Empty);
-
-            foreach (var otherLobbyPlayer in otherLobbyPlayers)
+            foreach (var panel in lobbyUserUIPanels)
             {
-                otherLobbyPlayer.SetPlayerName(string.Empty);
-                otherLobbyPlayer.SetAdditionalText(string.Empty);
-                otherLobbyPlayer.SetState(LobbyPlayer.ItemState.Empty);
+                panel.SetPlayerName(string.Empty);
+                panel.SetAdditionalText(string.Empty);
+                panel.SetState(LobbyPlayer.ItemState.Empty);
             }
         }
         else
         {
             var otherUser = lobbyUsers.FirstOrDefault(user => user.UniqueId.Equals(leftUser.UniqueId));
-            otherUser = null;
+            lobbyUsers.Remove(otherUser);
 
-            var otherUserUI = otherLobbyPlayers.FirstOrDefault(user => user.additionalText.Equals(leftUser.UniqueId.ToString()));
-            otherUserUI.SetPlayerName(string.Empty);
-            otherUserUI.SetAdditionalText(string.Empty);
-            otherUserUI.SetState(LobbyPlayer.ItemState.Empty);
+            var otherUserUI = lobbyUserUIPanels.FirstOrDefault(user => user.additionalText.Equals(leftUser.UniqueId.ToString()));
+            otherUserUI?.SetPlayerName(string.Empty);
+            otherUserUI?.SetAdditionalText(string.Empty);
+            otherUserUI?.SetState(LobbyPlayer.ItemState.Empty);
         }
     }
 
     public void OnPlayerReadyStateChanged(Ulid uniqueId, bool isReady)
     {
-        lobbyUsers.First(user => user.UniqueId.Equals(uniqueId)).IsReady = isReady;
-        otherLobbyPlayers.First(user => user.additionalText.Equals(uniqueId.ToString()))
-                         .SetState(isReady ? LobbyPlayer.ItemState.Ready 
-                                           : LobbyPlayer.ItemState.NotReady);
+        var lobbyUser = lobbyUsers.FirstOrDefault(user => user.UniqueId.Equals(uniqueId));
+        if (lobbyUser is not null) { lobbyUser.IsReady = isReady; }
+
+        var lobbyUserUI = lobbyUserUIPanels.FirstOrDefault(user => user.additionalText.Equals(uniqueId.ToString()));
+        if (lobbyUserUI is not null) { lobbyUserUI.SetState(isReady ? LobbyPlayer.ItemState.Ready : LobbyPlayer.ItemState.NotReady); }
     }
 
     public void OnMatchMakingComplete(MatchMakingCompleteResponse response)
