@@ -94,8 +94,8 @@ Material:
     - _DetailNormalMapScale: 1
     - _DissolveAmount: 0
     - _DissolveScale: 1.17
-    - _DistortionAmount: 0.5
-    - _DistortionScale: -1
+    - _DistortionAmount: -66.39
+    - _DistortionScale: 0.044
     - _DstBlend: 0
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
