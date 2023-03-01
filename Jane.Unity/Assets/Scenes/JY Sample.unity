@@ -6834,8 +6834,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0.99892366, b: 0.7688679, a: 1}
-  m_Intensity: 5000
-  m_Range: 5000
+  m_Intensity: 3000
+  m_Range: 3000
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -11163,7 +11163,7 @@ Transform:
   - {fileID: 413370019}
   - {fileID: 1498667069}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &575108542
 PrefabInstance:
@@ -11913,7 +11913,7 @@ Transform:
   - {fileID: 1390053050}
   - {fileID: 1858763566}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!1001 &627683726
 PrefabInstance:
@@ -14377,7 +14377,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &901431910
 GameObject:
@@ -14796,7 +14796,7 @@ Transform:
   m_Children:
   - {fileID: 112584746}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &953205486
 AudioSource:
@@ -15926,7 +15926,7 @@ Transform:
   - {fileID: 1351069497}
   - {fileID: 1990983788}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1063726779
 PrefabInstance:
@@ -24766,7 +24766,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 90}
 --- !u!114 &1431730854
 MonoBehaviour:
@@ -26110,7 +26110,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1548543701
 MonoBehaviour:
@@ -39802,7 +39802,7 @@ Transform:
   - {fileID: 336275703}
   - {fileID: 251985026}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &909330138672319347
 GameObject:
