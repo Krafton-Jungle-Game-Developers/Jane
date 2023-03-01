@@ -5,28 +5,45 @@ using UnityEngine;
 
 public class SpawnMeteor : MonoBehaviour
 {
-    public GameObject meteorVFX;
-    [SerializeField] private Transform startPoint;
-    [SerializeField] private Transform endPoint;
+    // Spawn Control 
+    [SerializeField] private float _spawnRate = 1f;
+    public GameObject[] objectPrefabs;
+    public float destroyTime = 10.0f;
+    
+    //public GameObject meteorVFX;
+    public Transform startPoint;
+
+    public GameObject[] middlePoints;
     
     // Start is called before the first frame update
     void Start()
     {
-        var _startPos = startPoint.position;
-        GameObject objVFX = Instantiate(meteorVFX, _startPos, Quaternion.identity) as GameObject;
+        // Spawn objects at spawnrate 
+        InvokeRepeating("SpawnObject", _spawnRate, _spawnRate);
+        
+    }
 
-        var _endPos = endPoint.position;
+
+    private void SpawnObject()
+    {
+    
+        // Random Spawn from List 
+        int idxPrefabList = UnityEngine.Random.Range (0, objectPrefabs.Length);
+
+        Instantiate(objectPrefabs[idxPrefabList], startPoint.position, Quaternion.identity);
 
         
-        RotateTo (objVFX, _endPos);
     }
 
-    // Rotate Meteor Toward Destination
-    private void RotateTo(GameObject obj, Vector3 destination)
-    {
-        var _direction = destination - obj.transform.position;
-        var _rotation = Quaternion.LookRotation(_direction);
 
-        obj.transform.localRotation = Quaternion.Lerp(obj.transform.rotation, _rotation, 1);
-    }
+    //// Rotate Meteor Toward Destination
+    //private void RotateTo(GameObject obj, Vector3 destination)
+    //{
+    //    var _direction = destination - obj.transform.position;
+    //    var _rotation = Quaternion.LookRotation(_direction);
+
+    //    obj.transform.localRotation = Quaternion.Lerp(obj.transform.rotation, _rotation, 1);
+    //}
+
+
 }
