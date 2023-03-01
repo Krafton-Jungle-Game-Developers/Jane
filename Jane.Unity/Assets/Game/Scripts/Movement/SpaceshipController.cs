@@ -7,8 +7,8 @@ public class SpaceshipController : MonoBehaviour
     private Rigidbody _rb;
 
     [Header("Movement")]
-    [SerializeField] private Vector3 maxMovementSpeed = new Vector3(400f, 400f, 400f);
-    [SerializeField] private Vector3 maxSteeringForce = new Vector3(16f, 16f, 25f);
+    [SerializeField] private Vector3 maxMovementSpeed = new Vector3(5f, 5f, 10f);
+    [SerializeField] private Vector3 maxSteeringForce = new Vector3(2f, 2f, 5f);
     private Vector3 _currentMovementSpeed = Vector3.zero;
     private Vector3 playerInput;
 
@@ -90,8 +90,7 @@ public class SpaceshipController : MonoBehaviour
     // Currently used by BOOSTER.cs 
     public void ChangeSpeed(float newSpeed)
     {
-        /*        forwardSpeed= newSpeed;
-        */        //Debug.Log("Change Speed : " + forwardSpeed);
+        maxMovementSpeed = new Vector3(maxMovementSpeed.x, maxMovementSpeed.y, newSpeed);
     }
 
     // Method to Instantly change activeForwardSpeed 
@@ -99,8 +98,7 @@ public class SpaceshipController : MonoBehaviour
     // Currently used for BoosterImpact in BOOSTER.cs
     public void ChangeSpeedInstantly(float newSpeed)
     {
-        /*        _activeForwardSpeed = newSpeed;
-        */
+        maxMovementSpeed = new Vector3(maxMovementSpeed.x, maxMovementSpeed.y, newSpeed);
     }
 
     // Method to Access Cursor X Position (true if Left)
