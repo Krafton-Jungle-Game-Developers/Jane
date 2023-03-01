@@ -87,7 +87,11 @@ namespace MagicOnion
                 }
                 if (typeof(TStreamingHub) == typeof(global::Jane.Unity.ServerShared.Hubs.IGameHub) && typeof(TReceiver) == typeof(global::Jane.Unity.ServerShared.Hubs.IGameHubReceiver))
                 {
-                    factory = ((global::MagicOnion.Client.StreamingHubClientFactoryDelegate<global::Jane.Unity.ServerShared.Hubs.IGameHub, global::Jane.Unity.ServerShared.Hubs.IGameHubReceiver>)((a, _, b, c, d, e) => new Jane.Unity.ServerShared.Hubs.MovementHubClient(a, b, c, d, e)));
+                    factory = ((global::MagicOnion.Client.StreamingHubClientFactoryDelegate<global::Jane.Unity.ServerShared.Hubs.IGameHub, global::Jane.Unity.ServerShared.Hubs.IGameHubReceiver>)((a, _, b, c, d, e) => new Jane.Unity.ServerShared.Hubs.GameHubClient(a, b, c, d, e)));
+                }
+                if (typeof(TStreamingHub) == typeof(global::Jane.Unity.ServerShared.Hubs.IMatchMakingHub) && typeof(TReceiver) == typeof(global::Jane.Unity.ServerShared.Hubs.IMatchMakingHubReceiver))
+                {
+                    factory = ((global::MagicOnion.Client.StreamingHubClientFactoryDelegate<global::Jane.Unity.ServerShared.Hubs.IMatchMakingHub, global::Jane.Unity.ServerShared.Hubs.IMatchMakingHubReceiver>)((a, _, b, c, d, e) => new Jane.Unity.ServerShared.Hubs.MatchMakingHubClient(a, b, c, d, e)));
                 }
 
                 Factory = (global::MagicOnion.Client.StreamingHubClientFactoryDelegate<TStreamingHub, TReceiver>)factory;
@@ -122,8 +126,10 @@ namespace MagicOnion
     {
         public static void RegisterFormatters()
         {
+            global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.ArrayFormatter<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser>());
             global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.ArrayFormatter<global::Jane.Unity.ServerShared.MemoryPackObjects.Player>());
             global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MagicOnion.Serialization.MemoryPack.DynamicArgumentTupleFormatter<global::System.Collections.Generic.List<global::System.Int32>, global::System.Collections.Generic.Dictionary<global::System.Int32, global::System.String>>());
+            global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MagicOnion.Serialization.MemoryPack.DynamicArgumentTupleFormatter<global::System.Ulid, global::System.Boolean>());
             global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MagicOnion.Serialization.MemoryPack.DynamicArgumentTupleFormatter<global::System.Ulid, global::System.Ulid, global::UnityEngine.Vector3, global::UnityEngine.Quaternion>());
             global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.DictionaryFormatter<global::System.Int32, global::System.String>());
             global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.ListFormatter<global::System.Int32>());
@@ -323,15 +329,15 @@ namespace Jane.Unity.ServerShared.Hubs
     using global::MessagePack;
     
     [global::MagicOnion.Ignore]
-    public class MovementHubClient : global::MagicOnion.Client.StreamingHubClientBase<global::Jane.Unity.ServerShared.Hubs.IGameHub, global::Jane.Unity.ServerShared.Hubs.IGameHubReceiver>, global::Jane.Unity.ServerShared.Hubs.IGameHub
+    public class GameHubClient : global::MagicOnion.Client.StreamingHubClientBase<global::Jane.Unity.ServerShared.Hubs.IGameHub, global::Jane.Unity.ServerShared.Hubs.IGameHubReceiver>, global::Jane.Unity.ServerShared.Hubs.IGameHub
     {
         protected override global::Grpc.Core.Method<global::System.Byte[], global::System.Byte[]> DuplexStreamingAsyncMethod { get; }
         
-        public MovementHubClient(global::Grpc.Core.CallInvoker callInvoker, global::System.String host, global::Grpc.Core.CallOptions options, global::MagicOnion.Serialization.IMagicOnionSerializerProvider serializerProvider, global::MagicOnion.Client.IMagicOnionClientLogger logger)
+        public GameHubClient(global::Grpc.Core.CallInvoker callInvoker, global::System.String host, global::Grpc.Core.CallOptions options, global::MagicOnion.Serialization.IMagicOnionSerializerProvider serializerProvider, global::MagicOnion.Client.IMagicOnionClientLogger logger)
             : base(callInvoker, host, options, serializerProvider, logger)
         {
             var marshaller = global::MagicOnion.MagicOnionMarshallers.ThroughMarshaller;
-            DuplexStreamingAsyncMethod = new global::Grpc.Core.Method<global::System.Byte[], global::System.Byte[]>(global::Grpc.Core.MethodType.DuplexStreaming, "IMovementHub", "Connect", marshaller, marshaller);
+            DuplexStreamingAsyncMethod = new global::Grpc.Core.Method<global::System.Byte[], global::System.Byte[]>(global::Grpc.Core.MethodType.DuplexStreaming, "IGameHub", "Connect", marshaller, marshaller);
         }
         
         public global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.Player[]> JoinAsync(global::System.Ulid roomId, global::System.Ulid userId, global::UnityEngine.Vector3 position, global::UnityEngine.Quaternion rotation)
@@ -347,9 +353,9 @@ namespace Jane.Unity.ServerShared.Hubs
         [global::MagicOnion.Ignore]
         class FireAndForgetClient : global::Jane.Unity.ServerShared.Hubs.IGameHub
         {
-            readonly MovementHubClient parent;
+            readonly GameHubClient parent;
         
-            public FireAndForgetClient(MovementHubClient parent)
+            public FireAndForgetClient(GameHubClient parent)
                 => this.parent = parent;
         
             public global::Jane.Unity.ServerShared.Hubs.IGameHub FireAndForget() => this;
@@ -401,6 +407,107 @@ namespace Jane.Unity.ServerShared.Hubs
                     base.SetResultForResponse<global::MessagePack.Nil>(taskCompletionSource, data);
                     break;
                 case -99261176: // ValueTask MoveAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MoveRequest request)
+                    base.SetResultForResponse<global::MessagePack.Nil>(taskCompletionSource, data);
+                    break;
+            }
+        }
+        
+    }
+}
+
+namespace Jane.Unity.ServerShared.Hubs
+{
+    using global::System;
+    using global::Grpc.Core;
+    using global::MagicOnion;
+    using global::MagicOnion.Client;
+    using global::MessagePack;
+    
+    [global::MagicOnion.Ignore]
+    public class MatchMakingHubClient : global::MagicOnion.Client.StreamingHubClientBase<global::Jane.Unity.ServerShared.Hubs.IMatchMakingHub, global::Jane.Unity.ServerShared.Hubs.IMatchMakingHubReceiver>, global::Jane.Unity.ServerShared.Hubs.IMatchMakingHub
+    {
+        protected override global::Grpc.Core.Method<global::System.Byte[], global::System.Byte[]> DuplexStreamingAsyncMethod { get; }
+        
+        public MatchMakingHubClient(global::Grpc.Core.CallInvoker callInvoker, global::System.String host, global::Grpc.Core.CallOptions options, global::MagicOnion.Serialization.IMagicOnionSerializerProvider serializerProvider, global::MagicOnion.Client.IMagicOnionClientLogger logger)
+            : base(callInvoker, host, options, serializerProvider, logger)
+        {
+            var marshaller = global::MagicOnion.MagicOnionMarshallers.ThroughMarshaller;
+            DuplexStreamingAsyncMethod = new global::Grpc.Core.Method<global::System.Byte[], global::System.Byte[]>(global::Grpc.Core.MethodType.DuplexStreaming, "IMatchMakingHub", "Connect", marshaller, marshaller);
+        }
+        
+        public global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser[]> EnrollAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollRequest request)
+            => new global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser[]>(base.WriteMessageWithResponseAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollRequest, global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser[]>(-1742239889, request));
+        public global::System.Threading.Tasks.ValueTask ChangeReadyStateAsync(global::System.Boolean isReady)
+            => new global::System.Threading.Tasks.ValueTask(base.WriteMessageWithResponseAsync<global::System.Boolean, global::MessagePack.Nil>(1585484299, isReady));
+        public global::System.Threading.Tasks.ValueTask LeaveAsync()
+            => new global::System.Threading.Tasks.ValueTask(base.WriteMessageWithResponseAsync<global::MessagePack.Nil, global::MessagePack.Nil>(1368362116, global::MessagePack.Nil.Default));
+        
+        public global::Jane.Unity.ServerShared.Hubs.IMatchMakingHub FireAndForget()
+            => new FireAndForgetClient(this);
+        
+        [global::MagicOnion.Ignore]
+        class FireAndForgetClient : global::Jane.Unity.ServerShared.Hubs.IMatchMakingHub
+        {
+            readonly MatchMakingHubClient parent;
+        
+            public FireAndForgetClient(MatchMakingHubClient parent)
+                => this.parent = parent;
+        
+            public global::Jane.Unity.ServerShared.Hubs.IMatchMakingHub FireAndForget() => this;
+            public global::System.Threading.Tasks.Task DisposeAsync() => throw new global::System.NotSupportedException();
+            public global::System.Threading.Tasks.Task WaitForDisconnect() => throw new global::System.NotSupportedException();
+        
+            public global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser[]> EnrollAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollRequest request)
+                => new global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser[]>(parent.WriteMessageFireAndForgetAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollRequest, global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser[]>(-1742239889, request));
+            public global::System.Threading.Tasks.ValueTask ChangeReadyStateAsync(global::System.Boolean isReady)
+                => new global::System.Threading.Tasks.ValueTask(parent.WriteMessageFireAndForgetAsync<global::System.Boolean, global::MessagePack.Nil>(1585484299, isReady));
+            public global::System.Threading.Tasks.ValueTask LeaveAsync()
+                => new global::System.Threading.Tasks.ValueTask(parent.WriteMessageFireAndForgetAsync<global::MessagePack.Nil, global::MessagePack.Nil>(1368362116, global::MessagePack.Nil.Default));
+            
+        }
+        
+        protected override void OnBroadcastEvent(global::System.Int32 methodId, global::System.ArraySegment<global::System.Byte> data)
+        {
+            switch (methodId)
+            {
+                case -1259812596: // Void OnEnroll(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser user)
+                    {
+                        var value = base.Deserialize<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser>(data);
+                        receiver.OnEnroll(value);
+                    }
+                    break;
+                case 532410095: // Void OnLeave(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser leftUser)
+                    {
+                        var value = base.Deserialize<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser>(data);
+                        receiver.OnLeave(value);
+                    }
+                    break;
+                case 794938743: // Void OnPlayerReadyStateChanged(global::System.Ulid uniqueId, global::System.Boolean isReady)
+                    {
+                        var value = base.Deserialize<global::MagicOnion.DynamicArgumentTuple<global::System.Ulid, global::System.Boolean>>(data);
+                        receiver.OnPlayerReadyStateChanged(value.Item1, value.Item2);
+                    }
+                    break;
+                case 1489410691: // Void OnMatchMakingComplete(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingCompleteResponse response)
+                    {
+                        var value = base.Deserialize<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingCompleteResponse>(data);
+                        receiver.OnMatchMakingComplete(value);
+                    }
+                    break;
+            }
+        }
+        
+        protected override void OnResponseEvent(global::System.Int32 methodId, global::System.Object taskCompletionSource, global::System.ArraySegment<global::System.Byte> data)
+        {
+            switch (methodId)
+            {
+                case -1742239889: // ValueTask<MatchMakingLobbyUser[]> EnrollAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollRequest request)
+                    base.SetResultForResponse<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser[]>(taskCompletionSource, data);
+                    break;
+                case 1585484299: // ValueTask ChangeReadyStateAsync(global::System.Boolean isReady)
+                    base.SetResultForResponse<global::MessagePack.Nil>(taskCompletionSource, data);
+                    break;
+                case 1368362116: // ValueTask LeaveAsync()
                     base.SetResultForResponse<global::MessagePack.Nil>(taskCompletionSource, data);
                     break;
             }
