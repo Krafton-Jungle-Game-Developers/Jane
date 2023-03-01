@@ -8531,7 +8531,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 710b0cbfb53561f4a814e02980649a48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkpointTransform: {fileID: 2800000, guid: b791daab11936de49b68fa35e163954f, type: 3}
+  checkpointTransform: {fileID: 2800000, guid: 6706fff9f420e6549a96caee195046de, type: 3}
   targetBoxWidth: 800000
   targetBoxHeight: 800000
   target: {fileID: 1736308376}
