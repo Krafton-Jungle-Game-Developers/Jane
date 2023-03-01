@@ -5,7 +5,6 @@ using Jane.Unity.ServerShared.MemoryPackObjects;
 
 namespace Jane.Server.Hubs
 {
-    [GroupConfiguration(typeof(ConcurrentDictionaryGroupRepositoryFactory))]
     public class MatchMakingHub : StreamingHubBase<IMatchMakingHub, IMatchMakingHubReceiver>, IMatchMakingHub
     {
         private IGroup? matchMakingLobby;
@@ -43,8 +42,6 @@ namespace Jane.Server.Hubs
                 gameId = Ulid.NewUlid();
                 MatchMakingCompleteResponse response = new() { GameId = gameId };
                 Broadcast(matchMakingLobby).OnMatchMakingComplete(response);
-
-                await matchMakingLobby.RemoveAsync(Context);
             }
         }
         
