@@ -37,7 +37,18 @@ public class SpaceshipInputManager : MonoBehaviour
     private Vector3 boostTarget = Vector3.zero;
 
     [SerializeField] private SpaceshipEngine spaceEngine;
+    public SpaceshipEngine SpaceEngine
+    {
+        get => spaceEngine;
+        set => spaceEngine = value;
+    }
     [SerializeField] private HUDCursor hudCursor;
+
+    public HUDCursor HUDCursor
+    {
+        get => hudCursor;
+        set => hudCursor = value;
+    }
     private Vector3 reticuleViewportPosition = new (0.5f, 0.5f, 0f);
 
     private void Awake()

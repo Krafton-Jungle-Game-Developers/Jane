@@ -1,9 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
-using System.Collections.Generic;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
-
 
 public class HUD : MonoBehaviour
 {

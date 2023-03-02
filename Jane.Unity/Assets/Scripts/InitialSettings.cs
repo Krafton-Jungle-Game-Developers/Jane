@@ -34,5 +34,11 @@ namespace Assets.Scripts
                 channelCredentials: credentials
             )));
         }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void Init()
+        {
+            Application.targetFrameRate = 144;
+        }
     }
 }

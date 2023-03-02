@@ -11,4 +11,14 @@ namespace Jane.Unity.ServerShared.MemoryPackObjects
         public Vector3 Position { get; set; }
         public Quaternion Rotation { get; set; }
     }
+
+    [MemoryPackable]
+    public partial class GamePlayerData
+    {
+        public Ulid GameId { get; set; }
+        public string UserId { get; set; }
+        public Ulid UniqueId { get; set; }
+        public Vector3 Position { get; set; }
+        public Quaternion Rotation { get; set; }
+    }
 }

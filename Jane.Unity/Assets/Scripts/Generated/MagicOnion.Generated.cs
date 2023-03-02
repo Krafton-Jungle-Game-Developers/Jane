@@ -127,10 +127,8 @@ namespace MagicOnion
         public static void RegisterFormatters()
         {
             global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.ArrayFormatter<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser>());
-            global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.ArrayFormatter<global::Jane.Unity.ServerShared.MemoryPackObjects.Player>());
             global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MagicOnion.Serialization.MemoryPack.DynamicArgumentTupleFormatter<global::System.Collections.Generic.List<global::System.Int32>, global::System.Collections.Generic.Dictionary<global::System.Int32, global::System.String>>());
             global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MagicOnion.Serialization.MemoryPack.DynamicArgumentTupleFormatter<global::System.Ulid, global::System.Boolean>());
-            global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MagicOnion.Serialization.MemoryPack.DynamicArgumentTupleFormatter<global::System.Ulid, global::System.Ulid, global::UnityEngine.Vector3, global::UnityEngine.Quaternion>());
             global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.DictionaryFormatter<global::System.Int32, global::System.String>());
             global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.ListFormatter<global::System.Int32>());
         }
@@ -340,8 +338,8 @@ namespace Jane.Unity.ServerShared.Hubs
             DuplexStreamingAsyncMethod = new global::Grpc.Core.Method<global::System.Byte[], global::System.Byte[]>(global::Grpc.Core.MethodType.DuplexStreaming, "IGameHub", "Connect", marshaller, marshaller);
         }
         
-        public global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.Player[]> JoinAsync(global::System.Ulid roomId, global::System.Ulid userId, global::UnityEngine.Vector3 position, global::UnityEngine.Quaternion rotation)
-            => new global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.Player[]>(base.WriteMessageWithResponseAsync<global::MagicOnion.DynamicArgumentTuple<global::System.Ulid, global::System.Ulid, global::UnityEngine.Vector3, global::UnityEngine.Quaternion>, global::Jane.Unity.ServerShared.MemoryPackObjects.Player[]>(-733403293, new global::MagicOnion.DynamicArgumentTuple<global::System.Ulid, global::System.Ulid, global::UnityEngine.Vector3, global::UnityEngine.Quaternion>(roomId, userId, position, rotation)));
+        public global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinResponse> JoinAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinRequest request)
+            => new global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinResponse>(base.WriteMessageWithResponseAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinRequest, global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinResponse>(-733403293, request));
         public global::System.Threading.Tasks.ValueTask LeaveAsync()
             => new global::System.Threading.Tasks.ValueTask(base.WriteMessageWithResponseAsync<global::MessagePack.Nil, global::MessagePack.Nil>(1368362116, global::MessagePack.Nil.Default));
         public global::System.Threading.Tasks.ValueTask MoveAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MoveRequest request)
@@ -362,8 +360,8 @@ namespace Jane.Unity.ServerShared.Hubs
             public global::System.Threading.Tasks.Task DisposeAsync() => throw new global::System.NotSupportedException();
             public global::System.Threading.Tasks.Task WaitForDisconnect() => throw new global::System.NotSupportedException();
         
-            public global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.Player[]> JoinAsync(global::System.Ulid roomId, global::System.Ulid userId, global::UnityEngine.Vector3 position, global::UnityEngine.Quaternion rotation)
-                => new global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.Player[]>(parent.WriteMessageFireAndForgetAsync<global::MagicOnion.DynamicArgumentTuple<global::System.Ulid, global::System.Ulid, global::UnityEngine.Vector3, global::UnityEngine.Quaternion>, global::Jane.Unity.ServerShared.MemoryPackObjects.Player[]>(-733403293, new global::MagicOnion.DynamicArgumentTuple<global::System.Ulid, global::System.Ulid, global::UnityEngine.Vector3, global::UnityEngine.Quaternion>(roomId, userId, position, rotation)));
+            public global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinResponse> JoinAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinRequest request)
+                => new global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinResponse>(parent.WriteMessageFireAndForgetAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinRequest, global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinResponse>(-733403293, request));
             public global::System.Threading.Tasks.ValueTask LeaveAsync()
                 => new global::System.Threading.Tasks.ValueTask(parent.WriteMessageFireAndForgetAsync<global::MessagePack.Nil, global::MessagePack.Nil>(1368362116, global::MessagePack.Nil.Default));
             public global::System.Threading.Tasks.ValueTask MoveAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MoveRequest request)
@@ -375,15 +373,15 @@ namespace Jane.Unity.ServerShared.Hubs
         {
             switch (methodId)
             {
-                case -1297457280: // Void OnJoin(global::Jane.Unity.ServerShared.MemoryPackObjects.Player request)
+                case -1297457280: // Void OnJoin(global::Jane.Unity.ServerShared.MemoryPackObjects.GamePlayerData joinedPlayer)
                     {
-                        var value = base.Deserialize<global::Jane.Unity.ServerShared.MemoryPackObjects.Player>(data);
+                        var value = base.Deserialize<global::Jane.Unity.ServerShared.MemoryPackObjects.GamePlayerData>(data);
                         receiver.OnJoin(value);
                     }
                     break;
-                case 532410095: // Void OnLeave(global::Jane.Unity.ServerShared.MemoryPackObjects.Player request)
+                case 532410095: // Void OnLeave(global::Jane.Unity.ServerShared.MemoryPackObjects.GamePlayerData request)
                     {
-                        var value = base.Deserialize<global::Jane.Unity.ServerShared.MemoryPackObjects.Player>(data);
+                        var value = base.Deserialize<global::Jane.Unity.ServerShared.MemoryPackObjects.GamePlayerData>(data);
                         receiver.OnLeave(value);
                     }
                     break;
@@ -400,8 +398,8 @@ namespace Jane.Unity.ServerShared.Hubs
         {
             switch (methodId)
             {
-                case -733403293: // ValueTask<Player[]> JoinAsync(global::System.Ulid roomId, global::System.Ulid userId, global::UnityEngine.Vector3 position, global::UnityEngine.Quaternion rotation)
-                    base.SetResultForResponse<global::Jane.Unity.ServerShared.MemoryPackObjects.Player[]>(taskCompletionSource, data);
+                case -733403293: // ValueTask<GameJoinResponse> JoinAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinRequest request)
+                    base.SetResultForResponse<global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinResponse>(taskCompletionSource, data);
                     break;
                 case 1368362116: // ValueTask LeaveAsync()
                     base.SetResultForResponse<global::MessagePack.Nil>(taskCompletionSource, data);

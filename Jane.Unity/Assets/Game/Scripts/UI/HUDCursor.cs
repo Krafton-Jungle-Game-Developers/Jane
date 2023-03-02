@@ -2,7 +2,8 @@
 
 public class HUDCursor : MonoBehaviour
 {
-    [SerializeField] private Camera HUDCamera;
+    [SerializeField] private Camera hUDCamera;
+    public Camera HUDCamera { get; set; }
     [SerializeField] private Canvas canvas;
     [SerializeField] private RectTransform cursorRectTransform;
     [SerializeField] private RectTransform lineRectTransform;
@@ -12,7 +13,7 @@ public class HUDCursor : MonoBehaviour
     {
         get
         {
-            if (HUDCamera == null) { return new Vector3(0f, 0f, 1f); }
+            if (hUDCamera == null) { return new Vector3(0f, 0f, 1f); }
             
             Vector3 canvasPos = cursorRectTransform.anchoredPosition + (0.5f * canvasRectTransform.sizeDelta);
             return (new Vector3(canvasPos.x / canvasRectTransform.sizeDelta.x, canvasPos.y / canvasRectTransform.sizeDelta.y, 1f));
@@ -23,9 +24,9 @@ public class HUDCursor : MonoBehaviour
     {
         get
         {
-            if (HUDCamera is null) { return -cursorRectTransform.forward; }
+            if (hUDCamera is null) { return -cursorRectTransform.forward; }
 
-            return (HUDCamera.ViewportToWorldPoint(ViewportPosition) - HUDCamera.transform.position).normalized;
+            return (hUDCamera.ViewportToWorldPoint(ViewportPosition) - hUDCamera.transform.position).normalized;
         }
     }
 
