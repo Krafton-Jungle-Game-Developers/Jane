@@ -152,32 +152,30 @@ public class PlayerCameraController : MonoBehaviour
         //_gimbalRange == 0.1f
         //Gimbal Position X
         if (_mouseDistance.x > _gimbalRange)
-            _gimbalX = Mathf.Lerp(_gimbalX, 4f * gimbalX_Intensity, Time.deltaTime * 1f);
+            _gimbalX = Mathf.Lerp(_gimbalX, 12f * _mouseDistance.x - _gimbalRange, Time.deltaTime * 1f);
         else if (_mouseDistance.x < -_gimbalRange)
-            _gimbalX = Mathf.Lerp(_gimbalX, -4f * gimbalX_Intensity, Time.deltaTime * 1f);
+            _gimbalX = Mathf.Lerp(_gimbalX, 12f * _mouseDistance.x + _gimbalRange, Time.deltaTime * 1f);
         else
             _gimbalX = Mathf.Lerp(_gimbalX, 0f, Time.deltaTime * 1f);
 
         //Gimbal Position Y
         if (_mouseDistance.y > _gimbalRange)
-            _gimbalY = Mathf.Lerp(_gimbalY, 5f * gimbalY_Intensity, Time.deltaTime * 2f);
+            _gimbalY = Mathf.Lerp(_gimbalY, 5f * _mouseDistance.y - _gimbalRange, Time.deltaTime * 2f);
         else if (_mouseDistance.y < -_gimbalRange)
-            _gimbalY = Mathf.Lerp(_gimbalY, -10f * gimbalY_Intensity, Time.deltaTime * 2f);
+            _gimbalY = Mathf.Lerp(_gimbalY, 10f * _mouseDistance.y - _gimbalRange, Time.deltaTime * 2f);
         else
             _gimbalY = Mathf.Lerp(_gimbalY, 0f, Time.deltaTime * 2f);
 
-        _gimbalTargetZ = 0.05f * _gimbalX * _gimbalY;
-        _gimbalTargetZ = Mathf.Clamp(_gimbalTargetZ, -5f, 5f);
-        _gimbalRotationZ = Quaternion.Slerp(_gimbalRotationZ, Quaternion.AngleAxis(_gimbalTargetZ, Vector3.forward), Time.deltaTime * 5f);
         //Gimbal Rotation Z
         if (_gimbalX > 0f && _gimbalY > 0f)
         {
+            _gimbalRotationZ = Quaternion.Slerp(_gimbalRotationZ, Quaternion.AngleAxis(0.05f * _gimbalX * _gimbalY, Vector3.forward), Time.deltaTime * 5f);
             _gimbalRotationX = Quaternion.Slerp(_gimbalRotationX, Quaternion.AngleAxis(0.025f * _gimbalX * _gimbalY, Vector3.right), 0.02f);
         }
         else if (_gimbalX > 0f && _gimbalY < -0f)
         {
-            //_gimbalRotationZ = Quaternion.Slerp(_gimbalRotationZ, Quaternion.AngleAxis(0.05f * _gimbalX * _gimbalY, Vector3.forward), Time.deltaTime * 5f);
-            _gimbalRotationX = Quaternion.Slerp(_gimbalRotationX, Quaternion.AngleAxis(0.025f * _gimbalX * _gimbalY, Vector3.right), 0.02f);
+            _gimbalRotationZ = Quaternion.Slerp(_gimbalRotationZ, Quaternion.AngleAxis(0.05f * _gimbalX * _gimbalY, Vector3.forward), Time.deltaTime * 5f);
+            _gimbalRotationX = Quaternion.Slerp(_gimbalRotationX, Quaternion.AngleAxis(-0.025f * _gimbalX * _gimbalY, Vector3.right), 0.02f);
         }
         else if (_gimbalX < -0f && _gimbalY < -0f)
         {
@@ -186,14 +184,13 @@ public class PlayerCameraController : MonoBehaviour
         }
         else if (_gimbalX < -0f && _gimbalY > 0f)
         {
-            //_gimbalRotationZ = Quaternion.Slerp(_gimbalRotationZ, Quaternion.AngleAxis(0.05f * _gimbalX * _gimbalY, Vector3.forward), Time.deltaTime * 5f);
-            _gimbalRotationX = Quaternion.Slerp(_gimbalRotationX, Quaternion.AngleAxis(-0.025f * _gimbalX * _gimbalY, Vector3.right), 0.02f);
+            _gimbalRotationZ = Quaternion.Slerp(_gimbalRotationZ, Quaternion.AngleAxis(0.05f * _gimbalX * _gimbalY, Vector3.forward), Time.deltaTime * 5f);
+            _gimbalRotationX = Quaternion.Slerp(_gimbalRotationX, Quaternion.AngleAxis(0.025f * _gimbalX * _gimbalY, Vector3.right), 0.02f);
         }
         else
         {
             _gimbalRotationZ = Quaternion.Slerp(_gimbalRotationZ, Quaternion.AngleAxis(0f, Vector3.forward), Time.deltaTime * 5f);
             _gimbalRotationX = Quaternion.Slerp(_gimbalRotationX, Quaternion.AngleAxis(0f, Vector3.right), 0.02f);
-
         }
 
 
