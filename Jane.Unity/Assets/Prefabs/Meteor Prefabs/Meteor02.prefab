@@ -4990,8 +4990,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce9227e0aefe8074f8ab20a01e8abc94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speedMin: 10
-  _speedMax: 20
+  _speedMin: 5
+  _speedMax: 5
   impactPrefab: {fileID: 8217473123363731195, guid: e4644045d39470a4bbb23231dd56fedd,
     type: 3}
   SpawnController: {fileID: 8989313935175702695, guid: a098fa6dce5f70e43be967bdf8bf2ec6,

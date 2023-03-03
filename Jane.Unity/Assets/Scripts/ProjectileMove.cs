@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
 
 public class ProjectileMove : MonoBehaviour
@@ -24,7 +25,7 @@ public class ProjectileMove : MonoBehaviour
         _spawnMeteor = SpawnController.GetComponent<SpawnMeteor>();
         _startPoint = _spawnMeteor.startPoint.transform;
         _destination = _spawnMeteor.middlePoints[0].transform;
-        _direction = (_destination.position - gameObject.transform.position).normalized;
+        //_direction = (_destination.transform.position - gameObject.transform.position).normalized;
         _timer = 0;
         _speed = UnityEngine.Random.Range(_speedMin, _speedMax);
 
@@ -76,12 +77,12 @@ public class ProjectileMove : MonoBehaviour
             } 
             else
             {
-                Debug.Log("check : " + (_midIdx).ToString());
+                Debug.Log("check : " + _spawnMeteor.middlePoints[_midIdx].name);
                 _timer = 0;
-                _startPoint.position = transform.position;
+                _startPoint.position = _spawnMeteor.middlePoints[_midIdx].transform.position;
                 _midIdx++;
                 _destination.position = _spawnMeteor.middlePoints[_midIdx].transform.position;
-                _direction = (_destination.position - gameObject.transform.position).normalized;
+                //_direction = (_destination.position - gameObject.transform.position).normalized;
 
             }
         }
