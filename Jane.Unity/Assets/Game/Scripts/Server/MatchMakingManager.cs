@@ -13,8 +13,6 @@ using Jane.Unity.ServerShared.MemoryPackObjects;
 using MagicOnion;
 using MagicOnion.Client;
 using Cysharp.Threading.Tasks;
-using System.Xml;
-using static UnityEngine.Rendering.DebugUI;
 
 public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
 {
@@ -188,5 +186,7 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
     public void OnMatchMakingComplete(MatchMakingCompleteResponse response)
     {
         Debug.Log($"MatchMake Complete! GameID:{response.GameId}");
+        // TODO: Fade
+        // TODO: Load Game Scene
     }
 }

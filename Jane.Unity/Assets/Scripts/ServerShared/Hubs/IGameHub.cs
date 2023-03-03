@@ -8,7 +8,7 @@ namespace Jane.Unity.ServerShared.Hubs
 {
     public interface IGameHub : IStreamingHub<IGameHub, IGameHubReceiver>
     {
-        ValueTask<Player[]> JoinAsync(Ulid roomId, Ulid userId, Vector3 position, Quaternion rotation);
+        ValueTask<GameJoinResponse> JoinAsync(GameJoinRequest request);
         ValueTask LeaveAsync();
         ValueTask MoveAsync(MoveRequest request);
     }

@@ -5,7 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Destroyable
-  - Spawner
+  - SpaceFighter
+  - Environment
   layers:
   - Default
   - TransparentFX

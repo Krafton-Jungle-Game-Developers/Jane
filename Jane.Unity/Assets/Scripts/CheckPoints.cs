@@ -6,14 +6,13 @@ using UnityEngine;
 /// </summary>
 public class CheckPoints : MonoBehaviour
 {
-    [SerializeField] private GameObject[] checkPointArr;
+    [SerializeField] public GameObject[] checkPointArr;
     [SerializeField] private AudioSource audioSource;
-    //[SerializeField] private AudioClip activateSFX;
     [SerializeField] private AudioClip gateClearSFX;    // Used for user Feedback
+    public TargetBoxGenerator targetBoxGenerator;
 
-    private int idx = 0;
+    public int idx = 0;
     private int gateCount;
-    private GameObject currGate;
     private GameObject nextGate;
 
     // Start is called before the first frame update
@@ -21,8 +20,8 @@ public class CheckPoints : MonoBehaviour
     {
         idx = 0;
         gateCount = checkPointArr.Length;
-        currGate= checkPointArr[idx];
-        currGate.SendMessage("Activate");
+        nextGate= checkPointArr[idx];
+        nextGate.SendMessage("Activate");
 
         for (int k = 1; k  < gateCount ; k++)
         {
@@ -34,16 +33,20 @@ public class CheckPoints : MonoBehaviour
     {
         audioSource.clip = gateClearSFX;
         audioSource.Play();
-        
-        currGate = checkPointArr[idx];
-        currGate.SendMessage("Deactivate");
+
+        nextGate.SendMessage("Deactivate");
 
         if (idx != gateCount - 1)
         {
             nextGate= checkPointArr[idx + 1];
             nextGate.SendMessage("Activate");
+            idx++;
+            targetBoxGenerator.SetNextTargetBox(idx);
         }
-
-        idx++;
+        else
+        {
+            targetBoxGenerator.ResetTargetBox();
+            //activate goal line or something
+        }
     }
 }

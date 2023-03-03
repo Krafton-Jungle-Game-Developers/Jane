@@ -20,8 +20,26 @@ public class SpaceshipCameraController : MonoBehaviour
     public bool CameraCollisionEnabled => cameraCollisionEnabled;
     [SerializeField] private LayerMask collisionMask = ~0;
     [SerializeField] private Transform currentViewTarget;
+
+    public Transform CurrentViewTarget
+    {
+        get => currentViewTarget;
+        set => currentViewTarget = value;
+    }
     [SerializeField] private Rigidbody spaceShipRigidbody;
+    public Rigidbody SpaceShipRigidbody
+    {
+        get => spaceShipRigidbody;
+        set => spaceShipRigidbody = value;
+    }
+
     [SerializeField] private SpaceshipEngine spaceEngine;
+
+    public SpaceshipEngine SpaceEngine
+    {
+        get => spaceEngine;
+        set => spaceEngine = value;
+    }
 
     [SerializeField] private float positionFollowStrength = 0.4f;
     public float PositionFollowStrength => positionFollowStrength;
@@ -37,6 +55,7 @@ public class SpaceshipCameraController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (currentViewTarget == null) { return; }
         transform.rotation = Quaternion.LookRotation(currentViewTarget.forward, transform.up);
         UpdateCameraCollision();
     }
