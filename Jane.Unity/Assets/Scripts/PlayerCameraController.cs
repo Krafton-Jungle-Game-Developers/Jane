@@ -53,12 +53,16 @@ public class PlayerCameraController : MonoBehaviour
     public SpaceshipController spaceshipController;
     public RectTransform cursorRectTransform;
     private Vector3 _screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f), _mouseDistance;
-    [SerializeField] private float _gimbalX = 0f;
-    [SerializeField] private float _gimbalY = 0f;
+    private float _gimbalX = 0f;
+    private float _gimbalY = 0f;
+    [Range(0f, 20f)] public float gimbalX_Intensity;
+    [Range(0f, 5f)] public float gimbalY_Intensity;
 
     void Start()
     {
         //Common
+        gimbalX_Intensity = 3f;
+        gimbalY_Intensity = 1f;
 
         //CameraControlMovement
         m_Camera = GetComponent<Camera>();
@@ -152,17 +156,19 @@ public class PlayerCameraController : MonoBehaviour
         Mathf.Clamp(_gimbalX, -20f, 20f);
         Mathf.Clamp(_gimbalY, -10f, 5f);
 
+        //Gimbal Position X
         if (_mouseDistance.x > 0.1f)
-            _gimbalX = Mathf.Lerp(_gimbalX, 20f, Time.deltaTime * 1f);
+            _gimbalX = Mathf.Lerp(_gimbalX, 4f * gimbalX_Intensity, Time.deltaTime * 0.5f);
         else if (_mouseDistance.x < -0.1f)
-            _gimbalX = Mathf.Lerp(_gimbalX, -20f, Time.deltaTime * 1f);
+            _gimbalX = Mathf.Lerp(_gimbalX, -4f * gimbalX_Intensity, Time.deltaTime * 0.5f);
         else
             _gimbalX = Mathf.Lerp(_gimbalX, 0f, Time.deltaTime * 1f);
 
+        //Gimbal Position Y
         if (_mouseDistance.y > 0.1f)
-            _gimbalY = Mathf.Lerp(_gimbalY, 5f, Time.deltaTime * 2f);
+            _gimbalY = Mathf.Lerp(_gimbalY, 5f * gimbalY_Intensity, Time.deltaTime * 2f);
         else if (_mouseDistance.y < -0.1f)
-            _gimbalY = Mathf.Lerp(_gimbalY, -10f, Time.deltaTime * 2f);
+            _gimbalY = Mathf.Lerp(_gimbalY, -5f * gimbalY_Intensity, Time.deltaTime * 2f);
         else
             _gimbalY = Mathf.Lerp(_gimbalY, 0f, Time.deltaTime * 2f);
 
