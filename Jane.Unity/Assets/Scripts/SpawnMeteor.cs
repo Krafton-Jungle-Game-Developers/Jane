@@ -5,28 +5,64 @@ using UnityEngine;
 
 public class SpawnMeteor : MonoBehaviour
 {
-    public GameObject meteorVFX;
-    [SerializeField] private Transform startPoint;
-    [SerializeField] private Transform endPoint;
+    // Spawn Control 
+    [SerializeField] private float _spawnRate = 5f;
+    [SerializeField] private int _maxObjInScene = 7;
+
+    // Array of Meteors to Control 
+
+
     
-    // Start is called before the first frame update
+    // Meteor Prefabs Control
+    public GameObject[] objectPrefabs;
+    private int idxPrefabList = 0;
+    public float destroyTime = 10.0f;
+    [SerializeField] private float _minSpeed = 10f;
+    [SerializeField] private float _maxSpeed = 20f;
+    
+    //public GameObject meteorVFX;
+    public GameObject startPoint;
+
+    public GameObject[] middlePoints;
+    
     void Start()
     {
-        var _startPos = startPoint.position;
-        GameObject objVFX = Instantiate(meteorVFX, _startPos, Quaternion.identity) as GameObject;
-
-        var _endPos = endPoint.position;
-
-        
-        RotateTo (objVFX, _endPos);
+        // Spawn objects at spawnrate 
+        InvokeRepeating("SpawnObject", 10f, _spawnRate);
     }
 
+
+    private void SpawnObject()
+    {
+        
+        // Random Spawn from List 
+        //int idxPrefabList = UnityEngine.Random.Range (0, objectPrefabs.Length);
+        if (idxPrefabList == objectPrefabs.Length)
+        {
+            idxPrefabList = 0;
+        }
+
+
+        // Instantiate Meteor
+        MeteorMove newMeteorCs = Instantiate(objectPrefabs[idxPrefabList], startPoint.transform.position, Quaternion.identity).GetComponent<MeteorMove>(); ;
+        newMeteorCs._speed = UnityEngine.Random.Range(_minSpeed, _maxSpeed);
+
+
+        idxPrefabList++;
+    }
+
+
     // Rotate Meteor Toward Destination
-    private void RotateTo(GameObject obj, Vector3 destination)
+    public void RotateTo(GameObject obj, Vector3 destination)
     {
         var _direction = destination - obj.transform.position;
         var _rotation = Quaternion.LookRotation(_direction);
 
         obj.transform.localRotation = Quaternion.Lerp(obj.transform.rotation, _rotation, 1);
     }
+
+
 }
+
+/// TODO : 내일은 꼭 이거 완성해야지 
+/// rb로 움직이는거 구현하고 체크포인트 데이터 이쪽 meteor controller로 전송하는 방법 알아내야겠다 
