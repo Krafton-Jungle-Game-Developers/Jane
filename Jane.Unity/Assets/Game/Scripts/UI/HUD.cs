@@ -4,15 +4,16 @@ public class HUD : MonoBehaviour
 {
     public RectTransform cursorRectTransform;
     public RectTransform lineRectTransform;
-    public Canvas canvas;
     public float radius;
 
-    private Vector3 screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0.0f);
-    private Vector3 relativeScreenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0.0f);
+    private Vector3 screenCenter;
+    private Vector3 relativeScreenCenter;
 
     private void Start()
     {
         UnityEngine.Cursor.visible = false;
+        screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0.0f);
+        relativeScreenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0.0f);
     }
 
     void Update()

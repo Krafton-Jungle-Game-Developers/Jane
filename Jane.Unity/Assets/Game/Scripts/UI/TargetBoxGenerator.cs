@@ -47,7 +47,7 @@ public class TargetBoxGenerator : MonoBehaviour
             RectTransform targetRectTransform = onScreenObjects[i].gameObject.GetComponent<RectTransform>();
 
             targetRectTransform.position = new Vector2(targetRect.center.x, targetRect.center.y);
-            targetRectTransform.sizeDelta = new Vector2(Mathf.Max(targetRect.width, minSize.x), Mathf.Max(targetRect.height, minSize.y)) + sizeMargin;
+            targetRectTransform.sizeDelta = new Vector2(Mathf.Max(targetRect.width / 2, minSize.x), Mathf.Max(targetRect.height / 2, minSize.y)) + sizeMargin;
         }
         else
         {
