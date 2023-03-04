@@ -2,17 +2,13 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
 using SCPE;
-using System.Collections;
 
 public class PlayerCameraEffect : MonoBehaviour
 {
-    SpaceshipController spaceshipController;
-
     [Header("References")]
     [SerializeField] private Camera playerCamera;
     [SerializeField] private Rigidbody playerRigidbody;
     [SerializeField] private Volume globalVolume;
-    [SerializeField] private UniversalAdditionalCameraData UAC;
     [Space]
 
     [SerializeField] private float lastingDuration = 1f;
@@ -79,9 +75,6 @@ public class PlayerCameraEffect : MonoBehaviour
 
     private void Awake()
     {
-        spaceshipController = GetComponent<SpaceshipController>();
-        UAC = playerCamera.GetComponent<UniversalAdditionalCameraData>();
-
         globalVolume.profile.TryGet(out _motionBlur);
         globalVolume.profile.TryGet(out _chromaticAberration);
         globalVolume.profile.TryGet(out _bloom);
@@ -96,8 +89,6 @@ public class PlayerCameraEffect : MonoBehaviour
         CameraPropertiesControl();
         GlovalVolumeControl();
         ParticleSystemControl();
-
-        //UpsideCameraEffect(); 
     }
 
     private void FixedUpdate()
@@ -191,23 +182,4 @@ public class PlayerCameraEffect : MonoBehaviour
         _verticalParticleEmission.rateOverTime = nowParticleIntensity / 10f;
         _cockpitParticleEmission.rateOverTime = nowParticleIntensity;
     }
-
-    //Not Used Function
-    private void UpsideCameraEffect()
-    {
-        //TODO: Change if Condition
-        //if (playerMovementController.state == MovementState.Doublejump)
-        if (true)
-        {
-            nowVerticalIntensity = Mathf.Lerp(nowVerticalIntensity, maxVerticalIntensity, 0.1f * playerAcceleration);
-        }
-        else
-        {
-            if (nowVerticalIntensity > baseVerticalIntensity)
-            {
-                nowVerticalIntensity -= 10f * lastingDuration;
-            }
-        }
-    }
-
 }

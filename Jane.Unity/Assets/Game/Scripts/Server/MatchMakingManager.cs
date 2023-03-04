@@ -190,6 +190,7 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
     {
         Debug.Log($"MatchMake Complete! GameID:{response.GameId}");
         GameInfo.GameId = response.GameId;
+        GameInfo.PlayerCount = response.PlayerCount;
         // TODO: Fade
         // TODO: Load Game Scene
         sceneManager.LoadGameSceneAsync().Forget();

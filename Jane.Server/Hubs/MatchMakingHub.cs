@@ -40,7 +40,7 @@ namespace Jane.Server.Hubs
             if (isAllPlayersReady)
             {
                 matchedGameId = Ulid.NewUlid();
-                MatchMakingCompleteResponse response = new() { GameId = matchedGameId };
+                MatchMakingCompleteResponse response = new() { GameId = matchedGameId, PlayerCount = storage.AllValues.Count };
                 Broadcast(matchMakingLobby).OnMatchMakingComplete(response);
             }
 
