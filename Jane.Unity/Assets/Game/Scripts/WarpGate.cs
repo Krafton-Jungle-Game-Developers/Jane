@@ -47,6 +47,7 @@ public class WarpGate : MonoBehaviour
             yield return null;
         }
         _player.transform.position = warpDestination.transform.position;
+        _player.transform.rotation = warpDestination.transform.rotation;
         timeElapsed = 0f;
         playerCameraEffect.nowFOV = maxFOV;
         playerCameraEffect.nowBloomIntensity = maxBloomIntensity;

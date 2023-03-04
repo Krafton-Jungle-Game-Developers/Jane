@@ -83,5 +83,8 @@ public class GameController : MonoBehaviour
         
     }
 
-    
+    public void HideMouse()
+    {
+        Cursor.visible = false;
+    }
 }
