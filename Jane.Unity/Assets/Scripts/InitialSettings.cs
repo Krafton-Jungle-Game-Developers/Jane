@@ -38,7 +38,7 @@ namespace Assets.Scripts
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Init()
         {
-            Application.targetFrameRate = 144;
+            Application.targetFrameRate = 60;
         }
     }
 }

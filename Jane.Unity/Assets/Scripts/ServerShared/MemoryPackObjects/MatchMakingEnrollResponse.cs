@@ -1,6 +1,12 @@
-﻿namespace Jane.Unity.ServerShared.MemoryPackObjects
+﻿using System;
+using MemoryPack;
+
+namespace Jane.Unity.ServerShared.MemoryPackObjects
 {
-    public class MatchMakingEnrollResponse
+    [MemoryPackable]
+    public partial struct MatchMakingEnrollResponse
     {
+        public Ulid MatchId { get; set; }
+        public MatchMakingLobbyUser[] LobbyUsers { get; set; }
     }
 }

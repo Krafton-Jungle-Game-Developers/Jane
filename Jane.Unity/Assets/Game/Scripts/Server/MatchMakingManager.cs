@@ -3,26 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-using UnityEngine;
-using Michsky.UI.Reach;
 using TMPro;
+using Michsky.UI.Reach;
+using UnityEngine;
 
-using Grpc.Core;
-using Jane.Unity.ServerShared.Hubs;
-using Jane.Unity.ServerShared.MemoryPackObjects;
 using MagicOnion;
 using MagicOnion.Client;
 using Cysharp.Threading.Tasks;
 
+using Jane.Unity.ServerShared.Hubs;
+using Jane.Unity.ServerShared.MemoryPackObjects;
+
 public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
 {
     private readonly CancellationTokenSource shutdownCts = new();
-    private ChannelBase _channel;
-    private IMatchMakingHub _matchMakingHub;
+    private IMatchMakingHub matchMakingHub;
 
     private bool isJoin;
     private bool isSelfDisconnected;
 
+    private GrpcChannelManager channelManager;
+    private SceneManager sceneManager;
     [SerializeField] private TMP_Text profileText;
     [SerializeField] private ButtonManager lobbyPlayButton;
     [SerializeField] private ButtonManager lobbyStopSearchButton;
@@ -32,17 +33,20 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
     [SerializeField] private HotkeyEvent readyInputEvent;
     [SerializeField] private HotkeyEvent unReadyInputEvent;
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(this);
-    }
-
     private void OnEnable()
     {
         lobbyPlayButton.onClick.AddListener(UniTask.UnityAction(async () => { await EnrollAsync(); }));
         lobbyStopSearchButton.onClick.AddListener(UniTask.UnityAction(async () => { await LeaveAsync(); }));
         readyInputEvent.onHotkeyPress.AddListener(UniTask.UnityAction(async () => { await ChangeReadyStateAsync(true); }));
         unReadyInputEvent.onHotkeyPress.AddListener(UniTask.UnityAction(async () => { await ChangeReadyStateAsync(false); }));
+
+        channelManager = FindObjectOfType<GrpcChannelManager>();
+        sceneManager = FindObjectOfType<SceneManager>();
+    }
+
+    private async UniTaskVoid Start()
+    {
+        await InitializeAsync();
     }
 
     private async UniTaskVoid OnDestroy()
@@ -54,29 +58,24 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
         
         shutdownCts.Cancel();
 
-        if (_matchMakingHub != null) { await _matchMakingHub.DisposeAsync(); }
-        if (_channel != null) { await _channel.ShutdownAsync(); }
+        if (matchMakingHub is not null)
+        {
+            await matchMakingHub.LeaveAsync().AsTask().AsUniTask();
+            await matchMakingHub.DisposeAsync().AsUniTask();
+        }
     }
     
-    private async void Start()
+    public async UniTask InitializeAsync()
     {
-        await InitializeClientAsync();
-        
-        lobbyPlayerCountText.text = "1/4";
-    }
-
-    private async UniTask InitializeClientAsync()
-    {
-        // Initialize the Hub
-        _channel = GrpcChannelx.ForTarget(new("jane.jungle-gamedev.com", 5001, false));
-
         while (!shutdownCts.IsCancellationRequested)
         {
             try
             {
-                Debug.Log($"Connecting to the server...");
-                _matchMakingHub = await StreamingHubClient.ConnectAsync<IMatchMakingHub, IMatchMakingHubReceiver>(_channel, this, cancellationToken: shutdownCts.Token).AsUniTask();
-                Debug.Log($"Connection is established.");
+                Debug.Log($"Connecting Server from MatchMakingManager...");
+                matchMakingHub = await StreamingHubClient.ConnectAsync<IMatchMakingHub, IMatchMakingHubReceiver>(channelManager.GRPCChannel,
+                    this,
+                    cancellationToken: shutdownCts.Token).AsUniTask();
+                Debug.Log($"MatchMakingHub connection established!");
                 profileText.text = UserInfo.UserId;
                 break;
             }
@@ -92,10 +91,14 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
 
     private async UniTask EnrollAsync()
     {
-        MatchMakingEnrollRequest request = new() { UserId = UserInfo.UserId, UniqueId = UserInfo.UniqueId };
+        MatchMakingEnrollRequest request = new() { UserId = UserInfo.UserId, UniqueId = UserInfo.UniqueId, };
         try
         {
-            lobbyUsers = new(await _matchMakingHub.EnrollAsync(request));
+            MatchMakingEnrollResponse response = await matchMakingHub.EnrollAsync(request);
+            Debug.Log(response.MatchId);
+
+            // TODO: Validate lobbyUsers
+            lobbyUsers = new(response.LobbyUsers);
         }
         catch (Exception e)
         {
@@ -115,7 +118,7 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
     {
         try
         {
-            await _matchMakingHub.ChangeReadyStateAsync(isReady);
+            await matchMakingHub.ChangeReadyStateAsync(isReady);
         }
         catch (Exception e)
         {
@@ -129,7 +132,7 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
     {
         try
         {
-            await _matchMakingHub.LeaveAsync();
+            await matchMakingHub.LeaveAsync();
         }
         catch (Exception e)
         {
@@ -186,7 +189,9 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
     public void OnMatchMakingComplete(MatchMakingCompleteResponse response)
     {
         Debug.Log($"MatchMake Complete! GameID:{response.GameId}");
+        GameInfo.GameId = response.GameId;
         // TODO: Fade
         // TODO: Load Game Scene
+        sceneManager.LoadGameSceneAsync().Forget();
     }
 }

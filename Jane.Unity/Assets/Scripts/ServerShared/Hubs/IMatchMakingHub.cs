@@ -7,7 +7,7 @@ namespace Jane.Unity.ServerShared.Hubs
 {
     public interface IMatchMakingHub : IStreamingHub<IMatchMakingHub, IMatchMakingHubReceiver>
     {
-        ValueTask<MatchMakingLobbyUser[]?> EnrollAsync(MatchMakingEnrollRequest request);
+        ValueTask<MatchMakingEnrollResponse> EnrollAsync(MatchMakingEnrollRequest request);
         ValueTask ChangeReadyStateAsync(bool isReady);
         ValueTask LeaveAsync();
     }
