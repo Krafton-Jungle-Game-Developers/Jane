@@ -8,6 +8,7 @@ TagManager:
   - SpaceFighter
   - Environment
   - Spawner
+  - MeteorPoint
   layers:
   - Default
   - TransparentFX
