@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour
     public GameObject hud;
     private int _countdownTime = 3;
     private SpaceshipController _spaceshipController;
+    private RankManager _rankManager;
 
     // BGM Player
     [SerializeField] AudioSource bgmPlayer;
@@ -32,6 +33,7 @@ public class GameController : MonoBehaviour
         bgmPlayer.Play();
 
         _spaceshipController = GameObject.FindGameObjectWithTag("Player").GetComponent<SpaceshipController>();
+        _rankManager = GetComponentInChildren<RankManager>();
         StartGame();
     }
 
@@ -83,5 +85,8 @@ public class GameController : MonoBehaviour
         
     }
 
-    
+    public void HideMouse()
+    {
+        Cursor.visible = false;
+    }
 }
