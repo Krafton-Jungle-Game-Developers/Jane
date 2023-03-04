@@ -4920,9 +4920,9 @@ GameObject:
   - component: {fileID: 4839058931604694502}
   - component: {fileID: 4424844717588073903}
   - component: {fileID: -2821850906034804559}
-  - component: {fileID: 5917183979028535151}
+  - component: {fileID: -5799231596814850706}
   - component: {fileID: 8039425050089565823}
-  - component: {fileID: 466477310999225106}
+  - component: {fileID: 7873276825545174275}
   m_Layer: 0
   m_Name: Meteor02
   m_TagString: Destroyable
@@ -4978,7 +4978,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   durability: 10
   destroyPrefab: {fileID: 0}
---- !u!114 &5917183979028535151
+--- !u!114 &-5799231596814850706
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4990,12 +4990,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce9227e0aefe8074f8ab20a01e8abc94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speedMin: 5
-  _speedMax: 5
-  impactPrefab: {fileID: 8217473123363731195, guid: e4644045d39470a4bbb23231dd56fedd,
-    type: 3}
-  SpawnController: {fileID: 8989313935175702695, guid: a098fa6dce5f70e43be967bdf8bf2ec6,
-    type: 3}
+  _speedMin: 10
+  _speedMax: 20
+  impactPrefab: {fileID: 0}
+  SpawnController: {fileID: 0}
 --- !u!82 &8039425050089565823
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5092,8 +5090,8 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!64 &466477310999225106
-MeshCollider:
+--- !u!136 &7873276825545174275
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5102,10 +5100,10 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  m_Radius: 25
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6610242936981584568
 GameObject:
   m_ObjectHideFlags: 0

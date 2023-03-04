@@ -11,9 +11,9 @@ public class ProjectileMove : MonoBehaviour
     private float _speed;
     [SerializeField] private GameObject impactPrefab;
     //private Rigidbody _rigidbody;
-    private Transform _startPoint;
-    private Transform _destination;
-    private Vector3 _direction;
+    private Vector3 _startPoint;
+    private Vector3 _destination;
+    //private Vector3 _direction;
     private int _midIdx = 0;
     private SpawnMeteor _spawnMeteor;
     private float _timer;
@@ -23,8 +23,8 @@ public class ProjectileMove : MonoBehaviour
     {
         SpawnController = GameObject.FindWithTag("Spawner");
         _spawnMeteor = SpawnController.GetComponent<SpawnMeteor>();
-        _startPoint = _spawnMeteor.startPoint.transform;
-        _destination = _spawnMeteor.middlePoints[0].transform;
+        _startPoint = _spawnMeteor.startPoint.position;
+        _destination = _spawnMeteor.middlePoints[0].position;
         //_direction = (_destination.transform.position - gameObject.transform.position).normalized;
         _timer = 0;
         _speed = UnityEngine.Random.Range(_speedMin, _speedMax);
@@ -66,9 +66,9 @@ public class ProjectileMove : MonoBehaviour
         //
         //transform.position += _direction * _speed * Time.deltaTime;
         _timer += 0.1f * _speed * Time.deltaTime;
-        transform.position = Vector3.Lerp(_startPoint.position, _destination.position, _timer);
+        transform.position = Vector3.Lerp(_startPoint, _destination, _timer);
 
-        if (Vector3.Distance(transform.position, _destination.position) < 5f)
+        if (Vector3.Distance(transform.position, _destination) < 5f)
         {
             // if Last Checkpoint
             if (_midIdx == _spawnMeteor.middlePoints.Length - 1)
@@ -77,11 +77,11 @@ public class ProjectileMove : MonoBehaviour
             } 
             else
             {
-                Debug.Log("check : " + _spawnMeteor.middlePoints[_midIdx].name);
+                Debug.Log("check : " + _spawnMeteor.middlePoints[_midIdx]);
                 _timer = 0;
-                _startPoint.position = _spawnMeteor.middlePoints[_midIdx].transform.position;
+                _startPoint = _spawnMeteor.middlePoints[_midIdx].position;
                 _midIdx++;
-                _destination.position = _spawnMeteor.middlePoints[_midIdx].transform.position;
+                _destination = _spawnMeteor.middlePoints[_midIdx].position;
                 //_direction = (_destination.position - gameObject.transform.position).normalized;
 
             }
@@ -94,19 +94,19 @@ public class ProjectileMove : MonoBehaviour
     
 
     // Play VFX & Play SFX 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    //_speed = 0;
+    private void OnCollisionEnter(Collision collision)
+    {
+        //_speed = 0;
 
-    //    ContactPoint contact = collision.contacts[0];
-    //    Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
-    //    Vector3 position = contact.point;
+        ContactPoint contact = collision.contacts[0];
+        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
+        Vector3 position = contact.point;
 
-    //    if (impactPrefab != null)
-    //    {
-    //        var impactVFX = Instantiate(impactPrefab, position, rotation) as GameObject;
-    //        Destroy(impactVFX, 3);
-    //    }
+        if (impactPrefab != null)
+        {
+            var impactVFX = Instantiate(impactPrefab, position, rotation) as GameObject;
+            Destroy(impactVFX, 1.5f);
+        }
 
-    //}
+    }
 }

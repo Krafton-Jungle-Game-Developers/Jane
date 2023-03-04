@@ -7,28 +7,26 @@ public class SpawnMeteor : MonoBehaviour
 {
     // Spawn Control 
     [SerializeField] private float _spawnRate = 5f;
-    [SerializeField] private int _maxObjInScene = 7;
-
-    // Array of Meteors to Control 
-
+    //[SerializeField] private int _maxObjInScene = 7;
 
     
     // Meteor Prefabs Control
     public GameObject[] objectPrefabs;
-    private int idxPrefabList = 0;
     public float destroyTime = 10.0f;
-    [SerializeField] private float _minSpeed = 10f;
-    [SerializeField] private float _maxSpeed = 20f;
+    [SerializeField] private float _minSpeed = 100f;
+    [SerializeField] private float _maxSpeed = 200f;
     
     //public GameObject meteorVFX;
-    public GameObject startPoint;
+    public Transform startPoint;
 
-    public GameObject[] middlePoints;
+    public Transform[] middlePoints;
+
+    
     
     void Start()
     {
         // Spawn objects at spawnrate 
-        InvokeRepeating("SpawnObject", 10f, _spawnRate);
+        InvokeRepeating("SpawnObject", 0f, _spawnRate);
     }
 
 
@@ -36,19 +34,16 @@ public class SpawnMeteor : MonoBehaviour
     {
         
         // Random Spawn from List 
-        //int idxPrefabList = UnityEngine.Random.Range (0, objectPrefabs.Length);
-        if (idxPrefabList == objectPrefabs.Length)
-        {
-            idxPrefabList = 0;
-        }
+        int idxPrefabList = UnityEngine.Random.Range (0, objectPrefabs.Length);
+
 
 
         // Instantiate Meteor
-        MeteorMove newMeteorCs = Instantiate(objectPrefabs[idxPrefabList], startPoint.transform.position, Quaternion.identity).GetComponent<MeteorMove>(); ;
-        newMeteorCs._speed = UnityEngine.Random.Range(_minSpeed, _maxSpeed);
-
-
-        idxPrefabList++;
+        GameObject newMeteor = Instantiate(objectPrefabs[idxPrefabList], startPoint.position, Quaternion.identity); 
+        //newMeteor.GetComponent<MeteorMove>()._speed = UnityEngine.Random.Range(_minSpeed, _maxSpeed);
+        
+        
+        //RotateTo(newMeteor, middlePoints[0].transform.position);
     }
 
 

@@ -4921,7 +4921,7 @@ GameObject:
   - component: {fileID: 4424844717588073903}
   - component: {fileID: 8476240238450105598}
   - component: {fileID: -2821850906034804559}
-  - component: {fileID: 5917183979028535151}
+  - component: {fileID: 3958092769496012914}
   - component: {fileID: 8039425050089565823}
   m_Layer: 0
   m_Name: Meteor01
@@ -4991,7 +4991,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   durability: 10
   destroyPrefab: {fileID: 0}
---- !u!114 &5917183979028535151
+--- !u!114 &3958092769496012914
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5003,12 +5003,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce9227e0aefe8074f8ab20a01e8abc94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speedMin: 5
-  _speedMax: 5
-  impactPrefab: {fileID: 8217473123363731195, guid: e4644045d39470a4bbb23231dd56fedd,
-    type: 3}
-  SpawnController: {fileID: 8989313935175702695, guid: a098fa6dce5f70e43be967bdf8bf2ec6,
-    type: 3}
+  _speedMin: 10
+  _speedMax: 20
+  impactPrefab: {fileID: 0}
+  SpawnController: {fileID: 0}
 --- !u!82 &8039425050089565823
 AudioSource:
   m_ObjectHideFlags: 0
