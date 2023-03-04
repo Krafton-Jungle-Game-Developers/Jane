@@ -40,9 +40,6 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField] private Vector3 TransformPoint;
     [SerializeField] private Vector3 InverseTransformPoint;
 
-
-    [SerializeField] private float cameraDistance;
-
     //Camera Booster Movement Variable
     private Booster booster;
     private float _shakeX = 0f;
@@ -50,11 +47,16 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField] private float _shakeMagnitude = 0.1f;
 
     //Camera Gimbal Movement Variable
+    [SerializeField] private float _gimbalRange = 0.1f;
     public SpaceshipController spaceshipController;
     public RectTransform cursorRectTransform;
     private Vector3 _screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f), _mouseDistance;
-    private float _gimbalX = 0f;
-    private float _gimbalY = 0f;
+    [SerializeField]private float _gimbalX = 0f;
+    [SerializeField]private float _gimbalY = 0f;
+    private Quaternion _targetQuaternion;
+    [SerializeField]private float _gimbalTargetZ;
+    [SerializeField] private Quaternion _gimbalRotationZ;
+    [SerializeField] private Quaternion _gimbalRotationX;
     [Range(0f, 20f)] public float gimbalX_Intensity;
     [Range(0f, 5f)] public float gimbalY_Intensity;
 
@@ -75,38 +77,29 @@ public class PlayerCameraController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
+
         CameraGimbalMovement();
         CameraControlMovement();
         CameraBoosterMovement();
 
         m_Camera.transform.position = InverseTransformPoint;
 
-        //TODO: Delete
-        //m_Camera.transform.position = new Vector3(_cameraX + _shakeX + _gimbalX, _cameraY + _shakeY + _gimbalY, _cameraZ);
-
-        //cameraRotationReal.x = m_Camera.transform.rotation.x - playerTransform.rotation.x;
-        //cameraRotationReal.y = m_Camera.transform.rotation.y - playerTransform.rotation.y;
-        //cameraRotationReal.z = m_Camera.transform.rotation.z - playerTransform.rotation.z;
-        //cameraRotationReal.w = m_Camera.transform.rotation.w - playerTransform.rotation.w;
-
-        //cameraPositionReal = m_Camera.transform.position - playerTransform.position;
-        //playerPositionNow = playerTransform.position;
-        //cameraPositionNow = m_Camera.transform.position;
     }
 
     private void CameraControlMovement()
     {
-        //TEMP: Check Camera Distance
-        cameraDistance = (m_Camera.transform.position - playerTransform.position).magnitude;
-
         //Camera Rotation Smooth(1)
-        //_rotationX = Mathf.Lerp(m_Camera.transform.rotation.x, playerTransform.rotation.x, Time.deltaTime * cameraRotationTension);
-        //_rotationY = Mathf.Lerp(m_Camera.transform.rotation.y, playerTransform.rotation.y, Time.deltaTime * cameraRotationTension);
-        //_rotationZ = Mathf.Lerp(m_Camera.transform.rotation.z, playerTransform.rotation.z, Time.deltaTime * cameraRotationTension);
-        //_rotationW = Mathf.Lerp(m_Camera.transform.rotation.w, playerTransform.rotation.w, Time.deltaTime * cameraRotationTension);
+        _rotationX = playerTransform.rotation.x;
+        _rotationY = playerTransform.rotation.y;
+        _rotationZ = playerTransform.rotation.z;
+        _rotationW = playerTransform.rotation.w;
+
+        _targetQuaternion = new Quaternion(_rotationX,_rotationY,_rotationZ,_rotationW);
+        //_targetQuaternion = Quaternion.AngleAxis(10, Vector3.forward) * _gimbalZ;
+
 
         //Camera Rotation Smooth(2)
-        m_Camera.transform.rotation = Quaternion.Slerp(m_Camera.transform.rotation, playerTransform.rotation, Time.deltaTime * cameraRotationTension);
+        m_Camera.transform.rotation = Quaternion.Slerp(m_Camera.transform.rotation, _targetQuaternion, Time.deltaTime * cameraRotationTension) * _gimbalRotationZ * _gimbalRotationX;
 
         //Camera Rotation Hard(1)
         //playerQuaternion = playerTransform.rotation;
@@ -153,24 +146,52 @@ public class PlayerCameraController : MonoBehaviour
 
         _mouseDistance = Vector3.ClampMagnitude(_mouseDistance, 1f);
 
-        Mathf.Clamp(_gimbalX, -20f, 20f);
-        Mathf.Clamp(_gimbalY, -10f, 5f);
+        _gimbalX = Mathf.Clamp(_gimbalX, -20f, 20f);
+        _gimbalY = Mathf.Clamp(_gimbalY, -10f, 5f);
 
+        //_gimbalRange == 0.1f
         //Gimbal Position X
-        if (_mouseDistance.x > 0.1f)
-            _gimbalX = Mathf.Lerp(_gimbalX, 4f * gimbalX_Intensity, Time.deltaTime * 0.5f);
-        else if (_mouseDistance.x < -0.1f)
-            _gimbalX = Mathf.Lerp(_gimbalX, -4f * gimbalX_Intensity, Time.deltaTime * 0.5f);
+        if (_mouseDistance.x > _gimbalRange)
+            _gimbalX = Mathf.Lerp(_gimbalX, 12f * _mouseDistance.x - _gimbalRange, Time.deltaTime * 1f);
+        else if (_mouseDistance.x < -_gimbalRange)
+            _gimbalX = Mathf.Lerp(_gimbalX, 12f * _mouseDistance.x + _gimbalRange, Time.deltaTime * 1f);
         else
             _gimbalX = Mathf.Lerp(_gimbalX, 0f, Time.deltaTime * 1f);
 
         //Gimbal Position Y
-        if (_mouseDistance.y > 0.1f)
-            _gimbalY = Mathf.Lerp(_gimbalY, 5f * gimbalY_Intensity, Time.deltaTime * 2f);
-        else if (_mouseDistance.y < -0.1f)
-            _gimbalY = Mathf.Lerp(_gimbalY, -5f * gimbalY_Intensity, Time.deltaTime * 2f);
+        if (_mouseDistance.y > _gimbalRange)
+            _gimbalY = Mathf.Lerp(_gimbalY, 5f * _mouseDistance.y - _gimbalRange, Time.deltaTime * 2f);
+        else if (_mouseDistance.y < -_gimbalRange)
+            _gimbalY = Mathf.Lerp(_gimbalY, 10f * _mouseDistance.y - _gimbalRange, Time.deltaTime * 2f);
         else
             _gimbalY = Mathf.Lerp(_gimbalY, 0f, Time.deltaTime * 2f);
+
+        //Gimbal Rotation Z
+        if (_gimbalX > 0f && _gimbalY > 0f)
+        {
+            _gimbalRotationZ = Quaternion.Slerp(_gimbalRotationZ, Quaternion.AngleAxis(0.05f * _gimbalX * _gimbalY, Vector3.forward), Time.deltaTime * 5f);
+            _gimbalRotationX = Quaternion.Slerp(_gimbalRotationX, Quaternion.AngleAxis(0.025f * _gimbalX * _gimbalY, Vector3.right), 0.02f);
+        }
+        else if (_gimbalX > 0f && _gimbalY < -0f)
+        {
+            _gimbalRotationZ = Quaternion.Slerp(_gimbalRotationZ, Quaternion.AngleAxis(0.05f * _gimbalX * _gimbalY, Vector3.forward), Time.deltaTime * 5f);
+            _gimbalRotationX = Quaternion.Slerp(_gimbalRotationX, Quaternion.AngleAxis(-0.025f * _gimbalX * _gimbalY, Vector3.right), 0.02f);
+        }
+        else if (_gimbalX < -0f && _gimbalY < -0f)
+        {
+            _gimbalRotationZ = Quaternion.Slerp(_gimbalRotationZ, Quaternion.AngleAxis(0.05f * _gimbalX * _gimbalY, Vector3.forward), Time.deltaTime * 5f);
+            _gimbalRotationX = Quaternion.Slerp(_gimbalRotationX, Quaternion.AngleAxis(-0.025f * _gimbalX * _gimbalY, Vector3.right), 0.02f);
+        }
+        else if (_gimbalX < -0f && _gimbalY > 0f)
+        {
+            _gimbalRotationZ = Quaternion.Slerp(_gimbalRotationZ, Quaternion.AngleAxis(0.05f * _gimbalX * _gimbalY, Vector3.forward), Time.deltaTime * 5f);
+            _gimbalRotationX = Quaternion.Slerp(_gimbalRotationX, Quaternion.AngleAxis(0.025f * _gimbalX * _gimbalY, Vector3.right), 0.02f);
+        }
+        else
+        {
+            _gimbalRotationZ = Quaternion.Slerp(_gimbalRotationZ, Quaternion.AngleAxis(0f, Vector3.forward), Time.deltaTime * 5f);
+            _gimbalRotationX = Quaternion.Slerp(_gimbalRotationX, Quaternion.AngleAxis(0f, Vector3.right), 0.02f);
+        }
 
 
     }
