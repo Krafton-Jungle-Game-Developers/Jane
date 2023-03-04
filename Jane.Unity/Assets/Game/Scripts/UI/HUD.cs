@@ -4,7 +4,6 @@ public class HUD : MonoBehaviour
 {
     public RectTransform cursorRectTransform;
     public RectTransform lineRectTransform;
-    public Canvas canvas;
     public float radius;
 
     private Vector3 screenCenter;
