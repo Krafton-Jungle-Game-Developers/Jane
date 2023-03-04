@@ -152,6 +152,7 @@ public class GameHubManager : MonoBehaviour, IGameHubReceiver
 
         networkPlayer = playerGameObject.GetComponent<NetworkPlayer>();
         networkPlayer.Initialize(joinedPlayer);
+        RankManager.instance.GetPlayers(networkPlayer);
 
         players.TryAdd(joinedPlayer.UniqueId, networkPlayer);
     }

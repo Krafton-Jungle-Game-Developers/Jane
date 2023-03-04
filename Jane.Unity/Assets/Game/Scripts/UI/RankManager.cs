@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,32 +7,40 @@ using UnityEngine.UI;
 
 public class RankManager : MonoBehaviour
 {
-    public Text[] txtStandings;
-    Dictionary<string, int> players;
+    public static RankManager instance;
+    public StandingsGenerator standingsGenerator;
 
+    private Dictionary<NetworkPlayer, string> players;
+
+    private void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
-        players = new Dictionary<string, int>();
+        players = new Dictionary<NetworkPlayer, string>();
     }
 
     void Update()
     {
-        
+        SetPlayers();
     }
 
-    void GetPlayers(int playerID)
+    public void GetPlayers(NetworkPlayer playerID)
     {
         // Get players through playerID and add them to List
-        players.Add("playerName", playerID);
+        players.Add(playerID, playerID.UserId);
+        standingsGenerator.AddPlayerStanding();
+        Debug.Log($"current player dictionary: {players}");
     }
 
     void SetPlayers()
     {
-        IOrderedEnumerable<KeyValuePair<string, int>> sortedPlayer = players.OrderBy(x => x.Value).OrderByDescending(x => x.Value);
+        IOrderedEnumerable<KeyValuePair<NetworkPlayer, string>> sortedPlayer = players.OrderBy(x => x.Key.activeCheckpointIndex).OrderByDescending(x => x.Key.activeCheckpointIndex);
         int i = 0;
-        foreach (KeyValuePair<string, int> item in sortedPlayer)
+        foreach (KeyValuePair<NetworkPlayer, string> item in sortedPlayer)
         {
-            txtStandings[i].text = (i + 1) + " . " + item.Value;
+            standingsGenerator.standingsBox[i].GetComponent<Text>().text = (i + 1) + " . " + item.Value;
             i++;
         }
     }

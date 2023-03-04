@@ -25,7 +25,7 @@ public class TargetBoxGenerator : MonoBehaviour
         }
         for (int i = 0; i < targetList.Count; i++)
         {
-            onScreenObjects.Add(Instantiate(targetCanvasPrefab.GetComponentInChildren<HUDTargetBox>().gameObject));
+            onScreenObjects.Add(Instantiate(targetCanvasPrefab));
             onScreenObjects[i].transform.parent = transform;
         }
         SetNextTargetBox(0);
@@ -51,6 +51,7 @@ public class TargetBoxGenerator : MonoBehaviour
         }
         else
         {
+
         }
     }
 
