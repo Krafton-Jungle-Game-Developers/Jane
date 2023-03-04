@@ -1,26 +1,25 @@
-using Cysharp.Threading.Tasks.Linq;
-using Cysharp.Threading.Tasks;
-using Grpc.Core;
-using MagicOnion.Client;
-using MagicOnion;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
+using System.Collections.Generic;
+
+using UnityEngine;
+
+using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
+
+using MagicOnion;
+using MagicOnion.Client;
+
 using Jane.Unity.ServerShared.Hubs;
 using Jane.Unity.ServerShared.MemoryPackObjects;
-using UnityEngine;
 
 public class GameHubManager : MonoBehaviour, IGameHubReceiver
 {
-    private Dictionary<Ulid, NetworkPlayer> players = new(4);
-    private readonly CancellationTokenSource _shutdownCts = new();
-    private ChannelBase _channel;
-    private IGameHub gameHub;
-    
-    private Ulid myUniqueId;
-    private Ulid gameId;
+    private readonly CancellationTokenSource shutdownCts = new();
+    private GrpcChannelManager channelManager;
+    private IGameHub? gameHub;
 
+    private Dictionary<Ulid, NetworkPlayer> players = new(4);
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject otherPrefab;
     private NetworkPlayer _self;
@@ -28,69 +27,65 @@ public class GameHubManager : MonoBehaviour, IGameHubReceiver
     [SerializeField] private SpaceshipInputManager inputManager;
     [SerializeField] private SpaceshipCameraController cameraController;
 
-
-    private void Awake()
+    private void OnEnable()
     {
-        DontDestroyOnLoad(this);
-    }
-
-    private async UniTaskVoid Start()
-    {
-        await InitializeClient(_shutdownCts.Token);
-        Debug.Log("Finished Init");
-        await UniTaskAsyncEnumerable.IntervalFrame(1)
-                                    .Where(_ => _self is not null && gameHub is not null)
-                                    .ForEachAwaitAsync(async _ =>
-                                    {
-                                        await gameHub.MoveAsync(new()
-                                        {
-                                            Id = myUniqueId,
-                                            Position = _self.transform.position,
-                                            Rotation = _self.transform.rotation
-                                        });
-                                    }, _shutdownCts.Token);
+        channelManager = FindObjectOfType<GrpcChannelManager>();
     }
 
     private async UniTaskVoid OnDestroy()
     {
-        _shutdownCts.Cancel();
+        shutdownCts.Cancel();
 
         if (gameHub is not null)
         {
             await gameHub.LeaveAsync().AsTask().AsUniTask();
             await gameHub.DisposeAsync().AsUniTask();
         }
-        if (_channel is not null) { await _channel.ShutdownAsync().AsUniTask(); }
     }
 
-    public async UniTask InitializeClient(CancellationToken token)
+    public async UniTask InitializeAsync()
     {
-        _channel = GrpcChannelx.ForTarget(new("jane.jungle-gamedev.com", 5001, false));
-        myUniqueId = Ulid.NewUlid();
-        while (!_shutdownCts.IsCancellationRequested)
+        while (!shutdownCts.IsCancellationRequested)
         {
             try
             {
-                Debug.Log("Connecting to the server...");
-                gameHub = await StreamingHubClient.ConnectAsync<IGameHub, IGameHubReceiver>(_channel, this, cancellationToken: token).AsUniTask();
-                
-                Debug.Log("Connection established!");
+                Debug.Log("Connecting Server from GameHubManager...");
+                gameHub = await StreamingHubClient.ConnectAsync<IGameHub, IGameHubReceiver>(channelManager.GRPCChannel,
+                                                                                    this,
+                                                                                            cancellationToken: shutdownCts.Token).AsUniTask();
+                Debug.Log("GameHub connection established!");
                 break;
             }
             catch (Exception e) { Debug.LogError(e); }
 
             Debug.Log($"Failed to connect to the server. Retrying after 5 seconds");
-            await UniTask.Delay(TimeSpan.FromSeconds(5), cancellationToken: token);
+            await UniTask.Delay(TimeSpan.FromSeconds(5), cancellationToken: shutdownCts.Token);
         }
+
         _self = await ConnectAsync();
+
+        // TODO: 이동 가능 상태 세분화
+        // TODO: Lag Inspection
+        await UniTaskAsyncEnumerable.IntervalFrame(1)
+            .Where(_ => _self is not null && gameHub is not null)
+            .ForEachAwaitAsync(async _ =>
+            {
+                await gameHub.MoveAsync(new()
+                {
+                    Id = _self.UniqueId,
+                    Position = _self.transform.position,
+                    Rotation = _self.transform.rotation
+                });
+            }, shutdownCts.Token);
     }
 
     public async UniTask<NetworkPlayer> ConnectAsync()
     {
         GameJoinRequest request = new()
         {
+            GameId = GameInfo.GameId,
             UserId = UserInfo.UserId,
-            UniqueId = myUniqueId,
+            UniqueId = UserInfo.UniqueId,
             InitialPosition = Vector3.zero,
             InitialRotation = Quaternion.identity
         };
@@ -105,19 +100,18 @@ public class GameHubManager : MonoBehaviour, IGameHubReceiver
             Debug.Log(e);
             throw;
         }
-
-        gameId = response.GameId;
+        
         GamePlayerData[] roomPlayers = response.Players;
 
         foreach (GamePlayerData player in roomPlayers)
         {
             Debug.Log($"Player:{player.UserId}, UID:{player.UniqueId}");
-            if (player.UniqueId.Equals(myUniqueId)) { continue; }
+            if (player.UniqueId.Equals(UserInfo.UniqueId)) { continue; }
 
             OnJoin(player);
         }
 
-        return players[myUniqueId];
+        return players[UserInfo.UniqueId];
     }
 
     public void OnJoin(GamePlayerData joinedPlayer)
@@ -129,7 +123,7 @@ public class GameHubManager : MonoBehaviour, IGameHubReceiver
         GameObject playerGameObject;
         NetworkPlayer networkPlayer;
 
-        if (joinedPlayer.UniqueId.Equals(myUniqueId))
+        if (joinedPlayer.UniqueId.Equals(UserInfo.UniqueId))
         {
             playerGameObject = Instantiate(playerPrefab, joinedPlayer.Position, joinedPlayer.Rotation);
             cameraController.CurrentViewTarget = playerGameObject.transform.Find("Camera Target");

@@ -10,39 +10,41 @@ namespace Jane.Server.Hubs
         private IGroup? matchMakingLobby;
         private MatchMakingLobbyUser self;
         private IInMemoryStorage<MatchMakingLobbyUser>? storage;
-        private bool isEnrolled;
+        private bool isEnrollSuccessful;
         private bool isAllPlayersReady;
-        private Ulid gameId;
+        private Ulid matchId;
+        private Ulid matchedGameId;
 
-        public async ValueTask<MatchMakingLobbyUser[]?> EnrollAsync(MatchMakingEnrollRequest request)
+        public async ValueTask<MatchMakingEnrollResponse> EnrollAsync(MatchMakingEnrollRequest request)
         {
-            self = new MatchMakingLobbyUser() { UserId = request.UserId, UniqueId = request.UniqueId };
-            (isEnrolled, matchMakingLobby, storage) = await Group.TryAddAsync("MatchMakingLobby", 4, true, self);
-
-            if (isEnrolled)
-            {
-                BroadcastExceptSelf(matchMakingLobby).OnEnroll(self);
-                return storage.AllValues.ToArray();
-            }
+            self = new () { UserId = request.UserId, UniqueId = request.UniqueId };
             
-            return null;
+            (isEnrollSuccessful, matchMakingLobby, storage) = await Group.TryAddAsync("MatchMakingLobby", 4, true, self);
+
+            if (isEnrollSuccessful is false) { return new () { MatchId = Ulid.Empty, LobbyUsers = null }; }
+
+            BroadcastExceptSelf(matchMakingLobby).OnEnroll(self);
+            MatchMakingEnrollResponse response = new () { MatchId = Ulid.MinValue, LobbyUsers = storage.AllValues.ToArray() };
+            return response;
         }
 
         // TODO: 2명 이상? 
-        public async ValueTask ChangeReadyStateAsync(bool isReady)
+        public ValueTask ChangeReadyStateAsync(bool isReady)
         {
-            if (isAllPlayersReady) { return; }
+            if (isAllPlayersReady) { return CompletedTask; }
+
             self.IsReady = isReady;
-            Broadcast(matchMakingLobby).OnPlayerReadyStateChanged(self.UniqueId, isReady);
-
             isAllPlayersReady = storage.AllValues.All(user => user.IsReady);
-
+            Broadcast(matchMakingLobby).OnPlayerReadyStateChanged(self.UniqueId, isReady);
+            
             if (isAllPlayersReady)
             {
-                gameId = Ulid.NewUlid();
-                MatchMakingCompleteResponse response = new() { GameId = gameId };
+                matchedGameId = Ulid.NewUlid();
+                MatchMakingCompleteResponse response = new() { GameId = matchedGameId };
                 Broadcast(matchMakingLobby).OnMatchMakingComplete(response);
             }
+
+            return CompletedTask;
         }
         
         public async ValueTask LeaveAsync()
