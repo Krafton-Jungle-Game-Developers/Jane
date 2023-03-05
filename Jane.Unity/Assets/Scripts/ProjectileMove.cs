@@ -58,6 +58,9 @@ public class ProjectileMove : MonoBehaviour
 
         //}
 
+        // rotate 50degree per second 
+        transform.Rotate (120 * Time.deltaTime, 0, 360 * Time.deltaTime);
+
         
     }
 
@@ -68,7 +71,7 @@ public class ProjectileMove : MonoBehaviour
         _timer += 0.1f * _speed * Time.deltaTime;
         transform.position = Vector3.Lerp(_startPoint, _destination, _timer);
 
-        if (Vector3.Distance(transform.position, _destination) < 5f)
+        if (Vector3.Distance(transform.position, _destination) < 1f)
         {
             // if Last Checkpoint
             if (_midIdx == _spawnMeteor.middlePoints.Length - 1)
@@ -77,7 +80,7 @@ public class ProjectileMove : MonoBehaviour
             } 
             else
             {
-                Debug.Log("check : " + _spawnMeteor.middlePoints[_midIdx]);
+                //Debug.Log("check : " + _spawnMeteor.middlePoints[_midIdx]);
                 _timer = 0;
                 _startPoint = _spawnMeteor.middlePoints[_midIdx].position;
                 _midIdx++;
@@ -97,6 +100,7 @@ public class ProjectileMove : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //_speed = 0;
+        //Debug.Log("collision" + collision.gameObject.name);
 
         ContactPoint contact = collision.contacts[0];
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
@@ -105,7 +109,7 @@ public class ProjectileMove : MonoBehaviour
         if (impactPrefab != null)
         {
             var impactVFX = Instantiate(impactPrefab, position, rotation) as GameObject;
-            Destroy(impactVFX, 1.5f);
+            Destroy(impactVFX, 1f);
         }
 
     }

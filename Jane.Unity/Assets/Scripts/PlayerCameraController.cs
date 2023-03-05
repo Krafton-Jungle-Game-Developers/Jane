@@ -21,18 +21,11 @@ public class PlayerCameraController : MonoBehaviour
     private Vector3 _playerRight;
 
     [Space]
-    //Inspector Edit
     [SerializeField] private Vector3 cameraOffset;
     [SerializeField] private Quaternion cameraRotationOffset;
     [SerializeField] private float cameraPositionTension = 10;
     [SerializeField] private float cameraRotationTension = 10;
-
-    //TEMP: Show Inspector
-    //[SerializeField] private Quaternion cameraRotationReal;
-    //[SerializeField] private Vector3 cameraPositionReal;
-    //[SerializeField] private Vector3 playerPositionNow;
-    //[SerializeField] private Vector3 cameraPositionNow;
-
+    
     private float _cameraX;
     private float _cameraY;
     private float _cameraZ;
@@ -73,17 +66,14 @@ public class PlayerCameraController : MonoBehaviour
         //CameraBoosterMovement
         booster = GameObject.FindGameObjectWithTag("Player").GetComponent<Booster>();
     }
-
-    // Update is called once per frame
+    
     void LateUpdate()
     {
-
         CameraGimbalMovement();
         CameraControlMovement();
         CameraBoosterMovement();
 
         m_Camera.transform.position = InverseTransformPoint;
-
     }
 
     private void CameraControlMovement()
@@ -192,7 +182,5 @@ public class PlayerCameraController : MonoBehaviour
             _gimbalRotationZ = Quaternion.Slerp(_gimbalRotationZ, Quaternion.AngleAxis(0f, Vector3.forward), Time.deltaTime * 5f);
             _gimbalRotationX = Quaternion.Slerp(_gimbalRotationX, Quaternion.AngleAxis(0f, Vector3.right), 0.02f);
         }
-
-
     }
 }

@@ -1,32 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
+using UnityEngine.UI;
 
 public class TargetBoxGenerator : MonoBehaviour
 {
     public Camera mainCam;
     public CheckPoints checkPoints;
-    public List<GameObject> targetList = new List<GameObject>();
-    public List<GameObject> onScreenObjects = new List<GameObject>();
-    public List<GameObject> offScreenObjects = new List<GameObject>();
+    public List<GameObject> checkpointList = new List<GameObject>();
+    public List<GameObject> onScreenCheckpoint = new List<GameObject>();
+    public List<GameObject> enemyList = new List<GameObject>();
+    public List<GameObject> onScreenEnemy = new List<GameObject>();
     public GameObject targetCanvasPrefab;
 
-    [SerializeField]
-    private Vector2 minSize = new Vector2(100, 100);
-    [SerializeField]
-    private Vector2 sizeMargin = new Vector2(-50, -50);
+    [SerializeField] private Vector2 minSize = new Vector2(100, 100);
+    [SerializeField] private Vector2 sizeMargin = new Vector2(-50, -50);
 
     void Start()
     {
         foreach (GameObject checkPoint in checkPoints.checkPointArr)
         {
-            targetList.Add(checkPoint);
+            checkpointList.Add(checkPoint);
         }
-        for (int i = 0; i < targetList.Count; i++)
+        for (int i = 0; i < checkpointList.Count; i++)
         {
-            onScreenObjects.Add(Instantiate(targetCanvasPrefab.GetComponentInChildren<HUDTargetBox>().gameObject));
-            onScreenObjects[i].transform.parent = transform;
+            onScreenCheckpoint.Add(Instantiate(targetCanvasPrefab));
+            onScreenCheckpoint[i].transform.parent = transform;
         }
         SetNextTargetBox(0);
     }
@@ -39,24 +38,24 @@ public class TargetBoxGenerator : MonoBehaviour
     private void UpdateTargetBox()
     {
         int i = checkPoints.idx;
-        bool isInView = targetList[i].GetComponent<Renderer>().isVisible;
-
-        if (isInView)
+        bool isInView = checkpointList[i].GetComponent<Renderer>().isVisible;
+        onScreenCheckpoint[i].GetComponent<CanvasGroup>().alpha = isInView ? 1 : 0;
+/*        offScreenObjects[i].GetComponent<CanvasGroup>().alpha = isInView ? 0 : 1;
+*/
+        if (isInView && !checkPoints.goalActive)
         {
-            Rect targetRect = GetBoundsInScreenSpace(targetList[i], mainCam);
-            RectTransform targetRectTransform = onScreenObjects[i].gameObject.GetComponent<RectTransform>();
+            Rect targetRect = GetBoundsInScreenSpace(checkpointList[i], mainCam);
+            RectTransform targetRectTransform = onScreenCheckpoint[i].gameObject.GetComponent<RectTransform>();
 
             targetRectTransform.position = new Vector2(targetRect.center.x, targetRect.center.y);
-            targetRectTransform.sizeDelta = new Vector2(Mathf.Max(targetRect.width / 2, minSize.x), Mathf.Max(targetRect.height / 2, minSize.y)) + sizeMargin;
-        }
-        else
-        {
+            targetRectTransform.sizeDelta = new Vector2(Mathf.Max(targetRect.width, minSize.x), Mathf.Max(targetRect.height, minSize.y)) + sizeMargin;
+            onScreenCheckpoint[i].SendMessage("UpdateText", checkpointList[i].transform.position);
         }
     }
 
     public void ResetTargetBox()
     {
-        foreach(GameObject obj in onScreenObjects)
+        foreach(GameObject obj in onScreenCheckpoint)
         {
             obj.SetActive(false);
         }
@@ -64,7 +63,7 @@ public class TargetBoxGenerator : MonoBehaviour
     public void SetNextTargetBox(int i)
     {
         ResetTargetBox();
-        onScreenObjects[i].SetActive(true);
+        onScreenCheckpoint[i].SetActive(true);
     }
 
     public static Rect GetBoundsInScreenSpace(GameObject targetObj, Camera camera)

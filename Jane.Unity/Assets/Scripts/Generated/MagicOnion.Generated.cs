@@ -126,9 +126,7 @@ namespace MagicOnion
     {
         public static void RegisterFormatters()
         {
-            global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.ArrayFormatter<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser>());
             global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MagicOnion.Serialization.MemoryPack.DynamicArgumentTupleFormatter<global::System.Collections.Generic.List<global::System.Int32>, global::System.Collections.Generic.Dictionary<global::System.Int32, global::System.String>>());
-            global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MagicOnion.Serialization.MemoryPack.DynamicArgumentTupleFormatter<global::System.Ulid, global::System.Boolean>());
             global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.DictionaryFormatter<global::System.Int32, global::System.String>());
             global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.ListFormatter<global::System.Int32>());
         }
@@ -433,10 +431,10 @@ namespace Jane.Unity.ServerShared.Hubs
             DuplexStreamingAsyncMethod = new global::Grpc.Core.Method<global::System.Byte[], global::System.Byte[]>(global::Grpc.Core.MethodType.DuplexStreaming, "IMatchMakingHub", "Connect", marshaller, marshaller);
         }
         
-        public global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser[]> EnrollAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollRequest request)
-            => new global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser[]>(base.WriteMessageWithResponseAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollRequest, global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser[]>(-1742239889, request));
-        public global::System.Threading.Tasks.ValueTask ChangeReadyStateAsync(global::System.Boolean isReady)
-            => new global::System.Threading.Tasks.ValueTask(base.WriteMessageWithResponseAsync<global::System.Boolean, global::MessagePack.Nil>(1585484299, isReady));
+        public global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollResponse> EnrollAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollRequest request)
+            => new global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollResponse>(base.WriteMessageWithResponseAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollRequest, global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollResponse>(-1742239889, request));
+        public global::System.Threading.Tasks.ValueTask ChangeReadyStateAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingReadyRequest request)
+            => new global::System.Threading.Tasks.ValueTask(base.WriteMessageWithResponseAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingReadyRequest, global::MessagePack.Nil>(1585484299, request));
         public global::System.Threading.Tasks.ValueTask LeaveAsync()
             => new global::System.Threading.Tasks.ValueTask(base.WriteMessageWithResponseAsync<global::MessagePack.Nil, global::MessagePack.Nil>(1368362116, global::MessagePack.Nil.Default));
         
@@ -455,10 +453,10 @@ namespace Jane.Unity.ServerShared.Hubs
             public global::System.Threading.Tasks.Task DisposeAsync() => throw new global::System.NotSupportedException();
             public global::System.Threading.Tasks.Task WaitForDisconnect() => throw new global::System.NotSupportedException();
         
-            public global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser[]> EnrollAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollRequest request)
-                => new global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser[]>(parent.WriteMessageFireAndForgetAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollRequest, global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser[]>(-1742239889, request));
-            public global::System.Threading.Tasks.ValueTask ChangeReadyStateAsync(global::System.Boolean isReady)
-                => new global::System.Threading.Tasks.ValueTask(parent.WriteMessageFireAndForgetAsync<global::System.Boolean, global::MessagePack.Nil>(1585484299, isReady));
+            public global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollResponse> EnrollAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollRequest request)
+                => new global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollResponse>(parent.WriteMessageFireAndForgetAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollRequest, global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollResponse>(-1742239889, request));
+            public global::System.Threading.Tasks.ValueTask ChangeReadyStateAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingReadyRequest request)
+                => new global::System.Threading.Tasks.ValueTask(parent.WriteMessageFireAndForgetAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingReadyRequest, global::MessagePack.Nil>(1585484299, request));
             public global::System.Threading.Tasks.ValueTask LeaveAsync()
                 => new global::System.Threading.Tasks.ValueTask(parent.WriteMessageFireAndForgetAsync<global::MessagePack.Nil, global::MessagePack.Nil>(1368362116, global::MessagePack.Nil.Default));
             
@@ -480,10 +478,10 @@ namespace Jane.Unity.ServerShared.Hubs
                         receiver.OnLeave(value);
                     }
                     break;
-                case 794938743: // Void OnPlayerReadyStateChanged(global::System.Ulid uniqueId, global::System.Boolean isReady)
+                case 794938743: // Void OnPlayerReadyStateChanged(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingReadyResponse response)
                     {
-                        var value = base.Deserialize<global::MagicOnion.DynamicArgumentTuple<global::System.Ulid, global::System.Boolean>>(data);
-                        receiver.OnPlayerReadyStateChanged(value.Item1, value.Item2);
+                        var value = base.Deserialize<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingReadyResponse>(data);
+                        receiver.OnPlayerReadyStateChanged(value);
                     }
                     break;
                 case 1489410691: // Void OnMatchMakingComplete(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingCompleteResponse response)
@@ -499,10 +497,10 @@ namespace Jane.Unity.ServerShared.Hubs
         {
             switch (methodId)
             {
-                case -1742239889: // ValueTask<MatchMakingLobbyUser[]> EnrollAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollRequest request)
-                    base.SetResultForResponse<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingLobbyUser[]>(taskCompletionSource, data);
+                case -1742239889: // ValueTask<MatchMakingEnrollResponse> EnrollAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollRequest request)
+                    base.SetResultForResponse<global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingEnrollResponse>(taskCompletionSource, data);
                     break;
-                case 1585484299: // ValueTask ChangeReadyStateAsync(global::System.Boolean isReady)
+                case 1585484299: // ValueTask ChangeReadyStateAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MatchMakingReadyRequest request)
                     base.SetResultForResponse<global::MessagePack.Nil>(taskCompletionSource, data);
                     break;
                 case 1368362116: // ValueTask LeaveAsync()
