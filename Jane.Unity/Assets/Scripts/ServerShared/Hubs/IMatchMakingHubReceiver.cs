@@ -7,7 +7,7 @@ namespace Jane.Unity.ServerShared.Hubs
     {
         void OnEnroll(MatchMakingLobbyUser user);
         void OnLeave(MatchMakingLobbyUser leftUser);
-        void OnPlayerReadyStateChanged(Ulid uniqueId, bool isReady);
+        void OnPlayerReadyStateChanged(MatchMakingReadyResponse response);
         void OnMatchMakingComplete(MatchMakingCompleteResponse response);
     }
 }

@@ -123,7 +123,7 @@ namespace Jane.Unity.Server
         {
             if (joinedPlayer is null) { throw new ArgumentNullException(); }
 
-            Debug.Log($"Player {joinedPlayer.UserId} has joined the room.");
+            Debug.Log($"Player {joinedPlayer.UserId}: {joinedPlayer.UniqueId} has joined the room.");
 
             GameObject playerGameObject;
             NetworkPlayer networkPlayer;
@@ -145,8 +145,9 @@ namespace Jane.Unity.Server
 
             playerGameObject.name = joinedPlayer.UserId;
 
-            networkPlayer = playerGameObject.GetComponent<NetworkPlayer>();
-            networkPlayer.Initialize(joinedPlayer);
+        networkPlayer = playerGameObject.GetComponent<NetworkPlayer>();
+        networkPlayer.Initialize(joinedPlayer);
+        RankManager.instance.GetPlayers(networkPlayer);
 
             players.TryAdd(joinedPlayer.UniqueId, networkPlayer);
         }
@@ -170,5 +171,4 @@ namespace Jane.Unity.Server
             }
         }
     }
-
 }

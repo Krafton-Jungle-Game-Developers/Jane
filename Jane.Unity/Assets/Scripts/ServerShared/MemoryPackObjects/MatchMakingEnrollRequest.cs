@@ -3,7 +3,7 @@ using MemoryPack;
 
 namespace Jane.Unity.ServerShared.MemoryPackObjects
 {
-    [MemoryPackable()]
+    [MemoryPackable]
     public partial struct MatchMakingEnrollRequest
     {
         public string UserId { get; set; }

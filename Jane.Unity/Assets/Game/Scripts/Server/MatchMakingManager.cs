@@ -18,12 +18,10 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
 {
     private readonly CancellationTokenSource shutdownCts = new();
     private IMatchMakingHub matchMakingHub;
-
-    private bool isJoin;
-    private bool isSelfDisconnected;
-
+    
     private GrpcChannelManager channelManager;
     private SceneManager sceneManager;
+
     [SerializeField] private TMP_Text profileText;
     [SerializeField] private ButtonManager lobbyPlayButton;
     [SerializeField] private ButtonManager lobbyStopSearchButton;
@@ -32,6 +30,8 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
     [SerializeField] private LobbyPlayer[] lobbyUserUIPanels;
     [SerializeField] private HotkeyEvent readyInputEvent;
     [SerializeField] private HotkeyEvent unReadyInputEvent;
+    [SerializeField] private GameObject readyObject;
+    [SerializeField] private GameObject unreadyObject;
 
     private void OnEnable()
     {
@@ -60,7 +60,7 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
 
         if (matchMakingHub is not null)
         {
-            await matchMakingHub.LeaveAsync().AsTask().AsUniTask();
+            if (GameInfo.GameId.Equals(Ulid.Empty)) await matchMakingHub.LeaveAsync().AsTask().AsUniTask();
             await matchMakingHub.DisposeAsync().AsUniTask();
         }
     }
@@ -102,29 +102,35 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
         }
         catch (Exception e)
         {
-            Debug.Log(e);
+            Debug.LogError(e);
             throw;
         }
-
+        
         for (int i = 0; i < lobbyUsers.Count; i++)
         {
             lobbyUserUIPanels[i].SetPlayerName(lobbyUsers[i].UserId);
             lobbyUserUIPanels[i].SetAdditionalText(lobbyUsers[i].UniqueId.ToString());
-            lobbyUserUIPanels[i].SetState(LobbyPlayer.ItemState.NotReady);
+            lobbyUserUIPanels[i].SetState(lobbyUsers[i].IsReady ? LobbyPlayer.ItemState.Ready : LobbyPlayer.ItemState.NotReady);
         }
+
+        readyObject.SetActive(true);
+        unreadyObject.SetActive(false);
     }
 
     private async UniTask ChangeReadyStateAsync(bool isReady)
     {
+        MatchMakingReadyRequest request = new() { UniqueId = UserInfo.UniqueId, IsReady = isReady };
         try
         {
-            await matchMakingHub.ChangeReadyStateAsync(isReady);
+            await matchMakingHub.ChangeReadyStateAsync(request);
         }
         catch (Exception e)
         {
-            Debug.Log(e);
-            throw;
+            Debug.LogError(e);
         }
+
+        readyObject.SetActive(!isReady);
+        unreadyObject.SetActive(isReady);
     }
 
     // OnLeave will confirm server side Leave
@@ -136,9 +142,11 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
         }
         catch (Exception e)
         {
-            Debug.Log(e);
-            throw;
+            Debug.LogError(e);
         }
+
+        readyObject.SetActive(false);
+        unreadyObject.SetActive(false);
     }
     
     public void OnEnroll(MatchMakingLobbyUser user)
@@ -150,7 +158,7 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
 
         emptySlot?.SetPlayerName(user.UserId);
         emptySlot?.SetAdditionalText(user.UniqueId.ToString());
-        emptySlot?.SetState(LobbyPlayer.ItemState.NotReady);
+        emptySlot?.SetState(user.IsReady ? LobbyPlayer.ItemState.Ready : LobbyPlayer.ItemState.NotReady);
     }
 
     public void OnLeave(MatchMakingLobbyUser leftUser)
@@ -177,18 +185,31 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
         }
     }
 
-    public void OnPlayerReadyStateChanged(Ulid uniqueId, bool isReady)
+    public void OnPlayerReadyStateChanged(MatchMakingReadyResponse response)
     {
-        var lobbyUser = lobbyUsers.FirstOrDefault(user => user.UniqueId.Equals(uniqueId));
-        if (lobbyUser is not null) { lobbyUser.IsReady = isReady; }
+        Debug.Log($"Received ULID: {response.UniqueId}, IsReady: {response.IsReady}");
+        var lobbyUser = lobbyUsers.FirstOrDefault(user => user.UniqueId.Equals(response.UniqueId));
+        if (lobbyUser is not null) { lobbyUser.IsReady = response.IsReady; }
 
-        var lobbyUserUI = lobbyUserUIPanels.FirstOrDefault(user => user.additionalText.Equals(uniqueId.ToString()));
-        if (lobbyUserUI is not null) { lobbyUserUI.SetState(isReady ? LobbyPlayer.ItemState.Ready : LobbyPlayer.ItemState.NotReady); }
+        var lobbyUserUI = lobbyUserUIPanels.FirstOrDefault(user => user.additionalText.Equals(response.UniqueId.ToString()));
+        if (lobbyUserUI is not null) { lobbyUserUI.SetState(response.IsReady ? LobbyPlayer.ItemState.Ready : LobbyPlayer.ItemState.NotReady); }
     }
 
     public void OnMatchMakingComplete(MatchMakingCompleteResponse response)
     {
+        readyObject.SetActive(false);
+        unreadyObject.SetActive(false);
+
         Debug.Log($"MatchMake Complete! GameID:{response.GameId}");
+
+        lobbyUsers = null;
+        foreach (var panel in lobbyUserUIPanels)
+        {
+            panel.SetPlayerName(string.Empty);
+            panel.SetAdditionalText(string.Empty);
+            panel.SetState(LobbyPlayer.ItemState.Empty);
+        }
+
         GameInfo.GameId = response.GameId;
         GameInfo.PlayerCount = response.PlayerCount;
         // TODO: Fade
