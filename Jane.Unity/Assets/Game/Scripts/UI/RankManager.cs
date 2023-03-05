@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,11 +37,14 @@ public class RankManager : MonoBehaviour
 
     void SetPlayers()
     {
-        IOrderedEnumerable<KeyValuePair<NetworkPlayer, string>> sortedPlayer = players.OrderBy(x => x.Key.activeCheckpointIndex).OrderByDescending(x => x.Key.activeCheckpointIndex);
+        IOrderedEnumerable<KeyValuePair<NetworkPlayer, string>> sortedPlayer = players.OrderBy(x => x.Key.activeCheckpointIndex)
+                                                                                      .OrderByDescending(x => x.Key.activeCheckpointIndex)
+                                                                                      .ThenBy(x => x.Key.distanceToCheckpoint)
+                                                                                      .ThenByDescending(x => x.Key.distanceToCheckpoint);
         int i = 0;
         foreach (KeyValuePair<NetworkPlayer, string> item in sortedPlayer)
         {
-            standingsGenerator.standingsBox[i].GetComponent<Text>().text = (i + 1) + " . " + item.Value;
+            standingsGenerator.standingsBox[i].GetComponent<TMP_Text>().text = (i + 1) + " . " + item.Value;
             i++;
         }
     }

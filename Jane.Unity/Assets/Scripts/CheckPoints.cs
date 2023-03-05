@@ -12,15 +12,16 @@ public class CheckPoints : MonoBehaviour
     public TargetBoxGenerator targetBoxGenerator;
 
     public int idx = 0;
+    public GameObject nextGate;
+    public bool goalActive = false;
     private int gateCount;
-    private GameObject nextGate;
 
     // Start is called before the first frame update
     void Start()
     {
         idx = 0;
         gateCount = checkPointArr.Length;
-        nextGate= checkPointArr[idx];
+        nextGate = checkPointArr[idx];
         nextGate.SendMessage("Activate");
 
         for (int k = 1; k  < gateCount ; k++)
@@ -46,7 +47,7 @@ public class CheckPoints : MonoBehaviour
         else
         {
             targetBoxGenerator.ResetTargetBox();
-            //activate goal line or something
+            goalActive = true;
         }
     }
 }
