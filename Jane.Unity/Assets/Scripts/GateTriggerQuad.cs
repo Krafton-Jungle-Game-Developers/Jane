@@ -25,7 +25,8 @@ public class GateTriggerQuad : MonoBehaviour
         if (other.gameObject.GetComponent<NetworkPlayer>() != null)
         {
             other.gameObject.GetComponent<NetworkPlayer>().activeCheckpointIndex = checkPoints.idx;
-            Debug.Log(other.gameObject.GetComponent<NetworkPlayer>().activeCheckpointIndex);
+            RankManager.instance.UpdateInformation(other.gameObject.GetComponent<NetworkPlayer>());
+            Debug.Log("dict updated");
         }
     }
     public void Activate()
