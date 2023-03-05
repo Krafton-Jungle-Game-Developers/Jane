@@ -134,9 +134,12 @@ namespace Jane.Unity.Server
                 playerGameObject = playerRenderer.transform.root.gameObject;
                 playerGameObject.transform.SetPositionAndRotation(joinedPlayer.Position, joinedPlayer.Rotation);
                 playerRenderer.enabled = true;
-                
+
                 // Enable Input when game starts
                 // Call MoveAsync Every frame 
+                inputManager.EnableInput();
+                inputManager.EnableMovement();
+                inputManager.EnableSteering();
             }
             else
             {
@@ -145,9 +148,9 @@ namespace Jane.Unity.Server
 
             playerGameObject.name = joinedPlayer.UserId;
 
-        networkPlayer = playerGameObject.GetComponent<NetworkPlayer>();
-        networkPlayer.Initialize(joinedPlayer);
-        RankManager.instance.GetPlayers(networkPlayer);
+            networkPlayer = playerGameObject.GetComponent<NetworkPlayer>();
+            networkPlayer.Initialize(joinedPlayer);
+            RankManager.instance.GetPlayers(networkPlayer);
 
             players.TryAdd(joinedPlayer.UniqueId, networkPlayer);
         }

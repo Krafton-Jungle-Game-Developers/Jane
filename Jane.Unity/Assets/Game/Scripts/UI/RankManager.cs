@@ -11,7 +11,7 @@ public class RankManager : MonoBehaviour
     public static RankManager instance;
     public StandingsGenerator standingsGenerator;
 
-    private Dictionary<NetworkPlayer, string> players;
+    private Dictionary<string, NetworkPlayer> players;
 
     private void Awake()
     {
@@ -19,7 +19,7 @@ public class RankManager : MonoBehaviour
     }
     void Start()
     {
-        players = new Dictionary<NetworkPlayer, string>();
+        players = new Dictionary<string, NetworkPlayer>();
     }
 
     void Update()
@@ -30,22 +30,27 @@ public class RankManager : MonoBehaviour
     public void GetPlayers(NetworkPlayer playerID)
     {
         // Get players through playerID and add them to List
-        players.Add(playerID, playerID.UserId);
+        players.Add(playerID.UserId, playerID);
         standingsGenerator.AddPlayerStanding();
-        Debug.Log($"current player dictionary: {players}");
     }
 
     void SetPlayers()
     {
-        IOrderedEnumerable<KeyValuePair<NetworkPlayer, string>> sortedPlayer = players.OrderBy(x => x.Key.activeCheckpointIndex)
-                                                                                      .OrderByDescending(x => x.Key.activeCheckpointIndex)
-                                                                                      .ThenBy(x => x.Key.distanceToCheckpoint)
-                                                                                      .ThenByDescending(x => x.Key.distanceToCheckpoint);
+        IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sortedPlayer = players.OrderBy(x => x.Value.activeCheckpointIndex)
+                                                                                      .OrderByDescending(x => x.Value.activeCheckpointIndex)
+                                                                                      .ThenBy(x => x.Value.distanceToCheckpoint)
+                                                                                      .ThenByDescending(x => x.Value.distanceToCheckpoint);
         int i = 0;
-        foreach (KeyValuePair<NetworkPlayer, string> item in sortedPlayer)
+        foreach (KeyValuePair<string, NetworkPlayer> item in sortedPlayer)
         {
-            standingsGenerator.standingsBox[i].GetComponent<TMP_Text>().text = (i + 1) + " . " + item.Value;
+            Debug.Log(item.Value.activeCheckpointIndex);
+            standingsGenerator.standingsBox[i].GetComponent<TMP_Text>().text = (i + 1) + " . " + item.Key;
             i++;
         }
+    }
+
+    public void UpdateInformation(NetworkPlayer playerID)
+    {
+        players[playerID.UserId] = playerID;
     }
 }
