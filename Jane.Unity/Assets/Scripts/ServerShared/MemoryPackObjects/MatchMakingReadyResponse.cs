@@ -4,9 +4,9 @@ using MemoryPack;
 namespace Jane.Unity.ServerShared.MemoryPackObjects
 {
     [MemoryPackable]
-    public partial struct MatchMakingEnrollRequest
+    public partial struct MatchMakingReadyResponse
     {
-        public string UserId { get; set; }
         public Ulid UniqueId { get; set; }
+        public bool IsReady { get; set; }
     }
 }

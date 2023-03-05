@@ -123,7 +123,7 @@ namespace Jane.Unity.Server
         {
             if (joinedPlayer is null) { throw new ArgumentNullException(); }
 
-            Debug.Log($"Player {joinedPlayer.UserId} has joined the room.");
+            Debug.Log($"Player {joinedPlayer.UserId}: {joinedPlayer.UniqueId} has joined the room.");
 
             GameObject playerGameObject;
             NetworkPlayer networkPlayer;
