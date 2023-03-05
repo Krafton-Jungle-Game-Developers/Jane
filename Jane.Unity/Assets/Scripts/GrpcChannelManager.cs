@@ -29,8 +29,10 @@ public class GrpcChannelManager : MonoBehaviour
 
     private async UniTaskVoid OnDestroy()
     {
-        if (gRPCChannel is null) { return; }
-
-        await gRPCChannel.DisposeAsync();
+        if (gRPCChannel is not null)
+        {
+            await gRPCChannel.DisposeAsync();
+            gRPCChannel = null;
+        }
     }
 }

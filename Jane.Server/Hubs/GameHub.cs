@@ -1,4 +1,5 @@
 ﻿using System;
+using Jane.Unity.ServerShared.Enums;
 using Jane.Unity.ServerShared.Hubs;
 using Jane.Unity.ServerShared.MemoryPackObjects;
 using MagicOnion.Server.Hubs;
@@ -10,10 +11,18 @@ namespace Jane.Server.Hubs
     {
         private bool isJoinGameSuccess = false;
         private IGroup game;
+
+        // TODO: PlayerCount of a game should never be received from client. Anti-pattern.
+        private int totalPlayerCount;
+        private int readyPlayerCount;
+        
         private IInMemoryStorage<GamePlayerData> storage;
         private GamePlayerData self;
 
         private Ulid gameId;
+        private GameState gameState = GameState.Waiting;
+
+        private CancellationTokenSource cts = new();
 
         public async ValueTask<GameJoinResponse> JoinAsync(GameJoinRequest request)
         {
@@ -25,6 +34,8 @@ namespace Jane.Server.Hubs
                 Position = request.InitialPosition,
                 Rotation = request.InitialRotation
             };
+
+            totalPlayerCount = request.PlayerCount;
 
             (isJoinGameSuccess, game, storage) = await Group.TryAddAsync(self.GameId.ToString(),
                 4,
@@ -46,6 +57,11 @@ namespace Jane.Server.Hubs
 
             return new() { GameId = gameId, Players = storage.AllValues.ToArray() };
         }
+
+        //public async ValueTask ReadyAsync()
+        //{
+        //    Interlocked.Increment(ref readyPlayerCount);
+        //}
 
         public async ValueTask LeaveAsync()
         {

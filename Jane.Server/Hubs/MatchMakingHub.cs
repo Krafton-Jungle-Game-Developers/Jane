@@ -7,50 +7,52 @@ namespace Jane.Server.Hubs
 {
     public class MatchMakingHub : StreamingHubBase<IMatchMakingHub, IMatchMakingHubReceiver>, IMatchMakingHub
     {
-        private IGroup? matchMakingLobby;
-        private MatchMakingLobbyUser self;
+        private IGroup? matchMakingLobby = null;
+        private MatchMakingLobbyUser? self = null;
         private IInMemoryStorage<MatchMakingLobbyUser>? storage;
-        private bool isEnrollSuccessful;
-        private bool isAllPlayersReady;
-        private Ulid matchId;
-        private Ulid matchedGameId;
+        private bool isEnrollSuccessful = false;
+        private bool isAllPlayersReady = false;
+        private Ulid matchId = Ulid.Empty;
+        private Ulid matchedGameId = Ulid.Empty;
 
         public async ValueTask<MatchMakingEnrollResponse> EnrollAsync(MatchMakingEnrollRequest request)
         {
             self = new () { UserId = request.UserId, UniqueId = request.UniqueId };
-            
-            (isEnrollSuccessful, matchMakingLobby, storage) = await Group.TryAddAsync("MatchMakingLobby", 4, true, self);
+
+            // TODO: Get matchId from somewhere
+            matchId = Ulid.MinValue;
+            (isEnrollSuccessful, matchMakingLobby, storage) = await Group.TryAddAsync(matchId.ToString(), 4, true, self);
 
             if (isEnrollSuccessful is false) { return new () { MatchId = Ulid.Empty, LobbyUsers = null }; }
 
             BroadcastExceptSelf(matchMakingLobby).OnEnroll(self);
-            MatchMakingEnrollResponse response = new () { MatchId = Ulid.MinValue, LobbyUsers = storage.AllValues.ToArray() };
+            MatchMakingEnrollResponse response = new () { MatchId = matchId, LobbyUsers = storage.AllValues.ToArray() };
             return response;
         }
 
         // TODO: 2명 이상? 
-        public ValueTask ChangeReadyStateAsync(bool isReady)
+        public async ValueTask ChangeReadyStateAsync(MatchMakingReadyRequest request)
         {
-            if (isAllPlayersReady) { return CompletedTask; }
+            if (isAllPlayersReady) { return; }
 
-            self.IsReady = isReady;
+            self.IsReady = request.IsReady;
             isAllPlayersReady = storage.AllValues.All(user => user.IsReady);
-            Broadcast(matchMakingLobby).OnPlayerReadyStateChanged(self.UniqueId, isReady);
+            MatchMakingReadyResponse res = new () { UniqueId = request.UniqueId, IsReady = self.IsReady };
+            Broadcast(matchMakingLobby).OnPlayerReadyStateChanged(res);
             
             if (isAllPlayersReady)
             {
                 matchedGameId = Ulid.NewUlid();
-                MatchMakingCompleteResponse response = new() { GameId = matchedGameId };
+                MatchMakingCompleteResponse response = new() { GameId = matchedGameId, PlayerCount = storage.AllValues.Count };
                 Broadcast(matchMakingLobby).OnMatchMakingComplete(response);
+                await matchMakingLobby.RemoveAsync(Context);
             }
-
-            return CompletedTask;
         }
         
         public async ValueTask LeaveAsync()
         {
-            await matchMakingLobby.RemoveAsync(Context);
             Broadcast(matchMakingLobby).OnLeave(self);
+            await matchMakingLobby.RemoveAsync(Context);
         }
         
         protected override ValueTask OnDisconnected()
