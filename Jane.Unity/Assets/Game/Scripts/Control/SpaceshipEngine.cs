@@ -15,7 +15,7 @@ public class SpaceshipEngine : MonoBehaviour
 
     [Header("Movement & Steering Forces")]
     [SerializeField] private bool enginesActivated = false;
-    [SerializeField] private Rigidbody m_rigidbody;
+    [SerializeField] private Rigidbody spaceShipRigidbody;
 
     [SerializeField] private Vector3 maxMovementForces = new(400f, 400f, 400f);
     [SerializeField] private Vector3 maxSteeringForces = new(8f, 8f, 10f);
@@ -31,7 +31,7 @@ public class SpaceshipEngine : MonoBehaviour
     //[Header("Resource Handlers")]
     //[SerializeField] private List<ResourceHandler> boostResourceHandlers = new();
 
-    private void Awake() => TryGetComponent(out m_rigidbody);
+    private void Awake() => TryGetComponent(out spaceShipRigidbody);
 
     public void ClearInputs()
     {
@@ -44,14 +44,14 @@ public class SpaceshipEngine : MonoBehaviour
     {
         Vector3 maxForces = maxMovementForces + (withBoost ? maxBoostForces : Vector3.zero);
 
-        return (new Vector3(GetSpeedFromForce(maxForces.x, m_rigidbody), GetSpeedFromForce(maxForces.y, m_rigidbody), GetSpeedFromForce(maxForces.z, m_rigidbody)));
+        return (new Vector3(GetSpeedFromForce(maxForces.x, spaceShipRigidbody), GetSpeedFromForce(maxForces.y, spaceShipRigidbody), GetSpeedFromForce(maxForces.z, spaceShipRigidbody)));
     }
     
     public Vector3 GetCurrentMaxSpeedByAxis(bool withBoost)
     {
         Vector3 maxForces = maxMovementForces + (withBoost ? maxBoostForces : Vector3.zero);
 
-        return (new Vector3(GetSpeedFromForce(maxForces.x, m_rigidbody), GetSpeedFromForce(maxForces.y, m_rigidbody), GetSpeedFromForce(maxForces.z, m_rigidbody)));
+        return (new Vector3(GetSpeedFromForce(maxForces.x, spaceShipRigidbody), GetSpeedFromForce(maxForces.y, spaceShipRigidbody), GetSpeedFromForce(maxForces.z, spaceShipRigidbody)));
     }
     
     public static float GetSpeedFromForce(float force, Rigidbody rBody)
@@ -94,24 +94,24 @@ public class SpaceshipEngine : MonoBehaviour
     
     public void SetSpeed(Vector3 speedsByAxis)
     {
-        SetMovementInputs(new(GetForceForSpeed(speedsByAxis.x, m_rigidbody) / maxMovementForces.x,
-                                                  GetForceForSpeed(speedsByAxis.y, m_rigidbody) / maxMovementForces.y,
-                                                  GetForceForSpeed(speedsByAxis.z, m_rigidbody) / maxMovementForces.z));
+        SetMovementInputs(new(GetForceForSpeed(speedsByAxis.x, spaceShipRigidbody) / maxMovementForces.x,
+                                                  GetForceForSpeed(speedsByAxis.y, spaceShipRigidbody) / maxMovementForces.y,
+                                                  GetForceForSpeed(speedsByAxis.z, spaceShipRigidbody) / maxMovementForces.z));
     }
 
     public void SetSpeedXAxis(float speed)
     {
-        SetMovementInputs(new((speed * m_rigidbody.mass * m_rigidbody.drag) / maxMovementForces.x, movementInputs.y, movementInputs.z));
+        SetMovementInputs(new((speed * spaceShipRigidbody.mass * spaceShipRigidbody.drag) / maxMovementForces.x, movementInputs.y, movementInputs.z));
     }
 
     public void SetSpeedYAxis(float speed)
     {
-        SetMovementInputs(new(movementInputs.x, (speed * m_rigidbody.mass * m_rigidbody.drag) / maxMovementForces.y, movementInputs.z));
+        SetMovementInputs(new(movementInputs.x, (speed * spaceShipRigidbody.mass * spaceShipRigidbody.drag) / maxMovementForces.y, movementInputs.z));
     }
 
     public void SetSpeedZAxis(float speed)
     {
-        SetMovementInputs(new(movementInputs.x, movementInputs.y, (speed * m_rigidbody.mass * m_rigidbody.drag) / maxMovementForces.z));
+        SetMovementInputs(new(movementInputs.x, movementInputs.y, (speed * spaceShipRigidbody.mass * spaceShipRigidbody.drag) / maxMovementForces.z));
     }
 
     public void SetBoostInputs(Vector3 newValuesByAxis)
@@ -170,12 +170,12 @@ public class SpaceshipEngine : MonoBehaviour
             float topSpeed = GetCurrentMaxSpeedByAxis(false).z;
             if (!Mathf.Approximately(topSpeed, 0f))
             {
-                float topSpeedAmount = Mathf.Clamp(Mathf.Abs(m_rigidbody.velocity.z / topSpeed), 0f, 1f);
+                float topSpeedAmount = Mathf.Clamp(Mathf.Abs(spaceShipRigidbody.velocity.z / topSpeed), 0f, 1f);
                 steeringSpeedMultiplier = steeringBySpeedCurve.Evaluate(topSpeedAmount);
             }
         }
 
-        m_rigidbody.AddRelativeTorque(steeringSpeedMultiplier * Vector3.Scale(steeringInputs, maxSteeringForces), ForceMode.Acceleration);
+        spaceShipRigidbody.AddRelativeTorque(steeringSpeedMultiplier * Vector3.Scale(steeringInputs, maxSteeringForces), ForceMode.Acceleration);
 
         Vector3 nextMovementForces = Vector3.Scale(movementInputs, maxMovementForces);
 
@@ -186,6 +186,6 @@ public class SpaceshipEngine : MonoBehaviour
         nextMovementForces = Vector3.Lerp(currentMovementForcesByAxis, nextMovementForces, movementInputResponseSpeed * Time.deltaTime);
         currentMovementForcesByAxis = nextMovementForces;
 
-        m_rigidbody.AddRelativeForce(nextMovementForces);
+        spaceShipRigidbody.AddRelativeForce(nextMovementForces);
     }
 }

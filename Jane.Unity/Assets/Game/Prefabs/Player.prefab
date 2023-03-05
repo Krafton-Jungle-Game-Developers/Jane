@@ -986,7 +986,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8583916516732169314}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!215 &8588723811697120560
 ReflectionProbe:
@@ -1263,9 +1263,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1289316211828063698}
   m_Father: {fileID: 8583916516732169314}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8588723812721896759
 MeshFilter:
@@ -1371,8 +1372,8 @@ Transform:
   m_Children:
   - {fileID: 8588723811747336983}
   - {fileID: 8588723811419186177}
-  - {fileID: 8588723812721896752}
   - {fileID: 8588723811697120563}
+  - {fileID: 8588723812721896752}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1425,7 +1426,7 @@ MonoBehaviour:
   minMovementInputs: {x: -1, y: -1, z: -0.1}
   maxMovementInputs: {x: 1, y: 1, z: 1}
   enginesActivated: 1
-  m_rigidbody: {fileID: 8634631130920562521}
+  spaceShipRigidbody: {fileID: 0}
   maxMovementForces: {x: 400, y: 400, z: 400}
   maxSteeringForces: {x: 8, y: 8, z: 10}
   maxBoostForces: {x: 800, y: 800, z: 800}
