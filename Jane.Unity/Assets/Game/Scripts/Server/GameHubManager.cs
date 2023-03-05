@@ -145,8 +145,9 @@ namespace Jane.Unity.Server
 
             playerGameObject.name = joinedPlayer.UserId;
 
-            networkPlayer = playerGameObject.GetComponent<NetworkPlayer>();
-            networkPlayer.Initialize(joinedPlayer);
+        networkPlayer = playerGameObject.GetComponent<NetworkPlayer>();
+        networkPlayer.Initialize(joinedPlayer);
+        RankManager.instance.GetPlayers(networkPlayer);
 
             players.TryAdd(joinedPlayer.UniqueId, networkPlayer);
         }

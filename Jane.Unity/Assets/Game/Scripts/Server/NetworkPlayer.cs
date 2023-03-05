@@ -6,7 +6,8 @@ public class NetworkPlayer : MonoBehaviour
 {
     public string UserId { get; set; }
     public Ulid UniqueId { get; set; }
-
+    public int activeCheckpointIndex { get; set; }
+    public float distanceToCheckpoint { get; set; }
     public void Initialize(GamePlayerData data)
     {
         UserId = data.UserId;
