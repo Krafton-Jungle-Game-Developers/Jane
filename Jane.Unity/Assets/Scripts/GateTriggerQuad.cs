@@ -10,25 +10,21 @@ public class GateTriggerQuad : MonoBehaviour
 {
     [SerializeField] private VisualEffect gateActivateVFX;
     [SerializeField] private ParticleSystem swirlGreen;
-    private NetworkPlayer networkPlayer;
     public int gateNumber;
 
     private void OnTriggerEnter(Collider other)
     {
         CheckPoints checkPoints = GetComponentInParent<CheckPoints>();
-        checkPoints.idx += 1;
         if (other.gameObject.CompareTag("Player"))
         {
             if (checkPoints.nextGate == this.gameObject)
             {
-                checkPoints.ControlGates();
+                checkPoints.ControlGates(gateNumber);
             }
         }
         if (other.gameObject.GetComponent<NetworkPlayer>() != null)
         {
-            other.gameObject.GetComponent<NetworkPlayer>().activeCheckpointIndex = checkPoints.checkPointArr.Rank;
-            RankManager.instance.UpdateInformation(other.gameObject.GetComponent<NetworkPlayer>());
-            Debug.Log("dict updated");
+            other.gameObject.GetComponent<NetworkPlayer>().activeCheckpointIndex = gateNumber;
         }
     }
     public void Activate()

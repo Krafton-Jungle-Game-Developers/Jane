@@ -29,7 +29,7 @@ public class CheckPoints : MonoBehaviour
         }
     }
 
-    public void ControlGates()
+    public void ControlGates(int gateNo)
     {
         audioSource.clip = gateClearSFX;
         audioSource.Play();

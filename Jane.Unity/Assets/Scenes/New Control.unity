@@ -11068,6 +11068,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gate_CheckPoint (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7858240110408506800, guid: 641ce61b63c9b5848b6b706f83a87ae4,
+        type: 3}
+      propertyPath: gateNumber
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 641ce61b63c9b5848b6b706f83a87ae4, type: 3}
 --- !u!114 &716385084 stripped
@@ -13624,9 +13629,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 4e430a2ce55fdc24fa35d1de6fb912aa, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.15
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -13727,9 +13732,9 @@ MonoBehaviour:
   endGameText: {fileID: 716385084}
   hud: {fileID: 1314271527}
   bgmPlayer: {fileID: 866887325}
-  waitingClip: {fileID: 8300000, guid: 93d5ccc677cb08842bb05c231772b61d, type: 3}
-  gogoClip: {fileID: 8300000, guid: c27f339290bcc8a47adafc57f16b906d, type: 3}
-  volumeMax: 0.2
+  waitingClip: {fileID: 8300000, guid: 4e430a2ce55fdc24fa35d1de6fb912aa, type: 3}
+  gogoClip: {fileID: 8300000, guid: 4e430a2ce55fdc24fa35d1de6fb912aa, type: 3}
+  volumeMax: 0.5
 --- !u!4 &866887327
 Transform:
   m_ObjectHideFlags: 0
@@ -13827,6 +13832,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Gate_CheckPoint (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7858240110408506800, guid: 641ce61b63c9b5848b6b706f83a87ae4,
+        type: 3}
+      propertyPath: gateNumber
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 641ce61b63c9b5848b6b706f83a87ae4, type: 3}
@@ -14322,6 +14332,23 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1534055421}
     m_Modifications:
+    - target: {fileID: 585136915, guid: 641ce61b63c9b5848b6b706f83a87ae4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 585136917, guid: 641ce61b63c9b5848b6b706f83a87ae4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 585136918, guid: 641ce61b63c9b5848b6b706f83a87ae4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5112330474316778747, guid: 641ce61b63c9b5848b6b706f83a87ae4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5206361061255247678, guid: 641ce61b63c9b5848b6b706f83a87ae4,
         type: 3}
       propertyPath: m_RootOrder
@@ -14350,7 +14377,7 @@ PrefabInstance:
     - target: {fileID: 5206361061255247678, guid: 641ce61b63c9b5848b6b706f83a87ae4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 5206361061255247678, guid: 641ce61b63c9b5848b6b706f83a87ae4,
         type: 3}
@@ -14397,8 +14424,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gate_CheckPoint
       objectReference: {fileID: 0}
+    - target: {fileID: 6202340326254615879, guid: 641ce61b63c9b5848b6b706f83a87ae4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 641ce61b63c9b5848b6b706f83a87ae4, type: 3}
+--- !u!1 &929174159 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5209287684171609682, guid: 641ce61b63c9b5848b6b706f83a87ae4,
+    type: 3}
+  m_PrefabInstance: {fileID: 929174158}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &936964759
 GameObject:
   m_ObjectHideFlags: 0
@@ -21096,6 +21134,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gate_CheckPoint (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7858240110408506800, guid: 641ce61b63c9b5848b6b706f83a87ae4,
+        type: 3}
+      propertyPath: gateNumber
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 641ce61b63c9b5848b6b706f83a87ae4, type: 3}
 --- !u!1 &1318706619
@@ -21195,12 +21238,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1318706619}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1319315547 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5209287684171609682, guid: 641ce61b63c9b5848b6b706f83a87ae4,
-    type: 3}
-  m_PrefabInstance: {fileID: 929174158}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1319315553 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5206361061255247678, guid: 641ce61b63c9b5848b6b706f83a87ae4,
@@ -22646,6 +22683,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Gate_CheckPoint (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7858240110408506800, guid: 641ce61b63c9b5848b6b706f83a87ae4,
+        type: 3}
+      propertyPath: gateNumber
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 641ce61b63c9b5848b6b706f83a87ae4, type: 3}
@@ -24668,7 +24710,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkPointArr:
-  - {fileID: 1319315547}
+  - {fileID: 929174159}
   - {fileID: 1188513756}
   - {fileID: 305978405}
   - {fileID: 1146891525}

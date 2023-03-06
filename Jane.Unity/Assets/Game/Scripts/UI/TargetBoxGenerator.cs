@@ -38,7 +38,7 @@ public class TargetBoxGenerator : MonoBehaviour
     private void UpdateTargetBox()
     {
         int i = checkPoints.idx;
-        bool isInView = checkpointList[i].GetComponent<Renderer>().isVisible;
+        bool isInView = IsInScreen(checkpointList[i].transform.position);
         onScreenCheckpoint[i].GetComponent<CanvasGroup>().alpha = isInView ? 1 : 0;
 /*        offScreenObjects[i].GetComponent<CanvasGroup>().alpha = isInView ? 0 : 1;
 */
@@ -107,4 +107,13 @@ public class TargetBoxGenerator : MonoBehaviour
         return Rect.MinMaxRect(min_x, min_y, max_x, max_y);
     }
 
+    public bool IsInScreen(Vector3 targetPos)
+    {
+        Vector3 viewportPos = mainCam.WorldToViewportPoint(targetPos);
+        if ((0 < viewportPos.x && viewportPos.x < 1) && (0 < viewportPos.y && viewportPos.y < 1) && 0 < viewportPos.z)
+        {
+            return true;
+        }
+        return false;
+    }
 }

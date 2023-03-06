@@ -43,8 +43,8 @@ public class RankManager : MonoBehaviour
         int i = 0;
         foreach (KeyValuePair<string, NetworkPlayer> item in sortedPlayer)
         {
-            Debug.Log(item.Value.activeCheckpointIndex);
-            standingsGenerator.standingsBox[i].GetComponent<TMP_Text>().text = (i + 1) + " . " + item.Key;
+/*            Debug.Log(item.Value.activeCheckpointIndex);
+*/            standingsGenerator.standingsBox[i].GetComponent<TMP_Text>().text = (i + 1) + " . " + item.Key;
             i++;
         }
     }
