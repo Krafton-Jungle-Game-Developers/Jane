@@ -18,21 +18,24 @@ public class TargetBoxGenerator : MonoBehaviour
 
     void Start()
     {
-        foreach (GameObject checkPoint in checkPoints.checkPointArr)
+        if (checkPoints is not null)
         {
-            checkpointList.Add(checkPoint);
+            foreach (GameObject checkPoint in checkPoints.checkPointArr)
+            {
+                checkpointList.Add(checkPoint);
+            }
+            for (int i = 0; i < checkpointList.Count; i++)
+            {
+                onScreenCheckpoint.Add(Instantiate(targetCanvasPrefab));
+                onScreenCheckpoint[i].transform.parent = transform;
+            }
+            SetNextTargetBox(0);
         }
-        for (int i = 0; i < checkpointList.Count; i++)
-        {
-            onScreenCheckpoint.Add(Instantiate(targetCanvasPrefab));
-            onScreenCheckpoint[i].transform.parent = transform;
-        }
-        SetNextTargetBox(0);
     }
 
     void Update()
     {
-        UpdateTargetBox();
+        if (checkPoints is not null) { UpdateTargetBox(); }
     }
 
     private void UpdateTargetBox()
@@ -40,8 +43,8 @@ public class TargetBoxGenerator : MonoBehaviour
         int i = checkPoints.idx;
         bool isInView = checkpointList[i].GetComponent<Renderer>().isVisible;
         onScreenCheckpoint[i].GetComponent<CanvasGroup>().alpha = isInView ? 1 : 0;
-/*        offScreenObjects[i].GetComponent<CanvasGroup>().alpha = isInView ? 0 : 1;
-*/
+        /*        offScreenObjects[i].GetComponent<CanvasGroup>().alpha = isInView ? 0 : 1;
+        */
         if (isInView && !checkPoints.goalActive)
         {
             Rect targetRect = GetBoundsInScreenSpace(checkpointList[i], mainCam);
@@ -55,7 +58,7 @@ public class TargetBoxGenerator : MonoBehaviour
 
     public void ResetTargetBox()
     {
-        foreach(GameObject obj in onScreenCheckpoint)
+        foreach (GameObject obj in onScreenCheckpoint)
         {
             obj.SetActive(false);
         }
