@@ -3,7 +3,8 @@
     public enum GameState
     {
         Waiting = 0,
-        Playing = 1,
-        Finished = 2
+        CountDown = 1,
+        Playing = 2,
+        Finished = 3
     }
 }

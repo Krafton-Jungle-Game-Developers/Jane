@@ -1,17 +1,39 @@
 using System;
+using Jane.Unity;
 using Jane.Unity.ServerShared.MemoryPackObjects;
 using UnityEngine;
 
 public class NetworkPlayer : MonoBehaviour
 {
-    public string UserId { get; set; }
-    public Ulid UniqueId { get; set; }
+    private string userId;
+    public string UserId => userId;
+    private Ulid uniqueId;
+    public Ulid UniqueId => uniqueId;
+    public int CurrentZone { get; set ; } = 1;
+    public int CurrentCheckPoint { get; set; } = 1;
+    public int HP { get; set; } = 20;
+
     public int activeCheckpointIndex { get; set; }
     public float distanceToCheckpoint { get; set; }
-    public void Initialize(GamePlayerData data)
+
+    private bool _isSelf;
+    public bool IsSelf => _isSelf;
+    
+    [SerializeField] private MeshRenderer modelRenderer;
+    
+    public void Initialize(GamePlayerData data, bool isSelf)
     {
-        UserId = data.UserId;
-        UniqueId = data.UniqueId;
+        userId = data.UserId;
+        uniqueId = data.UniqueId;
+        CurrentZone = data.CurrentZone;
+        CurrentCheckPoint = data.CurrentCheckPoint;
+        HP = data.HP;
+
+        transform.SetPositionAndRotation(data.Position, data.Rotation);
+        modelRenderer.enabled = true;
+
+        _isSelf = isSelf;
+        gameObject.name = data.UserId;
     }
 
     public void UpdateMovement(MoveRequest request)

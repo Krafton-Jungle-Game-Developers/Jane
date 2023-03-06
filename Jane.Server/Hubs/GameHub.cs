@@ -21,7 +21,10 @@ namespace Jane.Server.Hubs
 
         private Ulid gameId;
         private GameState gameState = GameState.Waiting;
-
+        private TimeSpan gameDuration = TimeSpan.FromSeconds(30);
+        private TimeSpan timeLeft;
+        private Task waitOtherPlayersTask = null;
+        private Task timerTask = null;
         private CancellationTokenSource cts = new();
 
         public async ValueTask<GameJoinResponse> JoinAsync(GameJoinRequest request)
@@ -32,13 +35,16 @@ namespace Jane.Server.Hubs
                 UserId = request.UserId,
                 UniqueId = request.UniqueId,
                 Position = request.InitialPosition,
-                Rotation = request.InitialRotation
+                Rotation = request.InitialRotation,
+                CurrentZone = 1,
+                CurrentCheckPoint = 1,
+                HP = 20
             };
 
             totalPlayerCount = request.PlayerCount;
 
             (isJoinGameSuccess, game, storage) = await Group.TryAddAsync(self.GameId.ToString(),
-                4,
+                totalPlayerCount,
                 true,
                 self);
 
@@ -46,7 +52,42 @@ namespace Jane.Server.Hubs
             gameId = self.GameId;
 
             int userCount = await game.GetMemberCountAsync();
-            
+            if (waitOtherPlayersTask is null)
+            {
+                waitOtherPlayersTask = Task.Run(async () =>
+                {
+                    while (readyPlayerCount < totalPlayerCount) { await Task.Delay(1000); }
+
+                    GameStateChangedResponse countDown = new() { GameId = gameId, GameState = GameState.CountDown };
+                    Broadcast(game).OnGameStateChange(countDown);
+
+                    await Task.Delay(3000);
+
+                    GameStateChangedResponse gameStart = new() { GameId = gameId, GameState = GameState.Playing };
+                    Broadcast(game).OnGameStateChange(gameStart);
+
+                    if (timerTask is null)
+                    {
+                        timerTask = Task.Run(async () =>
+                        {
+                            TimeSpan timeLeft = gameDuration;
+                            TimeSpan checkInterval = TimeSpan.FromMilliseconds(10);
+
+                            while (timeLeft > TimeSpan.Zero)
+                            {
+                                await Task.Delay(checkInterval);
+                                timeLeft -= checkInterval;
+
+                                Broadcast(game).OnTimerUpdate(timeLeft.Ticks);
+                            }
+
+                            GameStateChangedResponse gameEnd = new() { GameId = gameId, GameState = GameState.Finished };
+                            Broadcast(game).OnGameStateChange(gameEnd);
+                        });
+                    }
+                });
+            }
+
             Vector3 pos = new(request.InitialPosition.x + (20 * int.Clamp(userCount - 1, 0, 3)),
                               request.InitialPosition.y,
                               request.InitialPosition.z);
@@ -54,14 +95,31 @@ namespace Jane.Server.Hubs
             self.Position = pos;
 
             Broadcast(game).OnJoin(self);
-
             return new() { GameId = gameId, Players = storage.AllValues.ToArray() };
         }
 
-        //public async ValueTask ReadyAsync()
-        //{
-        //    Interlocked.Increment(ref readyPlayerCount);
-        //}
+        public ValueTask GameInitializedAsync(GameInitializedRequest request)
+        {
+            Interlocked.Increment(ref readyPlayerCount);
+            return CompletedTask;
+        }
+
+        // TODO: When Game Starts, Timer of 120 seconds start.
+        // TODO: From client side, await for Server's Timer start response and start 120 second timer instantly.
+        // No matter what (even in Pause Menu), timer always runs.
+        // TODO: When Server Timer reaches 0, Broadcast Game End.
+
+        // TODO: On Every Frame while in GameState.Playing,
+        // BroadCast Player's Current Zone and Rank
+        // Rank is based on distance between Zone Start and Player Position)
+
+        // TODO: If any player enters Zone N, Activate MeteorSpawner(s) of that Zone. (Dependent to Zone.)
+        // Spawned Meteor(s) cannot go further than that Zone.
+
+        // TODO: When a meteor is spawned, it should be in ConcurrentDictionary.
+        // If a player collides to a meteor, HP should decrease, and meteor should be removed.
+        // Meteor can collide to: Bullet, Player, Environment
+        // When a collision happens, it is removed and broadcasted.
 
         public async ValueTask LeaveAsync()
         {
