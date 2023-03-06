@@ -375,7 +375,7 @@ namespace Jane.Unity.ServerShared.Hubs
         {
             switch (methodId)
             {
-                case -1297457280: // Void OnJoin(global::Jane.Unity.ServerShared.MemoryPackObjects.GamePlayerData joinedPlayer)
+                case -1297457280: // Void OnJoin(global::Jane.Unity.ServerShared.MemoryPackObjects.GamePlayerData joinedPlayerData)
                     {
                         var value = base.Deserialize<global::Jane.Unity.ServerShared.MemoryPackObjects.GamePlayerData>(data);
                         receiver.OnJoin(value);
@@ -391,6 +391,12 @@ namespace Jane.Unity.ServerShared.Hubs
                     {
                         var value = base.Deserialize<global::Jane.Unity.ServerShared.MemoryPackObjects.GameStateChangedResponse>(data);
                         receiver.OnGameStateChange(value);
+                    }
+                    break;
+                case -1610262240: // Void OnTimerUpdate(global::System.Int64 ticks)
+                    {
+                        var value = base.Deserialize<global::System.Int64>(data);
+                        receiver.OnTimerUpdate(value);
                     }
                     break;
                 case 1429874301: // Void OnMove(global::Jane.Unity.ServerShared.MemoryPackObjects.MoveRequest request)

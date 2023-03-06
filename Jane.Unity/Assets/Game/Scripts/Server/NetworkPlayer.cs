@@ -9,8 +9,8 @@ public class NetworkPlayer : MonoBehaviour
     public string UserId => userId;
     private Ulid uniqueId;
     public Ulid UniqueId => uniqueId;
-    public int CurrentZone { get; set ; } = 1;
-    public int CurrentCheckPoint { get; set; } = 1;
+    public int CurrentRegion { get; set ; } = 1;
+    public int CurrentZone { get; set; } = 0;
     public int HP { get; set; } = 20;
 
     public int activeCheckpointIndex { get; set; }
@@ -25,8 +25,8 @@ public class NetworkPlayer : MonoBehaviour
     {
         userId = data.UserId;
         uniqueId = data.UniqueId;
+        CurrentRegion = data.CurrentRegion;
         CurrentZone = data.CurrentZone;
-        CurrentCheckPoint = data.CurrentCheckPoint;
         HP = data.HP;
 
         transform.SetPositionAndRotation(data.Position, data.Rotation);

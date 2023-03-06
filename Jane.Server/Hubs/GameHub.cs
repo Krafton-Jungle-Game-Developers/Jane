@@ -36,8 +36,8 @@ namespace Jane.Server.Hubs
                 UniqueId = request.UniqueId,
                 Position = request.InitialPosition,
                 Rotation = request.InitialRotation,
-                CurrentZone = 1,
-                CurrentCheckPoint = 1,
+                CurrentRegion = 1,
+                CurrentZone = 0,
                 HP = 20
             };
 
@@ -110,11 +110,11 @@ namespace Jane.Server.Hubs
         // TODO: When Server Timer reaches 0, Broadcast Game End.
 
         // TODO: On Every Frame while in GameState.Playing,
-        // BroadCast Player's Current Zone and Rank
-        // Rank is based on distance between Zone Start and Player Position)
+        // BroadCast Player's Current Region and Rank
+        // Rank is based on distance between Region Start and Player Position)
 
-        // TODO: If any player enters Zone N, Activate MeteorSpawner(s) of that Zone. (Dependent to Zone.)
-        // Spawned Meteor(s) cannot go further than that Zone.
+        // TODO: If any player enters Region N, Activate MeteorSpawner(s) of that Region. (Dependent to Region.)
+        // Spawned Meteor(s) cannot go further than that Region.
 
         // TODO: When a meteor is spawned, it should be in ConcurrentDictionary.
         // If a player collides to a meteor, HP should decrease, and meteor should be removed.

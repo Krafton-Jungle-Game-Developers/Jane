@@ -70,7 +70,7 @@ namespace Jane.Unity.Server
 
         private async UniTask WaitForOtherPlayersReadyAsync(CancellationToken token)
         {
-            await UniTask.WaitWhile(() => players.Count < GameInfo.PlayerCount, cancellationToken: token);
+            await UniTask.WaitUntil(() => players.Count == GameInfo.PlayerCount, cancellationToken: token);
 
             if (token.IsCancellationRequested) { return; }
 
@@ -97,6 +97,7 @@ namespace Jane.Unity.Server
         private async UniTask WaitForGameFinishAsync(CancellationToken token)
         {
             await UniTask.WaitUntil(() => GameInfo.GameState is GameState.Finished, cancellationToken: token);
+            Debug.Log("Game Finished");
         }
 
         public async UniTask JoinAsync()
@@ -175,7 +176,7 @@ namespace Jane.Unity.Server
 
         public void OnTimerUpdate(long ticks)
         {
-
+            Debug.Log(ticks);
         }
 
         public void OnMove(MoveRequest request)

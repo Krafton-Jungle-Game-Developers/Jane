@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Jane.Unity;
+using Jane.Unity.ServerShared.Enums;
 using TMPro;
 using UnityEngine;
 
@@ -16,9 +17,16 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private SpaceshipInputManager inputManager;
     [SerializeField] private SpaceshipCameraController cameraController;
+    [SerializeField] private GameState CurrentGameState;
+
+    private void Update()
+    {
+        CurrentGameState = GameInfo.GameState;
+    }
 
     public async UniTask CountDownAsync(int seconds)
     {
+        countDownHolder.SetActive(true);
         while (seconds > 0)
         {
             countDownText.text = $"{seconds}";

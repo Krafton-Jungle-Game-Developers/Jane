@@ -24,7 +24,6 @@ public class SceneManager : MonoBehaviour
             .ContinueWith(async () =>
             {
                 gameHubManager = FindObjectOfType<GameHubManager>();
-                Debug.Log(gameHubManager);
                 await gameHubManager.InitializeAsync();
             });
         
