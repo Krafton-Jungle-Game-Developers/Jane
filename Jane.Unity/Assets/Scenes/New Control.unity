@@ -24306,6 +24306,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bar: {fileID: 1926808101}
   _visibleAngle: 180
+  testHP: 10
+  testMaxHP: 10
 --- !u!1 &1574868801
 GameObject:
   m_ObjectHideFlags: 0

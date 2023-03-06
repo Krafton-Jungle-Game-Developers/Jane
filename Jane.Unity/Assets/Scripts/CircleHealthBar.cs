@@ -21,9 +21,10 @@ public class CircleHealthBar : MonoBehaviour
         HealthChange(playerDestroyable.durability);
     }
 
-    private void HealthChange(int _playerHP)
+    private void HealthChange(float _playerHP)
     {
         float amount = (_playerHP / playerDestroyable.maxHealth) * _visibleAngle / 360;
+
         _bar.fillAmount = amount;
     }
 
