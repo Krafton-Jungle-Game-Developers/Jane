@@ -19,7 +19,6 @@ public class CheckPoints : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        idx = 0;
         gateCount = checkPointArr.Length;
         nextGate = checkPointArr[idx];
         nextGate.SendMessage("Activate");
@@ -41,7 +40,6 @@ public class CheckPoints : MonoBehaviour
         {
             nextGate= checkPointArr[idx + 1];
             nextGate.SendMessage("Activate");
-            idx++;
             targetBoxGenerator.SetNextTargetBox(idx);
         }
         else

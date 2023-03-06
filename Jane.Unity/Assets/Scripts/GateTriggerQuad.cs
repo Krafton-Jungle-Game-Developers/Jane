@@ -11,10 +11,12 @@ public class GateTriggerQuad : MonoBehaviour
     [SerializeField] private VisualEffect gateActivateVFX;
     [SerializeField] private ParticleSystem swirlGreen;
     private NetworkPlayer networkPlayer;
+    public int gateNumber;
 
     private void OnTriggerEnter(Collider other)
     {
         CheckPoints checkPoints = GetComponentInParent<CheckPoints>();
+        checkPoints.idx += 1;
         if (other.gameObject.CompareTag("Player"))
         {
             if (checkPoints.nextGate == this.gameObject)
