@@ -35,12 +35,13 @@ public class CheckPoints : MonoBehaviour
         audioSource.Play();
 
         nextGate.SendMessage("Deactivate");
+        idx += 1;
 
-        if (idx != gateCount - 1)
+        if (gateNo != gateCount)
         {
-            nextGate= checkPointArr[idx + 1];
+            nextGate= checkPointArr[gateNo];
             nextGate.SendMessage("Activate");
-            targetBoxGenerator.SetNextTargetBox(idx);
+            targetBoxGenerator.SetNextTargetBox(gateNo);
         }
         else
         {

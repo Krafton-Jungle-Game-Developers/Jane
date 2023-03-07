@@ -4644,6 +4644,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   standingsGenerator: {fileID: 354381807}
+  checkPoints: {fileID: 1534055420}
 --- !u!1 &313851442
 GameObject:
   m_ObjectHideFlags: 0
@@ -10993,6 +10994,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1534055421}
     m_Modifications:
+    - target: {fileID: 5112330474316778747, guid: 641ce61b63c9b5848b6b706f83a87ae4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5206361061255247678, guid: 641ce61b63c9b5848b6b706f83a87ae4,
         type: 3}
       propertyPath: m_RootOrder
@@ -11071,7 +11077,7 @@ PrefabInstance:
     - target: {fileID: 7858240110408506800, guid: 641ce61b63c9b5848b6b706f83a87ae4,
         type: 3}
       propertyPath: gateNumber
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 641ce61b63c9b5848b6b706f83a87ae4, type: 3}
@@ -13758,6 +13764,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1534055421}
     m_Modifications:
+    - target: {fileID: 5112330474316778747, guid: 641ce61b63c9b5848b6b706f83a87ae4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5206361061255247678, guid: 641ce61b63c9b5848b6b706f83a87ae4,
         type: 3}
       propertyPath: m_RootOrder
@@ -13836,7 +13847,7 @@ PrefabInstance:
     - target: {fileID: 7858240110408506800, guid: 641ce61b63c9b5848b6b706f83a87ae4,
         type: 3}
       propertyPath: gateNumber
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 641ce61b63c9b5848b6b706f83a87ae4, type: 3}
@@ -14427,6 +14438,11 @@ PrefabInstance:
     - target: {fileID: 6202340326254615879, guid: 641ce61b63c9b5848b6b706f83a87ae4,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7858240110408506800, guid: 641ce61b63c9b5848b6b706f83a87ae4,
+        type: 3}
+      propertyPath: gateNumber
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -21059,6 +21075,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1534055421}
     m_Modifications:
+    - target: {fileID: 5112330474316778747, guid: 641ce61b63c9b5848b6b706f83a87ae4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5206361061255247678, guid: 641ce61b63c9b5848b6b706f83a87ae4,
         type: 3}
       propertyPath: m_RootOrder
@@ -21137,7 +21158,7 @@ PrefabInstance:
     - target: {fileID: 7858240110408506800, guid: 641ce61b63c9b5848b6b706f83a87ae4,
         type: 3}
       propertyPath: gateNumber
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 641ce61b63c9b5848b6b706f83a87ae4, type: 3}
@@ -22609,6 +22630,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1534055421}
     m_Modifications:
+    - target: {fileID: 5112330474316778747, guid: 641ce61b63c9b5848b6b706f83a87ae4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5206361061255247678, guid: 641ce61b63c9b5848b6b706f83a87ae4,
         type: 3}
       propertyPath: m_RootOrder
@@ -22687,7 +22713,7 @@ PrefabInstance:
     - target: {fileID: 7858240110408506800, guid: 641ce61b63c9b5848b6b706f83a87ae4,
         type: 3}
       propertyPath: gateNumber
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 641ce61b63c9b5848b6b706f83a87ae4, type: 3}
@@ -24715,8 +24741,8 @@ MonoBehaviour:
   - {fileID: 305978405}
   - {fileID: 1146891525}
   - {fileID: 1779671107}
-  audioSource: {fileID: 0}
-  gateClearSFX: {fileID: 0}
+  audioSource: {fileID: 866887325}
+  gateClearSFX: {fileID: 8300000, guid: 93d5ccc677cb08842bb05c231772b61d, type: 3}
   targetBoxGenerator: {fileID: 454504405}
   idx: 0
   nextGate: {fileID: 0}
