@@ -134,6 +134,7 @@ namespace Jane.Unity.Server
                 playerGameObject = playerRenderer.transform.root.gameObject;
                 playerGameObject.transform.SetPositionAndRotation(joinedPlayer.Position, joinedPlayer.Rotation);
                 playerRenderer.enabled = true;
+                RankManager.instance.GetLocalPlayer(joinedPlayer.UniqueId);
 
                 // Enable Input when game starts
                 // Call MoveAsync Every frame 

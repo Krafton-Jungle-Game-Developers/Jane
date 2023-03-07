@@ -21,6 +21,7 @@ public class Destroyable : MonoBehaviour
             _isPlayer = true;
             _inputManager = GameObject.FindObjectOfType<SpaceshipInputManager>();
             maxHealth = durability;
+            //StartCoroutine(TestHP());
         }
         else
         {
@@ -73,19 +74,19 @@ public class Destroyable : MonoBehaviour
         }
     }
 
-    //private IEnumerator TestHP()
-    //{
-    //    Debug.Log("Start HP Test");
-    //    yield return new WaitForSeconds(1f);
+    private IEnumerator TestHP()
+    {
+        Debug.Log("Start HP Test");
+        yield return new WaitForSeconds(1f);
 
-    //    Debug.Log("HP dropping");
-    //    while (durability > 0)
-    //    {
-    //        durability -= 1.0f;
-    //        yield return new WaitForSeconds(0.5f);
-    //    }
+        Debug.Log("HP dropping");
+        while (durability > 0)
+        {
+            durability -= 1.0f;
+            yield return new WaitForSeconds(0.5f);
+        }
 
-      
+    
 
-    //}
+    }
 }

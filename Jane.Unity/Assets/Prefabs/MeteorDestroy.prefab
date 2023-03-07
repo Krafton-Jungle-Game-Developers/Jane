@@ -56,13 +56,22 @@ VisualEffect:
     m_Vector3f:
       m_Array: []
     m_Vector4f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 121.976456, y: 1.2772404, z: 0, w: 0}
+        m_Name: FlashColor
+        m_Overridden: 1
+      - m_Value: {x: 15.574422, y: 0.14794086, z: 0, w: 0}
+        m_Name: Spark Color
+        m_Overridden: 1
     m_Uint:
       m_Array: []
     m_Int:
       m_Array:
-      - m_Value: 170
+      - m_Value: 256
         m_Name: SparkCount
+        m_Overridden: 1
+      - m_Value: 2000
+        m_Name: FlashSize
         m_Overridden: 1
     m_Matrix4x4f:
       m_Array: []
