@@ -16492,6 +16492,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1495488050824438711, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3466316751822046098, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
         type: 3}
       propertyPath: mainCam
@@ -16506,6 +16511,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449597231479731172, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7118629299887800606, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8583916516732169314, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
         type: 3}
