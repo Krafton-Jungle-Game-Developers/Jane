@@ -9,11 +9,13 @@ public class CircleHealthBar : MonoBehaviour
     [SerializeField] private float _visibleAngle = 45.0f;
     private Destroyable playerDestroyable;
 
+    [SerializeField] private Material _lowHealthScreenMat;
 
     void Start()
     {
         playerDestroyable = GameObject.FindGameObjectWithTag("Player").GetComponent<Destroyable>();
         _visibleAngle = _bar.fillAmount;
+        _lowHealthScreenMat.SetFloat("_FullScreenIntensity", 0f);
     }
 
     void Update()
@@ -26,6 +28,15 @@ public class CircleHealthBar : MonoBehaviour
         float amount = (_playerHP / playerDestroyable.maxHealth) * _visibleAngle;
 
         _bar.fillAmount = amount;
+
+        if (_playerHP < playerDestroyable.maxHealth / 3 )
+        {
+            _lowHealthScreenMat.SetFloat("_FullScreenIntensity", 0.2f);
+        } 
+        else if (_playerHP >= playerDestroyable.maxHealth / 3 )
+        {
+            _lowHealthScreenMat.SetFloat("_FullScreenIntensity", 0f);
+        }
     }
 
 }
