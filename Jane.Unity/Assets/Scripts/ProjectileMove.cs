@@ -10,6 +10,7 @@ public class ProjectileMove : MonoBehaviour
     [SerializeField] private float _speedMax;
     private float _speed;
     [SerializeField] private GameObject impactPrefab;
+
     //private Rigidbody _rigidbody;
     private Vector3 _startPoint;
     private Vector3 _destination;
@@ -109,7 +110,7 @@ public class ProjectileMove : MonoBehaviour
         if (impactPrefab != null)
         {
             var impactVFX = Instantiate(impactPrefab, position, rotation) as GameObject;
-            Destroy(impactVFX, .5f);
+            Destroy(impactVFX, 1.2f);
         }
 
     }
