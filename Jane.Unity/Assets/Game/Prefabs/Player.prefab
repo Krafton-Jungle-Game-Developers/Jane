@@ -574,7 +574,9 @@ MonoBehaviour:
   onScreenCheckpoint: []
   enemyList: []
   onScreenEnemy: []
-  targetCanvasPrefab: {fileID: 1154794223855646554, guid: 4caee166a46e16f4b89cbf4fb3e0a30f,
+  checkpointPrefab: {fileID: 4261192407093732681, guid: 0cbcbdd2cac13754ca47302ff4404090,
+    type: 3}
+  enemyPrefab: {fileID: 818905777937365823, guid: c6a2cb2e50297c94894b476f5684afec,
     type: 3}
   minSize: {x: 100, y: 100}
   sizeMargin: {x: -50, y: -50}

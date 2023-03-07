@@ -10,6 +10,7 @@ public class RankManager : MonoBehaviour
 {
     public static RankManager instance;
     public StandingsGenerator standingsGenerator;
+    public TargetBoxGenerator targetBoxGenerator;
 
     private Dictionary<string, NetworkPlayer> players;
     private Ulid playerID;
@@ -29,16 +30,20 @@ public class RankManager : MonoBehaviour
         SetPlayers();
     }
 
-    public void GetPlayers(NetworkPlayer playerID)
-    {
-        // Get players through playerID and add them to List
-        players.Add(playerID.UserId, playerID);
-        standingsGenerator.AddPlayerStanding();
-    }
-
     public void GetLocalPlayer(Ulid currentLocalID)
     {
         playerID = currentLocalID;
+    }
+
+    public void GetPlayers(NetworkPlayer id)
+    {
+        // Get players through playerID and add them to List
+        players.Add(id.UserId, id);
+        standingsGenerator.AddPlayerStanding();
+        if (id.UniqueId != playerID)
+        {
+            targetBoxGenerator.AddPlayerTargetBox(id.gameObject);
+        }
     }
 
     void SetPlayers()
