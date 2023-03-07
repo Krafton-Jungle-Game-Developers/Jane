@@ -11,7 +11,9 @@ public class RankManager : MonoBehaviour
     public static RankManager instance;
     public StandingsGenerator standingsGenerator;
 
-    private Dictionary<NetworkPlayer, string> players;
+    private Dictionary<string, NetworkPlayer> players;
+    private Ulid playerID;
+    public CheckPoints checkPoints;
 
     private void Awake()
     {
@@ -19,7 +21,7 @@ public class RankManager : MonoBehaviour
     }
     void Start()
     {
-        players = new Dictionary<NetworkPlayer, string>();
+        players = new Dictionary<string, NetworkPlayer>();
     }
 
     void Update()
@@ -30,22 +32,42 @@ public class RankManager : MonoBehaviour
     public void GetPlayers(NetworkPlayer playerID)
     {
         // Get players through playerID and add them to List
-        players.Add(playerID, playerID.UserId);
+        players.Add(playerID.UserId, playerID);
         standingsGenerator.AddPlayerStanding();
-        Debug.Log($"current player dictionary: {players}");
+    }
+
+    public void GetLocalPlayer(Ulid currentLocalID)
+    {
+        playerID = currentLocalID;
     }
 
     void SetPlayers()
     {
-        IOrderedEnumerable<KeyValuePair<NetworkPlayer, string>> sortedPlayer = players.OrderBy(x => x.Key.activeCheckpointIndex)
-                                                                                      .OrderByDescending(x => x.Key.activeCheckpointIndex)
-                                                                                      .ThenBy(x => x.Key.distanceToCheckpoint)
-                                                                                      .ThenByDescending(x => x.Key.distanceToCheckpoint);
+        IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sortedPlayer = players.OrderBy(x => x.Value.activeCheckpointIndex)
+                                                                                      .OrderByDescending(x => x.Value.activeCheckpointIndex)
+                                                                                      .ThenBy(x => x.Value.distanceToCheckpoint)
+                                                                                      .ThenByDescending(x => x.Value.distanceToCheckpoint);
         int i = 0;
-        foreach (KeyValuePair<NetworkPlayer, string> item in sortedPlayer)
+        foreach (KeyValuePair<string, NetworkPlayer> item in sortedPlayer)
         {
-            standingsGenerator.standingsBox[i].GetComponent<TMP_Text>().text = (i + 1) + " . " + item.Value;
+            if (item.Value.UniqueId == playerID)
+            {
+                standingsGenerator.standingsBox[i].GetComponent<TMP_Text>().color = new Color(0.3f, 1.0f, 0f, 1.0f);
+            }
+            else
+            {
+                standingsGenerator.standingsBox[i].GetComponent<TMP_Text>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            }
+            standingsGenerator.standingsBox[i].GetComponent<TMP_Text>().text = (i + 1) + " . " + item.Key;
             i++;
         }
+    }
+
+    public float GetDistance(GameObject playerObj, GameObject checkpointObj)
+    {
+        Vector3 playerLocation = playerObj.transform.position;
+        Vector3 checkpointLocation = checkpointObj.transform.position;
+        float distance = Vector3.Distance(playerLocation, checkpointLocation);
+        return distance;
     }
 }

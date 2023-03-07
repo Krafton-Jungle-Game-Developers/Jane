@@ -18,44 +18,53 @@ public class TargetBoxGenerator : MonoBehaviour
 
     void Start()
     {
-        foreach (GameObject checkPoint in checkPoints.checkPointArr)
+        if (checkPoints != null)
         {
-            checkpointList.Add(checkPoint);
+            foreach (GameObject checkPoint in checkPoints.checkPointArr)
+            {
+                checkpointList.Add(checkPoint);
+            }
+            for (int i = 0; i < checkpointList.Count; i++)
+            {
+                onScreenCheckpoint.Add(Instantiate(targetCanvasPrefab));
+                onScreenCheckpoint[i].transform.parent = transform;
+            }
+            SetNextTargetBox(0);
         }
-        for (int i = 0; i < checkpointList.Count; i++)
-        {
-            onScreenCheckpoint.Add(Instantiate(targetCanvasPrefab));
-            onScreenCheckpoint[i].transform.parent = transform;
-        }
-        SetNextTargetBox(0);
     }
 
     void Update()
     {
-        UpdateTargetBox();
+        if (checkPoints != null) 
+        { 
+            UpdateTargetBox();
+        }
     }
 
     private void UpdateTargetBox()
     {
         int i = checkPoints.idx;
-        bool isInView = checkpointList[i].GetComponent<Renderer>().isVisible;
-        onScreenCheckpoint[i].GetComponent<CanvasGroup>().alpha = isInView ? 1 : 0;
-/*        offScreenObjects[i].GetComponent<CanvasGroup>().alpha = isInView ? 0 : 1;
-*/
-        if (isInView && !checkPoints.goalActive)
+        if (!checkPoints.goalActive)
         {
-            Rect targetRect = GetBoundsInScreenSpace(checkpointList[i], mainCam);
-            RectTransform targetRectTransform = onScreenCheckpoint[i].gameObject.GetComponent<RectTransform>();
+            bool isInView = IsInScreen(checkpointList[i].transform.position);
+            onScreenCheckpoint[i].GetComponent<CanvasGroup>().alpha = isInView ? 1 : 0;
+            /*        offScreenObjects[i].GetComponent<CanvasGroup>().alpha = isInView ? 0 : 1;
+            */
+            if (isInView)
+            {
+                Rect targetRect = GetBoundsInScreenSpace(checkpointList[i], mainCam);
+                RectTransform targetRectTransform = onScreenCheckpoint[i].gameObject.GetComponent<RectTransform>();
 
-            targetRectTransform.position = new Vector2(targetRect.center.x, targetRect.center.y);
-            targetRectTransform.sizeDelta = new Vector2(Mathf.Max(targetRect.width, minSize.x), Mathf.Max(targetRect.height, minSize.y)) + sizeMargin;
-            onScreenCheckpoint[i].SendMessage("UpdateText", checkpointList[i].transform.position);
+                targetRectTransform.position = new Vector2(targetRect.center.x, targetRect.center.y);
+                targetRectTransform.sizeDelta = new Vector2(Mathf.Max(targetRect.width, minSize.x), Mathf.Max(targetRect.height, minSize.y)) + sizeMargin;
+                onScreenCheckpoint[i].SendMessage("UpdateText", checkpointList[i].transform.position);
+        }
         }
     }
 
     public void ResetTargetBox()
     {
-        foreach(GameObject obj in onScreenCheckpoint)
+        foreach (GameObject obj in onScreenCheckpoint)
         {
             obj.SetActive(false);
         }
@@ -107,4 +116,13 @@ public class TargetBoxGenerator : MonoBehaviour
         return Rect.MinMaxRect(min_x, min_y, max_x, max_y);
     }
 
+    public bool IsInScreen(Vector3 targetPos)
+    {
+        Vector3 viewportPos = mainCam.WorldToViewportPoint(targetPos);
+        if ((0 < viewportPos.x && viewportPos.x < 1) && (0 < viewportPos.y && viewportPos.y < 1) && 0 < viewportPos.z)
+        {
+            return true;
+        }
+        return false;
+    }
 }

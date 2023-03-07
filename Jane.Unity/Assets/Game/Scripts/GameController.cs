@@ -13,7 +13,6 @@ public class GameController : MonoBehaviour
     public GameObject hud;
     private int _countdownTime = 3;
     private SpaceshipController _spaceshipController;
-    private RankManager _rankManager;
 
     // BGM Player
     [SerializeField] AudioSource bgmPlayer;
@@ -33,21 +32,20 @@ public class GameController : MonoBehaviour
         bgmPlayer.Play();
 
         _spaceshipController = GameObject.FindGameObjectWithTag("Player").GetComponent<SpaceshipController>();
-        _rankManager = GetComponentInChildren<RankManager>();
         StartGame();
     }
 
     private void StartGame()
     {
         StartCoroutine(CountdownStart());
-        _spaceshipController.canControl = false;
-
+/*        _spaceshipController.canControl = false;
+*/
     }
 
     public void EndGame()
     {
-        _spaceshipController.canControl = false;
-        hud.GetComponentInChildren<Canvas>().enabled = false;
+/*        _spaceshipController.canControl = false;
+*/        hud.GetComponentInChildren<Canvas>().enabled = false;
         endGameText.gameObject.SetActive(true);
     }
 
@@ -68,8 +66,8 @@ public class GameController : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        _spaceshipController.canControl = true;
-
+/*        _spaceshipController.canControl = true;
+*/
         hud.GetComponentInChildren<Canvas>().enabled = true;
 
         countdownText.gameObject.SetActive(false);

@@ -147,6 +147,9 @@ namespace Jane.Unity.Server
                 networkPlayer.Initialize(joinedPlayerData, true);
                 // Enable Input when game starts
                 // Call MoveAsync Every frame 
+                inputManager.EnableInput();
+                inputManager.EnableMovement();
+                inputManager.EnableSteering();
             }
             else
             {

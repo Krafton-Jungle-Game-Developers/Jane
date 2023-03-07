@@ -13,8 +13,7 @@ public class SpawnMeteor : MonoBehaviour
     // Meteor Prefabs Control
     public GameObject[] objectPrefabs;
     public float destroyTime = 10.0f;
-    [SerializeField] private float _minSpeed = 100f;
-    [SerializeField] private float _maxSpeed = 200f;
+    
     
     //public GameObject meteorVFX;
     public Transform startPoint;

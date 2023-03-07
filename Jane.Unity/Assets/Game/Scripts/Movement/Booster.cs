@@ -16,7 +16,7 @@ public class Booster : MonoBehaviour
     [Header("Booster Settings")]
     [SerializeField] private float _boosterSpeed = 400f;
     [SerializeField] private float _normalSpeed = 200f;
-    [SerializeField] private float _warpRate = 0.02f;
+    [SerializeField] private float _warpRate = 0.05f;
     [SerializeField] private bool _instantSpeed = true;
 
     public bool _isBoosterActive;
@@ -89,7 +89,7 @@ public class Booster : MonoBehaviour
         }
         else
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
             spaceshipController.ChangeSpeed(_normalSpeed);
 
             float _warpAmount = boosterLoopVFX.GetFloat("WarpAmount");
