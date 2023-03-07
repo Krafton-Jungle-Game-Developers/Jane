@@ -20,7 +20,9 @@ public class CircleHealthBar : MonoBehaviour
 
     void Update()
     {
+        if(playerDestroyable != null) { 
         HealthChange(playerDestroyable.durability);
+        }
     }
 
     private void HealthChange(float _playerHP)
