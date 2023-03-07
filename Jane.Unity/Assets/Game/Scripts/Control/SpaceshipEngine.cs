@@ -6,6 +6,12 @@ public class SpaceshipEngine : MonoBehaviour
 {
     [Header("Input")]
     [SerializeField] private bool controlsDisabled = false;
+    public bool ControlsDisabled
+    {
+        get => controlsDisabled;
+        set => controlsDisabled = value;
+    }
+
     [SerializeField] private Vector3 movementInputs;
     public Vector3 MovementInputs => movementInputs;
     [SerializeField] public Vector3 steeringInputs;
