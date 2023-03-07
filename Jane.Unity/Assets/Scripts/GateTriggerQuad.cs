@@ -30,12 +30,12 @@ public class GateTriggerQuad : MonoBehaviour
     public void Activate()
     {
         gateActivateVFX.Play();
-        swirlGreen.Play();
-    }
+/*        swirlGreen.Play();
+*/    }
 
     public void Deactivate()
     {
         gateActivateVFX.Stop();
-        swirlGreen.Stop();
-    }
+/*        swirlGreen.Stop();
+*/    }
 }
