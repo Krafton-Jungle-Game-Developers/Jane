@@ -4939,7 +4939,7 @@ Transform:
   m_GameObject: {fileID: 3367040749032044191}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -651, y: 0, z: 119}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 6, y: 6, z: 6}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2967083954634034061}
@@ -4996,6 +4996,8 @@ MonoBehaviour:
   _speedMin: 3
   _speedMax: 10
   impactPrefab: {fileID: 8217473123363731195, guid: e4644045d39470a4bbb23231dd56fedd,
+    type: 3}
+  destroyPrefab: {fileID: 8217473123363731195, guid: 51f9cc2c14be07c4f96cc11533e471f6,
     type: 3}
   SpawnController: {fileID: 8989313935175702695, guid: a098fa6dce5f70e43be967bdf8bf2ec6,
     type: 3}
@@ -5135,7 +5137,7 @@ Transform:
   m_GameObject: {fileID: 6610242936981584568}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 30, y: 30, z: 30}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4839058931604694502}
