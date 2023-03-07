@@ -58,7 +58,7 @@ public class TargetBoxGenerator : MonoBehaviour
                 targetRectTransform.position = new Vector2(targetRect.center.x, targetRect.center.y);
                 targetRectTransform.sizeDelta = new Vector2(Mathf.Max(targetRect.width, minSize.x), Mathf.Max(targetRect.height, minSize.y)) + sizeMargin;
                 onScreenCheckpoint[i].SendMessage("UpdateText", checkpointList[i].transform.position);
-        }
+            }
         }
     }
 
