@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpaceshipEngine : MonoBehaviour
 {
     [Header("Input")]
-    [SerializeField] private bool controlsDisabled = false;
+    [SerializeField] public bool controlsDisabled = false;
     [SerializeField] public Vector3 movementInputs;
     [SerializeField] public Vector3 steeringInputs;
     [SerializeField] public Vector3 boostInputs;
@@ -14,7 +14,7 @@ public class SpaceshipEngine : MonoBehaviour
     [SerializeField] private Vector3 maxMovementInputs = new(1f, 1f, 1f);
 
     [Header("Movement & Steering Forces")]
-    [SerializeField] private bool enginesActivated = false;
+    [SerializeField] private bool enginesActivated = true;
     [SerializeField] private Rigidbody spaceShipRigidbody;
 
     [SerializeField] private Vector3 maxMovementForces = new(400f, 400f, 400f);

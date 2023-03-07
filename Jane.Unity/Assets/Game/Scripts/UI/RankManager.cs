@@ -12,6 +12,8 @@ public class RankManager : MonoBehaviour
     public StandingsGenerator standingsGenerator;
 
     private Dictionary<string, NetworkPlayer> players;
+    private Ulid playerID;
+    public CheckPoints checkPoints;
 
     private void Awake()
     {
@@ -34,6 +36,11 @@ public class RankManager : MonoBehaviour
         standingsGenerator.AddPlayerStanding();
     }
 
+    public void GetLocalPlayer(Ulid currentLocalID)
+    {
+        playerID = currentLocalID;
+    }
+
     void SetPlayers()
     {
         IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sortedPlayer = players.OrderBy(x => x.Value.activeCheckpointIndex)
@@ -43,14 +50,24 @@ public class RankManager : MonoBehaviour
         int i = 0;
         foreach (KeyValuePair<string, NetworkPlayer> item in sortedPlayer)
         {
-            Debug.Log(item.Value.activeCheckpointIndex);
+            if (item.Value.UniqueId == playerID)
+            {
+                standingsGenerator.standingsBox[i].GetComponent<TMP_Text>().color = new Color(0.3f, 1.0f, 0f, 1.0f);
+            }
+            else
+            {
+                standingsGenerator.standingsBox[i].GetComponent<TMP_Text>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            }
             standingsGenerator.standingsBox[i].GetComponent<TMP_Text>().text = (i + 1) + " . " + item.Key;
             i++;
         }
     }
 
-    public void UpdateInformation(NetworkPlayer playerID)
+    public float GetDistance(GameObject playerObj, GameObject checkpointObj)
     {
-        players[playerID.UserId] = playerID;
+        Vector3 playerLocation = playerObj.transform.position;
+        Vector3 checkpointLocation = checkpointObj.transform.position;
+        float distance = Vector3.Distance(playerLocation, checkpointLocation);
+        return distance;
     }
 }
