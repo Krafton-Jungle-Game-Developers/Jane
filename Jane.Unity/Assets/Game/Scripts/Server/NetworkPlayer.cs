@@ -36,14 +36,15 @@ public class NetworkPlayer : MonoBehaviour
         gameObject.name = data.UserId;
     }
 
-    private void Update()
-    {
-        RankManager rm = RankManager.instance;
-        if (!rm.checkPoints.goalActive)
-        {
-            distanceToCheckpoint = rm.GetDistance(this.gameObject, rm.checkPoints.checkPointArr[activeCheckpointIndex]);
-        }
-    }
+    //private void Update()
+    //{
+    //    RankManager rm = RankManager.instance;
+    //    if (!rm.checkPoints.goalActive)
+    //    {
+    //        distanceToCheckpoint = rm.GetDistance(this.gameObject, rm.checkPoints.checkPointArr[activeCheckpointIndex]);
+    //    }
+    //}
+
     public void UpdateMovement(MoveRequest request)
     {
         transform.SetPositionAndRotation(request.Position, request.Rotation);

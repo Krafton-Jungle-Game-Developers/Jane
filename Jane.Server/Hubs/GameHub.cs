@@ -14,7 +14,6 @@ namespace Jane.Server.Hubs
 
         // TODO: PlayerCount of a game should never be received from client. Anti-pattern.
         private int totalPlayerCount;
-        private int readyPlayerCount;
         
         private IInMemoryStorage<GamePlayerData> storage;
         private GamePlayerData self;
@@ -34,6 +33,7 @@ namespace Jane.Server.Hubs
                 GameId = request.GameId,
                 UserId = request.UserId,
                 UniqueId = request.UniqueId,
+                IsInitialized = request.IsInitialized,
                 Position = request.InitialPosition,
                 Rotation = request.InitialRotation,
                 CurrentRegion = 1,
@@ -56,7 +56,7 @@ namespace Jane.Server.Hubs
             {
                 waitOtherPlayersTask = Task.Run(async () =>
                 {
-                    while (readyPlayerCount < totalPlayerCount) { await Task.Delay(1000); }
+                    while (storage.AllValues.Any(user => user.IsInitialized is false)) { await Task.Delay(1000); }
 
                     GameStateChangedResponse countDown = new() { GameId = gameId, GameState = GameState.CountDown };
                     Broadcast(game).OnGameStateChange(countDown);
@@ -100,7 +100,7 @@ namespace Jane.Server.Hubs
 
         public ValueTask GameInitializedAsync(GameInitializedRequest request)
         {
-            Interlocked.Increment(ref readyPlayerCount);
+            self.IsInitialized = true;
             return CompletedTask;
         }
 
