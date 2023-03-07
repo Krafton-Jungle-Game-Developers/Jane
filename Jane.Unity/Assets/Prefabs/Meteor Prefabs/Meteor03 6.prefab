@@ -4977,7 +4977,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   durability: 10
-  destroyPrefab: {fileID: 0}
+  _stunTime: 1
+  destroyPrefab: {fileID: 8217473123363731195, guid: 51f9cc2c14be07c4f96cc11533e471f6,
+    type: 3}
+  maxHealth: 0
 --- !u!114 &3424201579328106723
 MonoBehaviour:
   m_ObjectHideFlags: 0

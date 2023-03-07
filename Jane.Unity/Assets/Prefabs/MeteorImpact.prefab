@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9195848565940103955}
   - component: {fileID: 1847803000987104429}
   m_Layer: 0
-  m_Name: MeteorDestroy
+  m_Name: MeteorImpact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,22 +56,13 @@ VisualEffect:
     m_Vector3f:
       m_Array: []
     m_Vector4f:
-      m_Array:
-      - m_Value: {x: 121.976456, y: 1.2772404, z: 0, w: 0}
-        m_Name: FlashColor
-        m_Overridden: 1
-      - m_Value: {x: 15.574422, y: 0.14794086, z: 0, w: 0}
-        m_Name: Spark Color
-        m_Overridden: 1
+      m_Array: []
     m_Uint:
       m_Array: []
     m_Int:
       m_Array:
-      - m_Value: 256
+      - m_Value: 170
         m_Name: SparkCount
-        m_Overridden: 1
-      - m_Value: 2000
-        m_Name: FlashSize
         m_Overridden: 1
     m_Matrix4x4f:
       m_Array: []
@@ -135,7 +126,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 1abb4cad5c08aa945b90a7ef0b2a747a, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
