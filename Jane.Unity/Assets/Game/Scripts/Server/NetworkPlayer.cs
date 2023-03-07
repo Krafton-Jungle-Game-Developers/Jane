@@ -12,8 +12,17 @@ public class NetworkPlayer : MonoBehaviour
     {
         UserId = data.UserId;
         UniqueId = data.UniqueId;
+        activeCheckpointIndex = 0;
     }
 
+    private void Update()
+    {
+        RankManager rm = RankManager.instance;
+        if (!rm.checkPoints.goalActive)
+        {
+            distanceToCheckpoint = rm.GetDistance(this.gameObject, rm.checkPoints.checkPointArr[activeCheckpointIndex]);
+        }
+    }
     public void UpdateMovement(MoveRequest request)
     {
         transform.SetPositionAndRotation(request.Position, request.Rotation);
