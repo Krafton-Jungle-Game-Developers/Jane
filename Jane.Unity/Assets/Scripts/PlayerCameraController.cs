@@ -25,7 +25,7 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField] private Quaternion cameraRotationOffset;
     [SerializeField] private float cameraPositionTension = 10;
     [SerializeField] private float cameraRotationTension = 10;
-    
+
     private float _cameraX;
     private float _cameraY;
     private float _cameraZ;
@@ -44,10 +44,10 @@ public class PlayerCameraController : MonoBehaviour
     public SpaceshipController spaceshipController;
     public RectTransform cursorRectTransform;
     private Vector3 _screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f), _mouseDistance;
-    [SerializeField]private float _gimbalX = 0f;
-    [SerializeField]private float _gimbalY = 0f;
+    [SerializeField] private float _gimbalX = 0f;
+    [SerializeField] private float _gimbalY = 0f;
     private Quaternion _targetQuaternion;
-    [SerializeField]private float _gimbalTargetZ;
+    [SerializeField] private float _gimbalTargetZ;
     [SerializeField] private Quaternion _gimbalRotationZ;
     [SerializeField] private Quaternion _gimbalRotationX;
     [Range(0f, 20f)] public float gimbalX_Intensity;
@@ -66,7 +66,7 @@ public class PlayerCameraController : MonoBehaviour
         //CameraBoosterMovement
         booster = GameObject.FindGameObjectWithTag("Player").GetComponent<Booster>();
     }
-    
+
     void LateUpdate()
     {
         CameraGimbalMovement();
@@ -84,7 +84,7 @@ public class PlayerCameraController : MonoBehaviour
         _rotationZ = playerTransform.rotation.z;
         _rotationW = playerTransform.rotation.w;
 
-        _targetQuaternion = new Quaternion(_rotationX,_rotationY,_rotationZ,_rotationW);
+        _targetQuaternion = new Quaternion(_rotationX, _rotationY, _rotationZ, _rotationW);
         //_targetQuaternion = Quaternion.AngleAxis(10, Vector3.forward) * _gimbalZ;
 
 
@@ -114,16 +114,18 @@ public class PlayerCameraController : MonoBehaviour
 
     private void CameraBoosterMovement()
     {
-
-        if (booster._isBoosterActive)
+        if (booster != null)
         {
-            _shakeX = UnityEngine.Random.Range(1f, -1f) * _shakeMagnitude;
-            _shakeY = UnityEngine.Random.Range(1f, -1f) * _shakeMagnitude;
-        }
-        else
-        {
-            _shakeX = 0;
-            _shakeY = 0;
+            if (booster._isBoosterActive)
+            {
+                _shakeX = UnityEngine.Random.Range(1f, -1f) * _shakeMagnitude;
+                _shakeY = UnityEngine.Random.Range(1f, -1f) * _shakeMagnitude;
+            }
+            else
+            {
+                _shakeX = 0;
+                _shakeY = 0;
+            }
         }
     }
 
