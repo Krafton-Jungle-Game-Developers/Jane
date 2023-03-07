@@ -123,7 +123,7 @@ namespace Jane.Unity.Server
         {
             if (joinedPlayer is null) { throw new ArgumentNullException(); }
 
-            Debug.Log($"Player {joinedPlayer.UserId} has joined the room.");
+            Debug.Log($"Player {joinedPlayer.UserId}: {joinedPlayer.UniqueId} has joined the room.");
 
             GameObject playerGameObject;
             NetworkPlayer networkPlayer;
@@ -134,9 +134,12 @@ namespace Jane.Unity.Server
                 playerGameObject = playerRenderer.transform.root.gameObject;
                 playerGameObject.transform.SetPositionAndRotation(joinedPlayer.Position, joinedPlayer.Rotation);
                 playerRenderer.enabled = true;
-                
+
                 // Enable Input when game starts
                 // Call MoveAsync Every frame 
+                inputManager.EnableInput();
+                inputManager.EnableMovement();
+                inputManager.EnableSteering();
             }
             else
             {
@@ -147,6 +150,7 @@ namespace Jane.Unity.Server
 
             networkPlayer = playerGameObject.GetComponent<NetworkPlayer>();
             networkPlayer.Initialize(joinedPlayer);
+            RankManager.instance.GetPlayers(networkPlayer);
 
             players.TryAdd(joinedPlayer.UniqueId, networkPlayer);
         }
@@ -170,5 +174,4 @@ namespace Jane.Unity.Server
             }
         }
     }
-
 }

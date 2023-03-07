@@ -40,14 +40,14 @@ public class GameController : MonoBehaviour
     private void StartGame()
     {
         StartCoroutine(CountdownStart());
-        _spaceshipController.canControl = false;
-
+/*        _spaceshipController.canControl = false;
+*/
     }
 
     public void EndGame()
     {
-        _spaceshipController.canControl = false;
-        hud.GetComponentInChildren<Canvas>().enabled = false;
+/*        _spaceshipController.canControl = false;
+*/        hud.GetComponentInChildren<Canvas>().enabled = false;
         endGameText.gameObject.SetActive(true);
     }
 
@@ -68,8 +68,8 @@ public class GameController : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        _spaceshipController.canControl = true;
-
+/*        _spaceshipController.canControl = true;
+*/
         hud.GetComponentInChildren<Canvas>().enabled = true;
 
         countdownText.gameObject.SetActive(false);
