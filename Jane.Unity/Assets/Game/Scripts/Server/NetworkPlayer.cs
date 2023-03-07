@@ -1,7 +1,8 @@
 using System;
+using UnityEngine;
+using Cysharp.Threading.Tasks;
 using Jane.Unity;
 using Jane.Unity.ServerShared.MemoryPackObjects;
-using UnityEngine;
 
 public class NetworkPlayer : MonoBehaviour
 {
@@ -18,9 +19,37 @@ public class NetworkPlayer : MonoBehaviour
 
     private bool _isSelf;
     public bool IsSelf => _isSelf;
+
+    private SpaceshipEngine engine;
     
     [SerializeField] private MeshRenderer modelRenderer;
-    
+
+    private void Awake()
+    {
+        if (_isSelf) { TryGetComponent(out engine); }
+    }
+
+    private async UniTaskVoid OnTriggerEnter(Collider other)
+    {
+        if (_isSelf is false) { return; }
+
+        if (other.CompareTag("CheckPoint"))
+        {
+            CheckPoint checkPoint = other.GetComponent<CheckPoint>();
+            CurrentRegion = checkPoint.Region;
+            CurrentZone = checkPoint.CheckPointNumber;
+
+            checkPoint.Interact();
+
+            if (checkPoint.IsWarpGate)
+            {
+                engine.ControlsDisabled = true;
+                await checkPoint.Warp(transform);
+                engine.ControlsDisabled = false;
+            }
+        }
+    }
+
     public void Initialize(GamePlayerData data, bool isSelf)
     {
         userId = data.UserId;

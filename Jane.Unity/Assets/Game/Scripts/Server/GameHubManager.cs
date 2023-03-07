@@ -108,6 +108,7 @@ namespace Jane.Unity.Server
                 PlayerCount = GameInfo.PlayerCount,
                 UserId = UserInfo.UserId,
                 UniqueId = UserInfo.UniqueId,
+                IsInitialized = false,
                 InitialPosition = Vector3.zero,
                 InitialRotation = Quaternion.identity
             };
