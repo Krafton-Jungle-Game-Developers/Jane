@@ -33,7 +33,7 @@ public class TargetBoxGenerator : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (checkPoints != null) 
         { 
