@@ -25150,6 +25150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bar: {fileID: 1926808101}
   _visibleAngle: 36
+  _lowHealthScreenMat: {fileID: 2100000, guid: 2d725f113dbee3d4193002508a97beaf, type: 2}
 --- !u!1 &1574868801
 GameObject:
   m_ObjectHideFlags: 0
