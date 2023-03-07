@@ -132,12 +132,6 @@ public class SpaceshipEngine : MonoBehaviour
         boostInputs.z = Mathf.Clamp(newValuesByAxis.z, -1f, 1f);
     }
 
-    // Used for stopping Spaceship from outside script 
-    public void SetControlBool(bool value)
-    {
-        controlsDisabled = value;
-    }
-
     private void Update()
     {
         // Use resources during boost

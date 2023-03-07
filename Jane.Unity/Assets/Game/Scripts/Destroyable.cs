@@ -1,16 +1,17 @@
+using Jane.Unity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Destroyable : MonoBehaviour
 {
-    public int durability = 10;
+    public float durability = 10;
     [SerializeField] private float _stunTime = 1f;
     [SerializeField] private GameObject destroyPrefab;
 
-    public int maxHealth;
+    public float maxHealth;
     private bool _isPlayer = false;
-    private SpaceshipEngine _spaceshipEngine;
+    private SpaceshipInputManager _inputManager;
 
     private void Start()
     {
@@ -18,7 +19,7 @@ public class Destroyable : MonoBehaviour
         if (gameObject.tag == "Player")
         {
             _isPlayer = true;
-            _spaceshipEngine = gameObject.GetComponent<SpaceshipEngine>();
+            _inputManager = GameObject.FindObjectOfType<SpaceshipInputManager>();
             maxHealth = durability;
         }
         else
@@ -41,9 +42,14 @@ public class Destroyable : MonoBehaviour
             {
                 Destroy(gameObject);
             } 
-            else if (_spaceshipEngine != null) 
+            else if (_inputManager != null) 
             {
                 StartCoroutine(StunPlayer());
+                
+                // Player Stun End
+                _inputManager.EnableInput();
+                _inputManager.EnableMovement();
+                _inputManager.EnableSteering();
                 
             }
         }
@@ -57,12 +63,29 @@ public class Destroyable : MonoBehaviour
         }
         else
         {
-            _spaceshipEngine.SetControlBool(false); 
+            _inputManager.DisableInput();
+            _inputManager.DisableMovement(true);
+            _inputManager.DisableSteering(true);
             yield return new WaitForSeconds(_stunTime);
-            
+
             // return to full health 
             durability = maxHealth;
-            _spaceshipEngine.SetControlBool(true); 
         }
     }
+
+    //private IEnumerator TestHP()
+    //{
+    //    Debug.Log("Start HP Test");
+    //    yield return new WaitForSeconds(1f);
+
+    //    Debug.Log("HP dropping");
+    //    while (durability > 0)
+    //    {
+    //        durability -= 1.0f;
+    //        yield return new WaitForSeconds(0.5f);
+    //    }
+
+      
+
+    //}
 }
