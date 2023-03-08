@@ -14,7 +14,7 @@ public class GoalController : MonoBehaviour
     //    if (other.gameObject.CompareTag("Player"))
     //    {
     //        Debug.Log("a");
-    //        _gameController.EndGame();
+    //        _gameController.GameOver();
     //    }
     //}
 }

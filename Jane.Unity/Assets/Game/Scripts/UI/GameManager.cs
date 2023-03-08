@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour
     public GameObject PlayingHolder => playingHolder;
     [SerializeField] private TMP_Text countDownText;
     public TMP_Text CountDownText => countDownText;
+    [SerializeField] private GameObject finishHolder;
+    [SerializeField] private GameObject gameOverHolder;
+    [SerializeField] private GameObject resultHolder;
     [SerializeField] private TMP_Text minuteText;
     [SerializeField] private TMP_Text secondText;
     [SerializeField] private TMP_Text milisecondText;
@@ -65,13 +68,33 @@ public class GameManager : MonoBehaviour
 
         minuteText.text = $"{time.Minutes:00}";
         secondText.text = $"{time.Seconds:00}";
-        milisecondText.text = $"{time.Milliseconds / 10:00}";
+        milisecondText.text = $"{(time.Milliseconds / 10):00}";
     }
 
-    public void EndGame()
+    public void RaceFinish()
+    {
+        // Do Stuff
+        // Game is not yet over for others
+        HUD.SetActive(false);
+        playingHolder.SetActive(false);
+        finishHolder.SetActive(true);
+
+        engine.ControlsDisabled = true;
+        engine.EnginesActivated = false;
+        
+        inputManager.DisableMovement(true);
+    }
+
+    public void GameOver()
     {
         // GameState.GameOver
         // Show Result Game UI
+        HUD.SetActive(false);
+        playingHolder.SetActive(false);
+        finishHolder.SetActive(false);
+
+        gameOverHolder.SetActive(true);
+
         engine.ControlsDisabled = true;
         engine.EnginesActivated = false;
 

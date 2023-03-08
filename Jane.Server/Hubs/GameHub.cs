@@ -20,7 +20,7 @@ namespace Jane.Server.Hubs
 
         private Ulid gameId;
         private GameState gameState = GameState.Waiting;
-        private TimeSpan gameDuration = TimeSpan.FromSeconds(30);
+        private TimeSpan gameDuration = TimeSpan.FromSeconds(10);
         private TimeSpan timeLeft;
         private Task waitOtherPlayersTask = null;
         private Task timerTask = null;
@@ -79,10 +79,10 @@ namespace Jane.Server.Hubs
                                 await Task.Delay(checkInterval);
                                 timeLeft -= checkInterval;
 
-                                Broadcast(game).OnTimerUpdate(timeLeft.Ticks);
+                                BroadcastToSelf(game).OnTimerUpdate(timeLeft.Ticks);
                             }
 
-                            GameStateChangedResponse gameEnd = new() { GameId = gameId, GameState = GameState.Finished };
+                            GameStateChangedResponse gameEnd = new() { GameId = gameId, GameState = GameState.GameOver };
                             Broadcast(game).OnGameStateChange(gameEnd);
                         });
                     }

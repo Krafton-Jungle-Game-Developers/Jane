@@ -111,7 +111,7 @@ namespace Jane.Unity.Server
             await UniTask.WaitUntil(() => GameInfo.GameState is GameState.GameOver, cancellationToken: token);
             gameCts.Cancel();
             
-            gameManager.EndGame();
+            gameManager.GameOver();
 
             Debug.Log("Game Over!");
         }
@@ -195,7 +195,6 @@ namespace Jane.Unity.Server
         public void OnTimerUpdate(long ticks)
         {
             gameManager.UpdateTimer(ticks);
-
         }
 
         public void OnMove(MoveRequest request)

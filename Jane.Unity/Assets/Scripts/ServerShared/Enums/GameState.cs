@@ -5,7 +5,6 @@
         Waiting = 0,
         CountDown = 1,
         Playing = 2,
-        Finished = 3,
-        GameOver = 4
+        GameOver = 3
     }
 }
