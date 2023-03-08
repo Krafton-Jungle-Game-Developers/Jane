@@ -35248,12 +35248,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 837287700}
   m_Mesh: {fileID: 4300002, guid: d41401d2ba1d9964aaffa87eced7f88b, type: 3}
---- !u!23 &840728066 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 8588723812721896758, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
-    type: 3}
-  m_PrefabInstance: {fileID: 1141281439}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &841213788
 GameObject:
   m_ObjectHideFlags: 0
@@ -45770,7 +45764,7 @@ PrefabInstance:
     - target: {fileID: 8583916516732169314, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8583916516732169314, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
         type: 3}
@@ -66583,7 +66577,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1647713484
 GameObject:
@@ -77710,11 +77704,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9e9cb0875cd37848a6c55038d521534, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerGameObject: {fileID: 0}
   otherPlayerPrefab: {fileID: 8450392848401878037, guid: 9d4e4bec09b98d44ab805c35b00d549e,
     type: 3}
-  playerRenderer: {fileID: 840728066}
-  inputManager: {fileID: 1645581984}
-  cameraController: {fileID: 1719736955}
+  gameManager: {fileID: 0}
 --- !u!4 &1945883465
 Transform:
   m_ObjectHideFlags: 0
