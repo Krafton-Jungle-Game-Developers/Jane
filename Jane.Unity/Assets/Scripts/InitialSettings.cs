@@ -40,13 +40,13 @@ namespace Assets.Scripts
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Init()
         {
-            Application.targetFrameRate = 60;
+            Application.targetFrameRate = 144;
             System.Random random = new System.Random();
             List<string> names = new List<string>() { "Arrow", "Bjergson", "Canyon", "Doublelift", "Elyoya", "Faker", "GorillA", "Hai", "Ignar", "Jankos", "Karsa", "Labrov", "Mithy",
                                                       "Nemesis", "Oner", "Perkz", "Quas", "River", "Sneaky", "Tomo", "Uzi", "Vicla", "WildTurtle", "Xmithie", "YamatoCanon", "Zven"};
             string randomName = names[random.Next(names.Count)];
             string uniqueID = UserInfo.UniqueId.ToString();
-            UserInfo.UserId = randomName + "#" + uniqueID.Substring(uniqueID.Length - 4);
+            UserInfo.UserId = randomName + " #" + uniqueID.Substring(uniqueID.Length - 4);
         }
     }
 }

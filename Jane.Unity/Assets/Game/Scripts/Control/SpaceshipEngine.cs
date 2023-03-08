@@ -23,7 +23,11 @@ public class SpaceshipEngine : MonoBehaviour
 
     [Header("Movement & Steering Forces")]
     [SerializeField] private bool enginesActivated = false;
-    public bool EnginesActivated => enginesActivated;
+    public bool EnginesActivated
+    {
+        get => enginesActivated;
+        set => enginesActivated = value;
+    }
     [SerializeField] private Rigidbody spaceShipRigidbody;
 
     [SerializeField] private Vector3 maxMovementForces = new(400f, 400f, 400f);

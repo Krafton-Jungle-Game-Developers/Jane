@@ -34,6 +34,7 @@ namespace Jane.Server.Hubs
                 UserId = request.UserId,
                 UniqueId = request.UniqueId,
                 IsInitialized = request.IsInitialized,
+                IsFinished = false,
                 Position = request.InitialPosition,
                 Rotation = request.InitialRotation,
                 CurrentRegion = 1,

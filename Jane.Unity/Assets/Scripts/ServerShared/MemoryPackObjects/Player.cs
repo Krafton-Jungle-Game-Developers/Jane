@@ -11,6 +11,7 @@ namespace Jane.Unity.ServerShared.MemoryPackObjects
         public string UserId { get; set; }
         public Ulid UniqueId { get; set; }
         public bool IsInitialized { get; set; }
+        public bool IsFinished { get; set; }
         public Vector3 Position { get; set; }
         public Quaternion Rotation { get; set; }
         public int CurrentRegion { get; set; }

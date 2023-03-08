@@ -21,7 +21,8 @@ public class NetworkPlayer : MonoBehaviour
     public bool IsSelf => _isSelf;
 
     private SpaceshipEngine engine;
-    
+    public SpaceshipEngine Engine => engine;
+
     [SerializeField] private MeshRenderer modelRenderer;
 
     private void Awake()

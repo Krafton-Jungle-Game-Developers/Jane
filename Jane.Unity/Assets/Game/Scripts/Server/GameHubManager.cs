@@ -20,9 +20,11 @@ namespace Jane.Unity.Server
     public class GameHubManager : MonoBehaviour, IGameHubReceiver
     {
         private readonly CancellationTokenSource shutdownCts = new();
+        private readonly CancellationTokenSource gameCts = new();
         private GrpcChannelManager channelManager;
         private IGameHub? gameHub;
-        
+
+        private NetworkPlayer self;
         private Dictionary<Ulid, NetworkPlayer> players = new(4);
         [SerializeField] private GameObject playerGameObject;
         [SerializeField] private GameObject otherPlayerPrefab;
@@ -89,15 +91,29 @@ namespace Jane.Unity.Server
             await gameManager.CountDownAsync(3);
             await UniTask.WaitUntil(() => GameInfo.GameState is GameState.Playing, cancellationToken: token);
 
-            gameManager.StartGame();
+            gameManager.StartGame().Forget();
 
-            WaitForGameFinishAsync(token).Forget();
+            WaitForGameOverAsync(token).Forget();
         }
 
-        private async UniTask WaitForGameFinishAsync(CancellationToken token)
+        private async UniTask WaitForGameOverAsync(CancellationToken token)
         {
-            await UniTask.WaitUntil(() => GameInfo.GameState is GameState.Finished, cancellationToken: token);
-            Debug.Log("Game Finished");
+            UniTaskAsyncEnumerable.IntervalFrame(1)
+                .Where(_ => GameInfo.GameState is GameState.Playing)
+                .ForEachAsync(_ => gameHub.MoveAsync(new()
+                {
+                    Id = UserInfo.UniqueId,
+                    Position = self.transform.position,
+                    Rotation = self.transform.rotation
+                }), gameCts.Token).SuppressCancellationThrow().Forget();
+
+
+            await UniTask.WaitUntil(() => GameInfo.GameState is GameState.GameOver, cancellationToken: token);
+            gameCts.Cancel();
+            
+            gameManager.EndGame();
+
+            Debug.Log("Game Over!");
         }
 
         public async UniTask JoinAsync()
@@ -146,6 +162,7 @@ namespace Jane.Unity.Server
             {
                 networkPlayer = playerGameObject.GetComponent<NetworkPlayer>();
                 networkPlayer.Initialize(joinedPlayerData, true);
+                self = networkPlayer;
                 // Enable Input when game starts
                 // Call MoveAsync Every frame
             }
@@ -177,7 +194,8 @@ namespace Jane.Unity.Server
 
         public void OnTimerUpdate(long ticks)
         {
-            Debug.Log(ticks);
+            gameManager.UpdateTimer(ticks);
+
         }
 
         public void OnMove(MoveRequest request)
