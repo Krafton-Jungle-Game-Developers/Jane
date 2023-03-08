@@ -17,5 +17,9 @@ public class GoalController : MonoBehaviour
             other.gameObject.GetComponent<NetworkPlayer>().isFinished = true;
             RankManager.instance.finishCount++;
         }
+        if (other.gameObject.CompareTag("Player"))
+        {
+
+        }
     }
 }
