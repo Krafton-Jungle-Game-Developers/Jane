@@ -15,8 +15,9 @@ public class RankManager : MonoBehaviour
     private Dictionary<string, NetworkPlayer> players;
     private Ulid playerID;
     private List<KeyValuePair<string, NetworkPlayer>> sortedList = new List<KeyValuePair<string, NetworkPlayer>>();
+    private bool isUpdating = false;
     public CheckPoints checkPoints;
-    public float switchTime = 0.5f;
+    private float switchTime = 0.15f;
 
     private void Awake()
     {
@@ -29,7 +30,10 @@ public class RankManager : MonoBehaviour
 
     void Update()
     {
-        SetPlayers();
+        if (!isUpdating)
+        {
+            SetPlayers();
+        }
     }
 
     public void GetLocalPlayer(Ulid currentLocalID)
@@ -50,18 +54,42 @@ public class RankManager : MonoBehaviour
 
     void SetPlayers()
     {
-        IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sortedPlayer = players.OrderByDescending(x => x.Value.activeCheckpointIndex)
+        IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sortedPlayer = players.Where(x => !x.Value.isFinished)
+                                                                                      .OrderByDescending(x => x.Value.activeCheckpointIndex)
                                                                                       .ThenBy(x => x.Value.distanceToCheckpoint);
-/*        List<KeyValuePair<string, NetworkPlayer>> tempList = sortedPlayer.ToList();
-        if (!sortedList.Any() && !sortedList.SequenceEqual(tempList))
+        foreach (KeyValuePair<string, NetworkPlayer> item in sortedPlayer)
+        { 
+            Debug.Log(item.Key);
+        }
+        List<KeyValuePair<string, NetworkPlayer>> tempList = sortedPlayer.ToList();
+
+        if (sortedList.Any() && !sortedList.SequenceEqual(tempList) && tempList.Count == sortedList.Count)
         {
             List<int?> differentPositions = sortedList.Zip(tempList, (x, y) => x.Equals(y) ? (int?)null : Array.IndexOf(tempList.ToArray(), x)).ToList();
             differentPositions = differentPositions.Where(x => x != null).ToList();
-
             int change1 = differentPositions.First() ?? 0;
             int change2 = differentPositions.Last() ?? 0;
-*/            int i = 0;
+            int i = 0;
 
+            foreach (KeyValuePair<string, NetworkPlayer> item in sortedPlayer)
+            {
+                if (i == change1)
+                {
+                    isUpdating = true;
+                    GameObject tempBox = standingsGenerator.standingsBox[change1];
+                    standingsGenerator.standingsBox[change1] = standingsGenerator.standingsBox[change2];
+                    standingsGenerator.standingsBox[change2] = tempBox;
+
+                    RectTransform first = standingsGenerator.standingsBox[change1].GetComponent<RectTransform>();
+                    RectTransform second = tempBox.GetComponent<RectTransform>();
+                    StartCoroutine(MoveStandings(first, second, sortedPlayer, switchTime));
+                }
+                i++;
+            }
+        }
+        else if (!sortedList.Any())
+        {
+            int i = 0;
             foreach (KeyValuePair<string, NetworkPlayer> item in sortedPlayer)
             {
                 if (item.Value.UniqueId == playerID)
@@ -72,23 +100,14 @@ public class RankManager : MonoBehaviour
                 {
                     standingsGenerator.standingsBox[i].GetComponent<Image>().color = new Color(0f, 0f, 0f, 1.0f);
                 }
-/*            if (i != change1 || i != change2)
-            {
-*/                standingsGenerator.standingsBox[i].GetComponentInChildren<TMP_Text>().text = " " + (i + 1) + "   " + item.Key;
-/*            }
-*//*            else if (i == change2)
-                {
-                    RectTransform first = standingsGenerator.standingsBox[change1].GetComponent<RectTransform>();
-                    RectTransform second = standingsGenerator.standingsBox[change2].GetComponent<RectTransform>();
-                    StartCoroutine(MoveStandings(first, second));
-                }
-*/                i++;
+                standingsGenerator.standingsBox[i].GetComponentInChildren<TMP_Text>().text = " " + (i + 1) + "   " + item.Key;
+                i++;
             }
         }
-/*    sortedList = tempList;
-  }
-*/
-public float GetDistance(GameObject playerObj, GameObject checkpointObj)
+        sortedList = tempList;
+    }
+
+    public float GetDistance(GameObject playerObj, GameObject checkpointObj)
     {
         Vector3 playerLocation = playerObj.transform.position;
         Vector3 checkpointLocation = checkpointObj.transform.position;
@@ -96,7 +115,7 @@ public float GetDistance(GameObject playerObj, GameObject checkpointObj)
         return distance;
     }
 
-    IEnumerator MoveStandings(RectTransform rectTransformA, RectTransform rectTransformB)
+    IEnumerator MoveStandings(RectTransform rectTransformA, RectTransform rectTransformB, IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sorted, float duration)
     {
         Vector2 startPosA = rectTransformA.anchoredPosition;
         Vector2 endPosA = rectTransformB.anchoredPosition;
@@ -104,15 +123,30 @@ public float GetDistance(GameObject playerObj, GameObject checkpointObj)
         Vector2 endPosB = rectTransformA.anchoredPosition;
 
         float elapsedTime = 0f;
-        while (elapsedTime < switchTime)
+        while (elapsedTime < duration)
         {
-            float t = Mathf.Clamp01(elapsedTime / switchTime);
+            float t = Mathf.Clamp01(elapsedTime / duration);
             rectTransformA.anchoredPosition = Vector2.Lerp(startPosA, endPosA, t);
             rectTransformB.anchoredPosition = Vector2.Lerp(startPosB, endPosB, t);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
+        int i = 0;
+        foreach (KeyValuePair<string, NetworkPlayer> item in sorted)
+        {
+            if (item.Value.UniqueId == playerID)
+            {
+                standingsGenerator.standingsBox[i].GetComponent<Image>().color = new Color(1.0f, 0.5f, 0f, 1.0f);
+            }
+            else
+            {
+                standingsGenerator.standingsBox[i].GetComponent<Image>().color = new Color(0f, 0f, 0f, 1.0f);
+            }
+            standingsGenerator.standingsBox[i].GetComponentInChildren<TMP_Text>().text = " " + (i + 1) + "   " + item.Key;
+            i++;
+        }
+        isUpdating = false;
         rectTransformA.anchoredPosition = endPosA;
         rectTransformB.anchoredPosition = endPosB;
     }
