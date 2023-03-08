@@ -233,6 +233,32 @@ namespace Jane.Unity
 
             spaceEngine.SetSteeringInputs(steeringInputs);
         }
-    }
 
+        // Method to check if Spaceship is controllable by outside scripts 
+        public bool CanControl()
+        {
+            if (inputEnabled && mouseEnabled && steeringEnabled && movementEnabled)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        // for boosterVFX inputs 
+        // Returns True if Cursor is on Leftside 
+        public bool IsCursorLeft()
+        {
+            if (mouseSteeringInputs.y < 0)
+            {
+                return true;
+            } 
+            else
+            {
+                return false;
+            }
+        }
+    }
 }
