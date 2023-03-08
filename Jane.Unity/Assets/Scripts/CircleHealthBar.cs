@@ -20,7 +20,10 @@ public class CircleHealthBar : MonoBehaviour
 
     void Update()
     {
-        HealthChange(playerDestroyable.durability);
+        if (playerDestroyable != null)
+        {
+            HealthChange(playerDestroyable.durability);
+        }
     }
 
     private void HealthChange(float _playerHP)
@@ -29,11 +32,11 @@ public class CircleHealthBar : MonoBehaviour
 
         _bar.fillAmount = amount;
 
-        if (_playerHP < playerDestroyable.maxHealth / 3 )
+        if (_playerHP < playerDestroyable.maxHealth / 3)
         {
             _lowHealthScreenMat.SetFloat("_FullScreenIntensity", 0.2f);
-        } 
-        else if (_playerHP >= playerDestroyable.maxHealth / 3 )
+        }
+        else if (_playerHP >= playerDestroyable.maxHealth / 3)
         {
             _lowHealthScreenMat.SetFloat("_FullScreenIntensity", 0f);
         }

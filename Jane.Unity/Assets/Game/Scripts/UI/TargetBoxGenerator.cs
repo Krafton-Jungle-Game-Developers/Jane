@@ -5,51 +5,46 @@ using UnityEngine.UI;
 
 public class TargetBoxGenerator : MonoBehaviour
 {
-    public Camera mainCam;
+    private Camera mainCam;
     public CheckPoints checkPoints;
     public List<GameObject> checkpointList = new List<GameObject>();
     public List<GameObject> onScreenCheckpoint = new List<GameObject>();
     public List<GameObject> enemyList = new List<GameObject>();
     public List<GameObject> onScreenEnemy = new List<GameObject>();
-    public GameObject targetCanvasPrefab;
+    public GameObject checkpointPrefab;
+    public GameObject enemyPrefab;
 
     [SerializeField] private Vector2 minSize = new Vector2(100, 100);
     [SerializeField] private Vector2 sizeMargin = new Vector2(-50, -50);
 
     void Start()
     {
+        mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         if (checkPoints != null)
         {
-            foreach (GameObject checkPoint in checkPoints.checkPointArr)
-            {
-                checkpointList.Add(checkPoint);
-            }
-            for (int i = 0; i < checkpointList.Count; i++)
-            {
-                onScreenCheckpoint.Add(Instantiate(targetCanvasPrefab));
-                onScreenCheckpoint[i].transform.parent = transform;
-            }
-            SetNextTargetBox(0);
+            AddCheckpointTargetBox();
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (checkPoints != null) 
         { 
-            UpdateTargetBox();
+            UpdateCheckpointBox();
+        }
+        if (enemyList != null)
+        {
+            UpdatePlayerBox();
         }
     }
 
-    private void UpdateTargetBox()
+    private void UpdateCheckpointBox()
     {
         int i = checkPoints.idx;
         if (!checkPoints.goalActive)
         {
             bool isInView = IsInScreen(checkpointList[i].transform.position);
             onScreenCheckpoint[i].GetComponent<CanvasGroup>().alpha = isInView ? 1 : 0;
-            /*        offScreenObjects[i].GetComponent<CanvasGroup>().alpha = isInView ? 0 : 1;
-            */
             if (isInView)
             {
                 Rect targetRect = GetBoundsInScreenSpace(checkpointList[i], mainCam);
@@ -57,8 +52,26 @@ public class TargetBoxGenerator : MonoBehaviour
 
                 targetRectTransform.position = new Vector2(targetRect.center.x, targetRect.center.y);
                 targetRectTransform.sizeDelta = new Vector2(Mathf.Max(targetRect.width, minSize.x), Mathf.Max(targetRect.height, minSize.y)) + sizeMargin;
-                onScreenCheckpoint[i].SendMessage("UpdateText", checkpointList[i].transform.position);
+                onScreenCheckpoint[i].SendMessage("UpdateDistance", checkpointList[i].transform.position);
+            }
         }
+    }
+
+    private void UpdatePlayerBox()
+    {
+        for (int i = 0; i < enemyList.Count; i++)
+        {
+            bool isInView = IsInScreen(enemyList[i].transform.position);
+            onScreenEnemy[i].GetComponent<CanvasGroup>().alpha = isInView ? 1 : 0;
+            if (isInView)
+            {
+                Rect targetRect = GetBoundsInScreenSpace(enemyList[i], mainCam);
+                RectTransform targetRectTransform = onScreenEnemy[i].gameObject.GetComponent<RectTransform>();
+
+                targetRectTransform.position = new Vector2(targetRect.center.x, targetRect.center.y);
+                targetRectTransform.sizeDelta = new Vector2(Mathf.Max(targetRect.width, minSize.x), Mathf.Max(targetRect.height, minSize.y)) + sizeMargin;
+                onScreenEnemy[i].SendMessage("UpdateDistance", enemyList[i].transform.position);
+            }
         }
     }
 
@@ -69,6 +82,7 @@ public class TargetBoxGenerator : MonoBehaviour
             obj.SetActive(false);
         }
     }
+
     public void SetNextTargetBox(int i)
     {
         ResetTargetBox();
@@ -124,5 +138,30 @@ public class TargetBoxGenerator : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public void AddCheckpointTargetBox()
+    {
+        foreach (GameObject checkPoint in checkPoints.checkPointArr)
+        {
+            checkpointList.Add(checkPoint);
+        }
+        for (int i = 0; i < checkpointList.Count; i++)
+        {
+            onScreenCheckpoint.Add(Instantiate(checkpointPrefab));
+            onScreenCheckpoint[i].transform.parent = transform;
+        }
+        SetNextTargetBox(0);
+    }
+
+    public void AddPlayerTargetBox(GameObject targetObj)
+    {
+        enemyList.Add(targetObj);
+        onScreenEnemy.Add(Instantiate(enemyPrefab));
+        for (int i = 0; i < enemyList.Count; i++)
+        {
+            onScreenEnemy[i].transform.parent = transform;
+            onScreenEnemy[i].SendMessage("SetName", enemyList[i].GetComponent<NetworkPlayer>().UserId);
+        }
     }
 }

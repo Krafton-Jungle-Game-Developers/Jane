@@ -128,7 +128,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 500
+      m_SerializableObject: 1000
     min: -Infinity
     max: Infinity
     enumValues: []
@@ -3535,7 +3535,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 0.6
+      m_SerializableObject: 1
     m_Space: 2147483647
   m_Property:
     name: A
@@ -3569,7 +3569,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 1.8
+      m_SerializableObject: 2
     m_Space: 2147483647
   m_Property:
     name: B
@@ -3682,7 +3682,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.Sphere, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"center":{"x":0.0,"y":0.0,"z":0.0},"radius":300.0}'
+      m_SerializableObject: '{"center":{"x":0.0,"y":0.0,"z":0.0},"radius":1000.0}'
     m_Space: 0
   m_Property:
     name: Sphere
@@ -3884,7 +3884,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 500
+      m_SerializableObject: 1000
     m_Space: 2147483647
   m_Property:
     name: attractionSpeed
@@ -3918,7 +3918,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 500
+      m_SerializableObject: 1000
     m_Space: 2147483647
   m_Property:
     name: attractionForce
@@ -4723,7 +4723,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 500
+      m_SerializableObject: 1000
     m_Space: 2147483647
   m_Property:
     name: o
