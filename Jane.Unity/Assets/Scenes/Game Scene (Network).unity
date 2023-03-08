@@ -45667,6 +45667,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4693467680724195824, guid: aa154f4d87c482741aae2d2faa5d465c,
         type: 3}
+    - target: {fileID: 2945870256820870775, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 180
+      objectReference: {fileID: 0}
     - target: {fileID: 3466316751822046098, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
         type: 3}
       propertyPath: mainCam
@@ -45763,6 +45768,11 @@ PrefabInstance:
       value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 7118629299887800606, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7609906645387833581, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
         type: 3}
       propertyPath: m_IsActive
       value: 0
