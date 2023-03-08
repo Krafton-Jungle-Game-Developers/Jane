@@ -35,7 +35,7 @@ public class WarpGate : MonoBehaviour
         }
 
         //some method in controller that stops player input & movement
-        _player.GetComponent<SpaceshipEngine>().controlsDisabled = true;
+        //_player.GetComponent<SpaceshipEngine>().controlsDisabled = true;
 
         while(timeElapsed < duration)
         {
@@ -60,6 +60,6 @@ public class WarpGate : MonoBehaviour
             timeElapsed += Time.deltaTime;
             yield return null;
         }
-        _player.GetComponent<SpaceshipEngine>().controlsDisabled = false;
+        //_player.GetComponent<SpaceshipEngine>().controlsDisabled = false;
     }
 }
