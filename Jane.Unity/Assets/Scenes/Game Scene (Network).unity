@@ -18975,6 +18975,7 @@ MonoBehaviour:
   standingsGenerator: {fileID: 1141281442}
   targetBoxGenerator: {fileID: 274476420}
   checkPoints: {fileID: 801073327}
+  finishCount: 0
 --- !u!1001 &737403458
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19951,7 +19952,6 @@ MonoBehaviour:
   - {fileID: 710182612}
   - {fileID: 158205714}
   - {fileID: 1675659256}
-  - {fileID: 1431730849}
   audioSource: {fileID: 801073326}
   gateClearSFX: {fileID: 8300000, guid: 2f597a0126e6a4b419c445cfd8ef7e29, type: 3}
   targetBoxGenerator: {fileID: 274476420}
@@ -19986,7 +19986,6 @@ Transform:
   - {fileID: 178173166}
   - {fileID: 158205715}
   - {fileID: 1675659257}
-  - {fileID: 1431730853}
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -36230,7 +36229,6 @@ GameObject:
   - component: {fileID: 1431730851}
   - component: {fileID: 1431730850}
   - component: {fileID: 1431730854}
-  - component: {fileID: 1431730855}
   m_Layer: 0
   m_Name: End Goal
   m_TagString: Untagged
@@ -36309,13 +36307,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1431730849}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0.000030517578, y: -0.000030517578, z: -2630}
-  m_LocalScale: {x: 99.999954, y: 1, z: 99.999985}
+  m_LocalPosition: {x: 0, y: 0, z: -2630}
+  m_LocalScale: {x: 100, y: 1, z: 100.000015}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 720217826}
-  m_Father: {fileID: 801073328}
-  m_RootOrder: 16
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 90, y: 270, z: 90}
 --- !u!114 &1431730854
 MonoBehaviour:
@@ -36329,21 +36327,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7687513b4f1c0bc49b681f5a49342c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1431730855
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1431730849}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc4bd8fbdac5b604094babe1f306126d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gateActivateVFX: {fileID: 0}
-  swirlGreen: {fileID: 0}
-  gateNumber: 17
 --- !u!1001 &1436085737
 PrefabInstance:
   m_ObjectHideFlags: 0
