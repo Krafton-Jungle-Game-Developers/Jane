@@ -14,7 +14,7 @@ public class GoalController : MonoBehaviour
         if (other.gameObject.GetComponent<NetworkPlayer>() != null)
         {
             Debug.Log("finished");
-            other.gameObject.GetComponent<NetworkPlayer>().isFinished = true;
+            other.gameObject.GetComponent<NetworkPlayer>().IsFinished = true;
         }
     }
 }

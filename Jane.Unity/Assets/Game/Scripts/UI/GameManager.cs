@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("UI")]
     [SerializeField] private GameObject HUD;
     [SerializeField] private GameObject countDownHolder;
     public GameObject CountDownHolder => countDownHolder;
@@ -21,19 +22,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_Text secondText;
     [SerializeField] private TMP_Text milisecondText;
 
+    [Header("Player")]
     [SerializeField] private SpaceshipEngine engine;
     [SerializeField] private SpaceshipInputManager inputManager;
     [SerializeField] private SpaceshipCameraController cameraController;
-    [SerializeField] private GameState CurrentGameState;
+    [SerializeField] private GameState DebugCurrentState;
 
+    [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip countClip;
     [SerializeField] private AudioClip startClip;
 
-    private void Update()
-    {
-        CurrentGameState = GameInfo.GameState;
-    }
+    private void Update() => DebugCurrentState = GameInfo.GameState;
 
     public async UniTask CountDownAsync(int seconds)
     {

@@ -10,6 +10,7 @@ public class NetworkPlayer : MonoBehaviour
     public string UserId => userId;
     private Ulid uniqueId;
     public Ulid UniqueId => uniqueId;
+    public bool IsFinished { get; set; }
     public int CurrentRegion { get; set ; } = 1;
     public int CurrentZone { get; set; } = 0;
     public int HP { get; set; } = 20;
@@ -57,6 +58,7 @@ public class NetworkPlayer : MonoBehaviour
         uniqueId = data.UniqueId;
         CurrentRegion = data.CurrentRegion;
         CurrentZone = data.CurrentZone;
+        IsFinished = data.IsFinished;
         HP = data.HP;
 
         transform.SetPositionAndRotation(data.Position, data.Rotation);

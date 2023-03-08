@@ -13367,6 +13367,26 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4441495195126791977, guid: b483070084c34ed4e81167b9ef7a665b,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: 8.5e-44
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441495195126791977, guid: b483070084c34ed4e81167b9ef7a665b,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.x
+      value: 7.112393e-15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441495195126791977, guid: b483070084c34ed4e81167b9ef7a665b,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.y
+      value: 1e-45
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441495195126791977, guid: b483070084c34ed4e81167b9ef7a665b,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4834716835065065821, guid: b483070084c34ed4e81167b9ef7a665b,
         type: 3}
       propertyPath: m_IsActive
@@ -13868,7 +13888,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1141281439}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1141281441}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b84d591435eff6f4299ca0cbfbf2ab8b, type: 3}
@@ -32613,7 +32633,6 @@ MonoBehaviour:
   standingsGenerator: {fileID: 1141281442}
   targetBoxGenerator: {fileID: 274476420}
   checkPoints: {fileID: 801073327}
-  switchTime: 0.15
 --- !u!1001 &737403458
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35778,6 +35797,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 837287700}
   m_Mesh: {fileID: 4300002, guid: d41401d2ba1d9964aaffa87eced7f88b, type: 3}
+--- !u!23 &840728066 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8588723812721896758, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
+    type: 3}
+  m_PrefabInstance: {fileID: 1141281439}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &841213788
 GameObject:
   m_ObjectHideFlags: 0
@@ -46212,6 +46237,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1793156947588006391, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
+        type: 3}
+      propertyPath: modelRenderer
+      value: 
+      objectReference: {fileID: 840728066}
     - target: {fileID: 1956705601706727249, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
         type: 3}
       propertyPath: m_Name
@@ -46341,7 +46371,7 @@ PrefabInstance:
     - target: {fileID: 8583916516732169314, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8583916516732169314, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
         type: 3}
@@ -46413,6 +46443,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8634631130920562521, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8634631130920562526, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
         type: 3}
       propertyPath: spaceShipRigidbody
@@ -46423,6 +46458,12 @@ PrefabInstance:
 --- !u!1 &1141281440 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8588723811419186176, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
+    type: 3}
+  m_PrefabInstance: {fileID: 1141281439}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1141281441 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8589490597797442162, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
     type: 3}
   m_PrefabInstance: {fileID: 1141281439}
   m_PrefabAsset: {fileID: 0}
@@ -67496,7 +67537,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1647713484
 GameObject:
@@ -78784,7 +78825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9e9cb0875cd37848a6c55038d521534, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerGameObject: {fileID: 0}
+  playerGameObject: {fileID: 1141281441}
   otherPlayerPrefab: {fileID: 8450392848401878037, guid: 9d4e4bec09b98d44ab805c35b00d549e,
     type: 3}
   gameManager: {fileID: 0}
