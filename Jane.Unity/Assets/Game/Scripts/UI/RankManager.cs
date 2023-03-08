@@ -1,3 +1,4 @@
+using Jane.Unity.ServerShared.Enums;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ public class RankManager : MonoBehaviour
     public StandingsGenerator standingsGenerator;
     public TargetBoxGenerator targetBoxGenerator;
 
+    private GameController gameController;
     private Dictionary<string, NetworkPlayer> players;
     private Ulid playerID;
     private List<KeyValuePair<string, NetworkPlayer>> sortedList = new List<KeyValuePair<string, NetworkPlayer>>();
@@ -26,11 +28,12 @@ public class RankManager : MonoBehaviour
     void Start()
     {
         players = new Dictionary<string, NetworkPlayer>();
+        gameController = GetComponentInParent<GameController>();
     }
 
     void Update()
     {
-        if (!isUpdating)
+        if (!isUpdating && gameController.gameState == GameState.Playing)
         {
             SetPlayers();
         }

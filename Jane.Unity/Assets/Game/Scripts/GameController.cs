@@ -3,6 +3,7 @@ using System.Threading;
 using TMPro;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using Jane.Unity.ServerShared.Enums;
 
 public class GameController : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI countdownText;
     public TextMeshProUGUI endGameText;
     public GameObject hud;
+    public GameState gameState;
     private int _countdownTime = 3;
     private SpaceshipController _spaceshipController;
 
@@ -32,6 +34,7 @@ public class GameController : MonoBehaviour
         bgmPlayer.Play();
 
         _spaceshipController = GameObject.FindGameObjectWithTag("Player").GetComponent<SpaceshipController>();
+        gameState = GameState.Waiting;
         StartGame();
     }
 
@@ -39,15 +42,15 @@ public class GameController : MonoBehaviour
     {
         StartCoroutine(CountdownStart());
         //for local test
-        _spaceshipController.canControl = false;
-
+/*        _spaceshipController.canControl = false;
+*/
     }
 
     public void EndGame()
     {
         //for local test
-        _spaceshipController.canControl = false;
-        hud.GetComponentInChildren<Canvas>().enabled = false;
+/*        _spaceshipController.canControl = false;
+*/        hud.GetComponentInChildren<Canvas>().enabled = false;
         endGameText.gameObject.SetActive(true);
 
     }
@@ -69,8 +72,8 @@ public class GameController : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
         //for local test
-        _spaceshipController.canControl = true;
-
+/*        _spaceshipController.canControl = true;
+*/
         hud.GetComponentInChildren<Canvas>().enabled = true;
 
         countdownText.gameObject.SetActive(false);
@@ -83,7 +86,7 @@ public class GameController : MonoBehaviour
             bgmPlayer.volume += fadeRate;
             yield return new WaitForSeconds(0.1f);
         }
-        
+        gameState = GameState.Playing;
     }
 
     public void HideMouse()
