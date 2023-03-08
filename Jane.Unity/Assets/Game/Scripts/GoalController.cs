@@ -9,12 +9,12 @@ public class GoalController : MonoBehaviour
     //    _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     //}
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.CompareTag("Player"))
-    //    {
-    //        Debug.Log("a");
-    //        _gameController.GameOver();
-    //    }
-    //}
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.GetComponent<NetworkPlayer>() != null)
+        {
+            Debug.Log("finished");
+            other.gameObject.GetComponent<NetworkPlayer>().isFinished = true;
+        }
+    }
 }

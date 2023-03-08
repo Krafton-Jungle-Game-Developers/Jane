@@ -20,7 +20,7 @@ MonoBehaviour:
   - headerTitle: Created by
     headerTitleKey: CreditsCreatedBy
     items:
-    - Jungle Game Team
+    - Team Space Haste
   - headerTitle: Client Programming
     headerTitleKey: CreditsClientProgrammer
     items:
@@ -64,13 +64,13 @@ MonoBehaviour:
   mentions:
   - ID: Logo Placeholder
     icon: {fileID: 21300000, guid: 46ee5ab304630404d8cdaf9092d41e10, type: 3}
-    description: Thank you for playing.
+    description: Krafton Jungle 1st Game Dev. Team
     descriptionKey: CreditsLogoDescription
     descriptionSpacing: 30
     layoutSpacing: 160
   - ID: Logo Placeholder 2
     icon: {fileID: 21300000, guid: 88577d55f767e1e44b699ad45916275e, type: 3}
-    description: Your journey starts here_
+    description: Your journey starts here__
     descriptionKey: CreditsLogoDescription
     descriptionSpacing: 30
     layoutSpacing: 80
