@@ -31,23 +31,23 @@ public class GameController : MonoBehaviour
         bgmPlayer.volume = volumeMax;
         bgmPlayer.Play();
 
-        _spaceshipController = GameObject.FindGameObjectWithTag("Player").GetComponent<SpaceshipController>();
-        StartGame();
+/*        _spaceshipController = GameObject.FindGameObjectWithTag("Player").GetComponent<SpaceshipController>();
+*/        StartGame();
     }
 
     private void StartGame()
     {
         StartCoroutine(CountdownStart());
         //for local test
-        _spaceshipController.canControl = false;
-
+/*        _spaceshipController.canControl = false;
+*/
     }
 
     public void EndGame()
     {
         //for local test
-        _spaceshipController.canControl = false;
-        hud.GetComponentInChildren<Canvas>().enabled = false;
+/*        _spaceshipController.canControl = false;
+*/        hud.GetComponentInChildren<Canvas>().enabled = false;
         endGameText.gameObject.SetActive(true);
     }
 
@@ -68,8 +68,8 @@ public class GameController : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
         //for local test
-        _spaceshipController.canControl = true;
-
+/*        _spaceshipController.canControl = true;
+*/
         hud.GetComponentInChildren<Canvas>().enabled = true;
 
         countdownText.gameObject.SetActive(false);

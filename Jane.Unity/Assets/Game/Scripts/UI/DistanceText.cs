@@ -18,6 +18,7 @@ public class DistanceText : MonoBehaviour
     {
         distance = Vector3.Distance(player.position, objectPos);
         float scale = targetBoxScale / distance;
+        scale = Mathf.Clamp(scale, 0.5f, 1f);
 
         ScaleAlpha(scale);
         ScaleSize(scale);
