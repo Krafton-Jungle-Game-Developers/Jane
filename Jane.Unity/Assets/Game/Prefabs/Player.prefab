@@ -1085,8 +1085,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bar: {fileID: 9066492405570223672}
-  _visibleAngle: 80
-  _playerSpeed: 0
+  _visibleAngle: 82
   _maxSpeed: 313
 --- !u!1 &6612046951249514458
 GameObject:

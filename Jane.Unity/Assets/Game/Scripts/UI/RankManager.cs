@@ -20,6 +20,7 @@ public class RankManager : MonoBehaviour
     private bool isUpdating = false;
     public CheckPoints checkPoints;
     private float switchTime = 0.15f;
+    public int finishCount = 0;
 
     private void Awake()
     {
@@ -72,7 +73,9 @@ public class RankManager : MonoBehaviour
             differentPositions = differentPositions.Where(x => x != null).ToList();
             int change1 = differentPositions.First() ?? 0;
             int change2 = differentPositions.Last() ?? 0;
-            int i = 0;
+            change1 += finishCount;
+            change2 += finishCount;
+            int i = finishCount;
 
             foreach (KeyValuePair<string, NetworkPlayer> item in sortedPlayer)
             {
@@ -92,7 +95,7 @@ public class RankManager : MonoBehaviour
         }
         else if (!sortedList.Any())
         {
-            int i = 0;
+            int i = finishCount;
             foreach (KeyValuePair<string, NetworkPlayer> item in sortedPlayer)
             {
                 if (item.Value.UniqueId == playerID)
@@ -135,7 +138,7 @@ public class RankManager : MonoBehaviour
             yield return null;
         }
 
-        int i = 0;
+        int i = finishCount;
         foreach (KeyValuePair<string, NetworkPlayer> item in sorted)
         {
             if (item.Value.UniqueId == playerID)

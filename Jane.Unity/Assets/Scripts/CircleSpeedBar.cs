@@ -31,7 +31,7 @@ public class CircleSpeedBar : MonoBehaviour
     private void DisplaySpeedChange(float _speed)
     {
         float amount = (_speed / _maxSpeed) * (_visibleAngle/360);
-        amount = Mathf.Clamp(amount, 0, 0.2f);
+        amount = Mathf.Clamp(amount, 0, 0.23f);
 
         _bar.fillAmount = amount;
 
