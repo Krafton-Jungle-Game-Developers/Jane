@@ -6,16 +6,16 @@ using UnityEngine.UI;
 public class CircleSpeedBar : MonoBehaviour
 {
     [SerializeField] private Image _bar;
-    [SerializeField] private float _visibleAngle = 45.0f;
+    [SerializeField] private float _visibleAngle;
 
     private Rigidbody _playerRB;
-    private Vector3 _playerSpeed;
-    [SerializeField] float _maxSpeed = 310f;
+    private float _playerSpeed;
+    [SerializeField] float _maxSpeed;
 
     void Start()
     {
         _playerRB = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
-        _playerSpeed = _playerRB.velocity;
+        _playerSpeed = _playerRB.velocity.magnitude;
     }
 
     
@@ -23,14 +23,15 @@ public class CircleSpeedBar : MonoBehaviour
     {
         if (_playerRB != null)
         {
-            _playerSpeed = _playerRB.velocity;
-            DisplaySpeedChange(_playerSpeed.magnitude);
+            _playerSpeed = _playerRB.velocity.magnitude;
+            DisplaySpeedChange(_playerSpeed);
         }
     }
 
     private void DisplaySpeedChange(float _speed)
     {
-        float amount = (_speed / _maxSpeed) * _visibleAngle;
+        float amount = (_speed / _maxSpeed) * (_visibleAngle/360);
+        amount = Mathf.Clamp(amount, 0, 0.2f);
 
         _bar.fillAmount = amount;
 
