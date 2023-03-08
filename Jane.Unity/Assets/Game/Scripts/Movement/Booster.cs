@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.VFX;
 using UnityEngine;
+using Jane.Unity;
 
 public class Booster : MonoBehaviour
 {
-    SpaceshipController spaceshipController;
+    //SpaceshipController spaceshipController;
+    SpaceshipInputManager spaceshipInputManager;
 
     [Header("Reference and Keys")]
     [SerializeField] private VisualEffect boosterImpactVFX;
@@ -13,17 +15,18 @@ public class Booster : MonoBehaviour
     [SerializeField] private KeyCode boosterKey = KeyCode.LeftShift;
 
     [Space]
-    [Header("Booster Settings")]
-    [SerializeField] private float _boosterSpeed = 400f;
-    [SerializeField] private float _normalSpeed = 200f;
+    //[Header("Booster Settings")]
+    //[SerializeField] private float _boosterSpeed = 400f;
+    //[SerializeField] private float _normalSpeed = 200f;
     [SerializeField] private float _warpRate = 0.05f;
-    [SerializeField] private bool _instantSpeed = true;
+    //[SerializeField] private bool _instantSpeed = true;
 
     public bool _isBoosterActive;
 
     private void Awake()
     {
-        spaceshipController = GetComponent<SpaceshipController>();
+        //spaceshipController = GetComponent<SpaceshipController>();
+        spaceshipInputManager = GameObject.FindObjectOfType<SpaceshipInputManager>();
     }
 
     
@@ -37,7 +40,8 @@ public class Booster : MonoBehaviour
     
     void Update()
     {
-        if(spaceshipController.canControl)
+        //if(spaceshipController.canControl)
+        if (spaceshipInputManager.CanControl())
         {
             if(Input.GetKeyDown(boosterKey))
             {
@@ -55,7 +59,8 @@ public class Booster : MonoBehaviour
         if (_isBoosterActive)
         {
             // Booster SpeedLine Left/Right Rotation management
-            if (spaceshipController.GetIsCursorLeft())
+            //if (spaceshipController.GetIsCursorLeft())
+            if (spaceshipInputManager.IsCursorLeft())
             {
                 boosterLoopVFX.SetBool("isLeft", true);
             }
@@ -71,11 +76,11 @@ public class Booster : MonoBehaviour
         if (_isBoosterActive)
         {
             yield return new WaitForSeconds(0.6f);
-            if (_instantSpeed)
-            {
-                spaceshipController.ChangeSpeedInstantly(_boosterSpeed);
-            }
-            spaceshipController.ChangeSpeed(_boosterSpeed);
+            // if (_instantSpeed)
+            // {
+            //     spaceshipController.ChangeSpeedInstantly(_boosterSpeed);
+            // }
+            // spaceshipController.ChangeSpeed(_boosterSpeed);
             boosterLoopVFX.Play();
 
             float _warpAmount = boosterLoopVFX.GetFloat("WarpAmount");
@@ -90,7 +95,7 @@ public class Booster : MonoBehaviour
         else
         {
             yield return new WaitForSeconds(0.2f);
-            spaceshipController.ChangeSpeed(_normalSpeed);
+            // spaceshipController.ChangeSpeed(_normalSpeed);
 
             float _warpAmount = boosterLoopVFX.GetFloat("WarpAmount");
             while (_warpAmount >= _warpRate)
