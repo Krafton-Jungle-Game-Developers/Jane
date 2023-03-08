@@ -8,10 +8,12 @@ public class NetworkPlayer : MonoBehaviour
     public Ulid UniqueId { get; set; }
     public int activeCheckpointIndex { get; set; }
     public float distanceToCheckpoint { get; set; }
+    public bool isFinished { get; set; }
     public void Initialize(GamePlayerData data)
     {
         UserId = data.UserId;
         UniqueId = data.UniqueId;
+        isFinished = false;
         activeCheckpointIndex = 0;
     }
 

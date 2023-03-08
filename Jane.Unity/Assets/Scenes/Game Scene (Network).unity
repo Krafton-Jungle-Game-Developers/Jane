@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 4890085278179872738, guid: 7ff094cfdf8bdc04893ff4948017b353,
+  m_LightingSettings: {fileID: 4890085278179872738, guid: a079dc404101aee4ca48b1b6a55fe067,
     type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -32613,7 +32613,7 @@ MonoBehaviour:
   standingsGenerator: {fileID: 1141281442}
   targetBoxGenerator: {fileID: 274476420}
   checkPoints: {fileID: 801073327}
-  switchTime: 0.5
+  switchTime: 0.15
 --- !u!1001 &737403458
 PrefabInstance:
   m_ObjectHideFlags: 0
