@@ -11,10 +11,10 @@ public class GoalController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.GetComponent<NetworkPlayer>() != null)
         {
-            Debug.Log("a");
-            _gameController.EndGame();
+            Debug.Log("finished");
+            other.gameObject.GetComponent<NetworkPlayer>().isFinished = true;
         }
     }
 }

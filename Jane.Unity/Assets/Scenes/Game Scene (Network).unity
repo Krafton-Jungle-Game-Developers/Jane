@@ -32083,7 +32083,7 @@ MonoBehaviour:
   standingsGenerator: {fileID: 1141281442}
   targetBoxGenerator: {fileID: 274476420}
   checkPoints: {fileID: 801073327}
-  switchTime: 0.5
+  switchTime: 0.15
 --- !u!1001 &737403458
 PrefabInstance:
   m_ObjectHideFlags: 0

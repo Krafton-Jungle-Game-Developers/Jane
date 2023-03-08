@@ -49,6 +49,7 @@ public class GameController : MonoBehaviour
 /*        _spaceshipController.canControl = false;
 */        hud.GetComponentInChildren<Canvas>().enabled = false;
         endGameText.gameObject.SetActive(true);
+
     }
 
     IEnumerator CountdownStart()
