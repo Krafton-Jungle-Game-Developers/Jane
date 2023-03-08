@@ -33,6 +33,7 @@ public class GameController : MonoBehaviour
         bgmPlayer.volume = volumeMax;
         bgmPlayer.Play();
 
+        //for local test
         _spaceshipController = GameObject.FindGameObjectWithTag("Player").GetComponent<SpaceshipController>();
         gameState = GameState.Waiting;
         StartGame();
