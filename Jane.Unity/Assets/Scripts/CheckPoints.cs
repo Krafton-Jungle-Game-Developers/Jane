@@ -31,8 +31,11 @@ public class CheckPoints : MonoBehaviour
 
     public void ControlGates(int gateNo)
     {
-        audioSource.clip = gateClearSFX;
-        audioSource.Play();
+        if(audioSource != null)
+        {
+            audioSource.clip = gateClearSFX;
+            audioSource.Play();
+        }
 
         nextGate.SendMessage("Deactivate");
         idx += 1;
