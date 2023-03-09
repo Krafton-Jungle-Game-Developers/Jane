@@ -20,7 +20,7 @@ MonoBehaviour:
   - headerTitle: Created by
     headerTitleKey: CreditsCreatedBy
     items:
-    - Team Space Haste
+    - Team SpaceHaste
   - headerTitle: Client Programming
     headerTitleKey: CreditsClientProgrammer
     items:
