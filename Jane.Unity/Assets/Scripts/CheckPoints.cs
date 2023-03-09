@@ -42,7 +42,7 @@ public class CheckPoints : MonoBehaviour
 
         if (gateNo != gateCount)
         {
-            nextGate= checkPointArr[gateNo];
+            nextGate = checkPointArr[gateNo];
             nextGate.SendMessage("Activate");
             targetBoxGenerator.SetNextTargetBox(gateNo);
         }

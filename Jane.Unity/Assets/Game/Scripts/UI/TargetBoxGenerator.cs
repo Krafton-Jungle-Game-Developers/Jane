@@ -12,6 +12,7 @@ public class TargetBoxGenerator : MonoBehaviour
     public List<GameObject> enemyList = new List<GameObject>();
     public List<GameObject> onScreenEnemy = new List<GameObject>();
     public GameObject checkpointPrefab;
+    public GameObject warpGatePrefab;
     public GameObject enemyPrefab;
 
     [SerializeField] private Vector2 minSize = new Vector2(100, 100);
@@ -148,8 +149,16 @@ public class TargetBoxGenerator : MonoBehaviour
         }
         for (int i = 0; i < checkpointList.Count; i++)
         {
-            onScreenCheckpoint.Add(Instantiate(checkpointPrefab));
+            if (checkpointList[i].name == "HyPeRdRiVe")
+            {
+                onScreenCheckpoint.Add(Instantiate(warpGatePrefab));
+            }
+            else
+            {
+                onScreenCheckpoint.Add(Instantiate(checkpointPrefab));
+            }
             onScreenCheckpoint[i].transform.parent = transform;
+            onScreenCheckpoint[i].SendMessage("SetName", checkpointList[i].gameObject.name);
         }
         SetNextTargetBox(0);
     }
