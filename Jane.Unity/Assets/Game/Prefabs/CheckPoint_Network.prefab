@@ -131,6 +131,7 @@ MonoBehaviour:
   region: 1
   checkPointNumber: 0
   VFX: {fileID: 287077178876301577}
+  isWarpGate: 0
   maxFOV: 0
   maxBloomIntensity: 0
   duration: 0
@@ -148,7 +149,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 2f597a0126e6a4b419c445cfd8ef7e29, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

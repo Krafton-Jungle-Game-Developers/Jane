@@ -37,6 +37,7 @@ namespace Jane.Unity.Server
 
         private async UniTaskVoid OnDestroy()
         {
+            gameCts.Cancel();
             shutdownCts.Cancel();
 
             if (gameHub is not null)
