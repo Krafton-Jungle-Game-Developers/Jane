@@ -35,7 +35,7 @@ public class GameController : MonoBehaviour
         //for local test
         _spaceshipEngine = GameObject.FindGameObjectWithTag("Player").GetComponent<SpaceshipEngine>();
         hud = GameObject.FindGameObjectWithTag("HUD");
-        hud.GetComponentInChildren<Canvas>().enabled = false;
+        hud.GetComponent<Canvas>().enabled = false;
         gameState = GameState.Waiting;
         StartGame();
     }
@@ -50,7 +50,7 @@ public class GameController : MonoBehaviour
     {
         //for local test
 /*        _spaceshipController.canControl = false;
-*/        hud.GetComponentInChildren<Canvas>().enabled = false;
+*/        hud.GetComponent<Canvas>().enabled = false;
         endGameText.gameObject.SetActive(true);
     }
 
@@ -71,7 +71,7 @@ public class GameController : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         _spaceshipEngine.EnableMovement();
-        hud.GetComponentInChildren<Canvas>().enabled = true;
+        hud.GetComponent<Canvas>().enabled = true;
         countdownText.gameObject.SetActive(false);
         gameState = GameState.Playing;
     }
