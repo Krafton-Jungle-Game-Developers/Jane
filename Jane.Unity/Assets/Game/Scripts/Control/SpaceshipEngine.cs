@@ -130,15 +130,6 @@ public class SpaceshipEngine : MonoBehaviour
 
     public void SetBoostInputs(Vector3 newValuesByAxis)
     {
-        //for (int i = 0; i < boostResourceHandlers.Count; ++i)
-        //{
-        //    if (!boostResourceHandlers[i].Ready())
-        //    {
-        //        newValuesByAxis = Vector3.zero;
-        //        break;
-        //    }
-        //}
-
         if (controlsDisabled) return;
 
         boostInputs.x = Mathf.Clamp(newValuesByAxis.x, -1f, 1f);
@@ -149,24 +140,14 @@ public class SpaceshipEngine : MonoBehaviour
     private void Update()
     {
         // Use resources during boost
-        //if (boostInputs.magnitude != 0f)
-        //{
-        //    for (int i = 0; i < boostResourceHandlers.Count; ++i)
-        //    {
-        //        if (boostResourceHandlers[i].Ready())
-        //        {
-        //            boostResourceHandlers[i].Implement();
-        //        }
-        //        else
-        //        {
-        //            if (controlsDisabled) return;
+        if (boostInputs.magnitude != 0f)
+        {
+            if (controlsDisabled) return;
 
-        //            boostInputs.x = Mathf.Clamp(0f, -1f, 1f);
-        //            boostInputs.y = Mathf.Clamp(0f, -1f, 1f);
-        //            boostInputs.z = Mathf.Clamp(0f, -1f, 1f);
-        //        }
-        //    }
-        //}
+            boostInputs.x = Mathf.Clamp(0f, -1f, 1f);
+            boostInputs.y = Mathf.Clamp(0f, -1f, 1f);
+            boostInputs.z = Mathf.Clamp(0f, -1f, 1f);
+        }
     }
 
     private void FixedUpdate()
