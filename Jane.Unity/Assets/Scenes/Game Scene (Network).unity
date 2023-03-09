@@ -26519,6 +26519,11 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2827371645633264258, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
+        type: 3}
+      propertyPath: m_FillAmount
+      value: 0.107
+      objectReference: {fileID: 0}
     - target: {fileID: 2945870256820870775, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -26738,6 +26743,11 @@ PrefabInstance:
         type: 3}
       propertyPath: spaceShipRigidbody
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066492405570223672, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
+        type: 3}
+      propertyPath: m_FillAmount
+      value: 0.107
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b8f3d3c5d6b1f84e97a65370803b591, type: 3}
