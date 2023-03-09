@@ -11,15 +11,14 @@ public class GameController : MonoBehaviour
 
     public TextMeshProUGUI countdownText;
     public TextMeshProUGUI endGameText;
-    public GameObject hud;
+    private GameObject hud;
     public GameState gameState;
     private int _countdownTime = 3;
-    private SpaceshipController _spaceshipController;
+    private SpaceshipEngine _spaceshipEngine;
 
     // BGM Player
     [SerializeField] AudioSource bgmPlayer;
-    [SerializeField] AudioClip waitingClip;
-    [SerializeField] AudioClip gogoClip;
+    [SerializeField] AudioClip bgmClip;
     [SerializeField] float volumeMax = 0.2f;
 
     private float fadeRate = 0.05f;
@@ -29,22 +28,22 @@ public class GameController : MonoBehaviour
     {
         // BGM Player
         bgmPlayer = GetComponent<AudioSource>();
-        bgmPlayer.clip = waitingClip;
+        bgmPlayer.clip = bgmClip;
         bgmPlayer.volume = volumeMax;
         bgmPlayer.Play();
 
         //for local test
-        _spaceshipController = GameObject.FindGameObjectWithTag("Player").GetComponent<SpaceshipController>();
+        _spaceshipEngine = GameObject.FindGameObjectWithTag("Player").GetComponent<SpaceshipEngine>();
+        hud = GameObject.FindGameObjectWithTag("HUD");
+        hud.GetComponentInChildren<Canvas>().enabled = false;
         gameState = GameState.Waiting;
         StartGame();
     }
 
     private void StartGame()
     {
+        _spaceshipEngine.DisableMovement();
         StartCoroutine(CountdownStart());
-        //for local test
-/*        _spaceshipController.canControl = false;
-*/
     }
 
     public void EndGame()
@@ -53,7 +52,6 @@ public class GameController : MonoBehaviour
 /*        _spaceshipController.canControl = false;
 */        hud.GetComponentInChildren<Canvas>().enabled = false;
         endGameText.gameObject.SetActive(true);
-
     }
 
     IEnumerator CountdownStart()
@@ -66,27 +64,15 @@ public class GameController : MonoBehaviour
 
             _countdownTime--;
 
-            bgmPlayer.volume -= fadeRate;
         }
 
         countdownText.text = "GO!";
 
         yield return new WaitForSeconds(1f);
-        //for local test
-/*        _spaceshipController.canControl = true;
-*/
+
+        _spaceshipEngine.EnableMovement();
         hud.GetComponentInChildren<Canvas>().enabled = true;
-
         countdownText.gameObject.SetActive(false);
-
-        bgmPlayer.clip = gogoClip;
-        bgmPlayer.Play();
-
-        while (bgmPlayer.volume < volumeMax)
-        {
-            bgmPlayer.volume += fadeRate;
-            yield return new WaitForSeconds(0.1f);
-        }
         gameState = GameState.Playing;
     }
 

@@ -5961,7 +5961,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &597291687470019332
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5997,7 +5997,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7216875739705062293}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -6013,7 +6013,8 @@ MonoBehaviour:
   m_text: FINISH!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f89ce2922ef89ae46adc711adf2e04ef, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_sharedMaterial: {fileID: 4749908933887385871, guid: f89ce2922ef89ae46adc711adf2e04ef,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6424,7 +6425,7 @@ GameObject:
   - component: {fileID: 8588723812502773710}
   m_Layer: 0
   m_Name: HUD Canvas
-  m_TagString: Untagged
+  m_TagString: HUD
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6791,7 +6792,7 @@ MonoBehaviour:
   movementInputs: {x: 0, y: 0, z: 0}
   steeringInputs: {x: 0, y: 0, z: 0}
   boostInputs: {x: 0, y: 0, z: 0}
-  minMovementInputs: {x: -1, y: -1, z: -0.1}
+  minMovementInputs: {x: -1, y: -1, z: -0.3}
   maxMovementInputs: {x: 1, y: 1, z: 1}
   enginesActivated: 1
   spaceShipRigidbody: {fileID: 0}
