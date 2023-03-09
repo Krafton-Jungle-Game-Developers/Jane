@@ -6,6 +6,7 @@ public class DistanceText : MonoBehaviour
 {
     [SerializeField] private TMP_Text distanceText;
     [SerializeField] private TMP_Text nameText;
+    [SerializeField] private float minClamp;
     private float distance;
     private float targetBoxScale = 1000f;
     private Transform player;
@@ -18,7 +19,7 @@ public class DistanceText : MonoBehaviour
     {
         distance = Vector3.Distance(player.position, objectPos);
         float scale = targetBoxScale / distance;
-        scale = Mathf.Clamp(scale, 0.5f, 1f);
+        scale = Mathf.Clamp(scale, minClamp, 1f);
 
         ScaleAlpha(scale);
         ScaleSize(scale);

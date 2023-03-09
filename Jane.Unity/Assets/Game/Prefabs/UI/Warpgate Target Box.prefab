@@ -69,14 +69,14 @@ MonoBehaviour:
   m_text: Checkpoint
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8322a83c36dbf604db8a075474b12c47, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 563953a9c2bc50e4fbf29501703826bd, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 8a57830265cf1c644bb74a30ae951986, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4282575615
-  m_fontColor: {r: 1, g: 0.91927314, b: 0.259, a: 1}
+    rgba: 4294918858
+  m_fontColor: {r: 0.7914013, g: 0.2588235, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: a087149ebbb2cdd459821aa3cc458a64, type: 2}
-  m_Color: {r: 1, g: 0.60249305, b: 0, a: 1}
+  m_Color: {r: 0.55702066, g: 0, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 3737373522021126190}
   - component: {fileID: 5558552474048241794}
   m_Layer: 0
-  m_Name: Checkpoint Target Box
+  m_Name: Warpgate Target Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -278,7 +278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distanceText: {fileID: 4261192407102881427}
   nameText: {fileID: 4261192405830904795}
-  minClamp: 0.8
+  minClamp: 1
 --- !u!1 &4261192407102881421
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,14 +348,14 @@ MonoBehaviour:
   m_text: distance
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8322a83c36dbf604db8a075474b12c47, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 563953a9c2bc50e4fbf29501703826bd, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 8a57830265cf1c644bb74a30ae951986, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4282575615
-  m_fontColor: {r: 1, g: 0.91764706, b: 0.25882354, a: 1}
+    rgba: 4294918858
+  m_fontColor: {r: 0.7921569, g: 0.2588235, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
