@@ -31,6 +31,7 @@ public class GateTriggerQuad : MonoBehaviour
     {
         if (gateActivateVFX != null)
         {
+            Debug.Log($"activate {gateNumber}");
             gateActivateVFX.Play();
         }
         /*        swirlGreen.Play();
@@ -41,6 +42,7 @@ public class GateTriggerQuad : MonoBehaviour
     {
         if (gateActivateVFX != null)
         {
+            Debug.Log($"De {gateNumber}");
             gateActivateVFX.Stop();
         }
         /*        swirlGreen.Stop();

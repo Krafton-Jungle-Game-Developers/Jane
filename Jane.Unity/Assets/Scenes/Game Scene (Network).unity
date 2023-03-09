@@ -8130,7 +8130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4bd8fbdac5b604094babe1f306126d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gateActivateVFX: {fileID: 0}
+  gateActivateVFX: {fileID: 1310802650}
   swirlGreen: {fileID: 0}
   gateNumber: 15
 --- !u!65 &158205717
@@ -9888,7 +9888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4bd8fbdac5b604094babe1f306126d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gateActivateVFX: {fileID: 0}
+  gateActivateVFX: {fileID: 1111004855}
   swirlGreen: {fileID: 0}
   gateNumber: 11
 --- !u!65 &262648299
@@ -14042,7 +14042,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4bd8fbdac5b604094babe1f306126d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gateActivateVFX: {fileID: 0}
+  gateActivateVFX: {fileID: 1277700824}
   swirlGreen: {fileID: 0}
   gateNumber: 12
 --- !u!65 &491287466
@@ -19988,6 +19988,7 @@ MonoBehaviour:
   - {fileID: 710182612}
   - {fileID: 158205714}
   - {fileID: 1675659256}
+  - {fileID: 1431730849}
   audioSource: {fileID: 801073326}
   gateClearSFX: {fileID: 8300000, guid: 2f597a0126e6a4b419c445cfd8ef7e29, type: 3}
   targetBoxGenerator: {fileID: 274476420}
@@ -20022,6 +20023,7 @@ Transform:
   - {fileID: 178173166}
   - {fileID: 158205715}
   - {fileID: 1675659257}
+  - {fileID: 1431730853}
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -21358,7 +21360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4bd8fbdac5b604094babe1f306126d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gateActivateVFX: {fileID: 0}
+  gateActivateVFX: {fileID: 1375234753}
   swirlGreen: {fileID: 0}
   gateNumber: 3
 --- !u!65 &881967202
@@ -23159,7 +23161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4bd8fbdac5b604094babe1f306126d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gateActivateVFX: {fileID: 0}
+  gateActivateVFX: {fileID: 113984481}
   swirlGreen: {fileID: 0}
   gateNumber: 10
 --- !u!65 &971792717
@@ -24161,7 +24163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4bd8fbdac5b604094babe1f306126d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gateActivateVFX: {fileID: 0}
+  gateActivateVFX: {fileID: 807758430}
   swirlGreen: {fileID: 0}
   gateNumber: 6
 --- !u!65 &1007318906
@@ -27431,7 +27433,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4bd8fbdac5b604094babe1f306126d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gateActivateVFX: {fileID: 0}
+  gateActivateVFX: {fileID: 1413890044}
   swirlGreen: {fileID: 0}
   gateNumber: 5
 --- !u!65 &1189937189
@@ -36640,6 +36642,7 @@ GameObject:
   - component: {fileID: 1431730851}
   - component: {fileID: 1431730850}
   - component: {fileID: 1431730854}
+  - component: {fileID: 1431730855}
   m_Layer: 0
   m_Name: End Goal
   m_TagString: Untagged
@@ -36718,13 +36721,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1431730849}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -2630}
-  m_LocalScale: {x: 100, y: 1, z: 100.000015}
+  m_LocalPosition: {x: 0.000030517578, y: -0.000030517578, z: -2630}
+  m_LocalScale: {x: 100, y: 1, z: 100.00002}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 720217826}
-  m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_Father: {fileID: 801073328}
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 90, y: 270, z: 90}
 --- !u!114 &1431730854
 MonoBehaviour:
@@ -36738,6 +36741,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7687513b4f1c0bc49b681f5a49342c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1431730855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431730849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc4bd8fbdac5b604094babe1f306126d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gateActivateVFX: {fileID: 0}
+  swirlGreen: {fileID: 0}
+  gateNumber: 17
 --- !u!1001 &1436085737
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37590,7 +37608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4bd8fbdac5b604094babe1f306126d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gateActivateVFX: {fileID: 0}
+  gateActivateVFX: {fileID: 410214953}
   swirlGreen: {fileID: 0}
   gateNumber: 13
 --- !u!65 &1475381284
@@ -38468,7 +38486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4bd8fbdac5b604094babe1f306126d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gateActivateVFX: {fileID: 0}
+  gateActivateVFX: {fileID: 1488033928}
   swirlGreen: {fileID: 0}
   gateNumber: 7
 --- !u!65 &1504209871
@@ -41331,7 +41349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4bd8fbdac5b604094babe1f306126d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gateActivateVFX: {fileID: 0}
+  gateActivateVFX: {fileID: 89765303}
   swirlGreen: {fileID: 0}
   gateNumber: 2
 --- !u!65 &1666107358
@@ -41589,7 +41607,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4bd8fbdac5b604094babe1f306126d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gateActivateVFX: {fileID: 0}
+  gateActivateVFX: {fileID: 201348050}
   swirlGreen: {fileID: 0}
   gateNumber: 16
 --- !u!65 &1675659259
@@ -45380,7 +45398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4bd8fbdac5b604094babe1f306126d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gateActivateVFX: {fileID: 0}
+  gateActivateVFX: {fileID: 95056758}
   swirlGreen: {fileID: 0}
   gateNumber: 9
 --- !u!65 &1889916442
@@ -47274,7 +47292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4bd8fbdac5b604094babe1f306126d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gateActivateVFX: {fileID: 0}
+  gateActivateVFX: {fileID: 515207417}
   swirlGreen: {fileID: 0}
   gateNumber: 1
 --- !u!65 &1988455089
