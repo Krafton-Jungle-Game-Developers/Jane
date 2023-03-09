@@ -14,11 +14,6 @@ public class GoalController : MonoBehaviour
         }
         if (other.gameObject.CompareTag("Player"))
         {
-            HUDManager hud = GameObject.FindGameObjectWithTag("HUD").GetComponentInParent<HUDManager>();
-            hud.hudCanvas.enabled = false;
-            hud.standingsCanvas.enabled = false;
-            hud.targetCanvas.enabled = false;
-            hud.resultCanvas.enabled = true;
             RankManager.instance.SetResult();
             other.gameObject.GetComponent<SpaceshipEngine>().DisableMovement();
             other.gameObject.GetComponent<SpaceshipEngine>().ClearInputs();
