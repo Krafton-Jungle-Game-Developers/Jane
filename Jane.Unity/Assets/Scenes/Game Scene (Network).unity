@@ -26524,6 +26524,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: 3131971551231489781, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3466316751822046098, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
         type: 3}
       propertyPath: mainCam
@@ -26624,6 +26629,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -200
       objectReference: {fileID: 0}
+    - target: {fileID: 6226624633779352562, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6730934583115097872, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
         type: 3}
       propertyPath: _correction
@@ -26633,6 +26643,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7159206499796600312, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7216875739705062293, guid: 4b8f3d3c5d6b1f84e97a65370803b591,
         type: 3}

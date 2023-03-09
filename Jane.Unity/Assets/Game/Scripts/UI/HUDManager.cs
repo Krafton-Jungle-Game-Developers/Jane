@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 
 namespace Jane.Unity
 {
@@ -6,6 +7,8 @@ namespace Jane.Unity
     {
         [SerializeField] private Camera hUDCamera;
         public Camera HUDCamera { get; set; }
+        public TMP_Text currentRankText;
+        public TMP_Text totalRankText;
         [SerializeField] private Canvas canvas;
         [SerializeField] private RectTransform cursorRectTransform;
         [SerializeField] private RectTransform lineRectTransform;
@@ -58,5 +61,4 @@ namespace Jane.Unity
             }
         }
     }
-
 }
