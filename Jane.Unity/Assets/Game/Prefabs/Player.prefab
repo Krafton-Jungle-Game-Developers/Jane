@@ -777,6 +777,8 @@ MonoBehaviour:
   onScreenEnemy: []
   checkpointPrefab: {fileID: 4261192407093732681, guid: 0cbcbdd2cac13754ca47302ff4404090,
     type: 3}
+  warpGatePrefab: {fileID: 4261192407093732681, guid: 0bdc81befb00c6f4a9f216a5fc519a1a,
+    type: 3}
   enemyPrefab: {fileID: 818905777937365823, guid: c6a2cb2e50297c94894b476f5684afec,
     type: 3}
   minSize: {x: 100, y: 100}

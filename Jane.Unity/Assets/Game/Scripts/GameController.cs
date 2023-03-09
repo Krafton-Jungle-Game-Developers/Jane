@@ -48,9 +48,7 @@ public class GameController : MonoBehaviour
 
     public void EndGame()
     {
-        //for local test
-/*        _spaceshipController.canControl = false;
-*/        hud.GetComponent<Canvas>().enabled = false;
+        hud.GetComponent<Canvas>().enabled = false;
         endGameText.gameObject.SetActive(true);
     }
 

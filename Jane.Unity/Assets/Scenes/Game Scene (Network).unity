@@ -589,7 +589,7 @@ GameObject:
   - component: {fileID: 29438562}
   - component: {fileID: 29438563}
   m_Layer: 0
-  m_Name: Warp Trigger
+  m_Name: HyPeRdRiVe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8093,7 +8093,7 @@ GameObject:
   - component: {fileID: 158205717}
   - component: {fileID: 158205716}
   m_Layer: 0
-  m_Name: Gate (12)
+  m_Name: Checkpoint 12/13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8405,7 +8405,7 @@ GameObject:
   - component: {fileID: 178173168}
   - component: {fileID: 178173167}
   m_Layer: 0
-  m_Name: Warp Gate to Hell
+  m_Name: Warp Gate to HELL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9851,7 +9851,7 @@ GameObject:
   - component: {fileID: 262648299}
   - component: {fileID: 262648298}
   m_Layer: 0
-  m_Name: Gate (9)
+  m_Name: Checkpoint 9/13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12101,7 +12101,7 @@ GameObject:
   - component: {fileID: 408238031}
   - component: {fileID: 408238032}
   m_Layer: 0
-  m_Name: Warp Trigger
+  m_Name: HyPeRdRiVe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14005,7 +14005,7 @@ GameObject:
   - component: {fileID: 491287466}
   - component: {fileID: 491287465}
   m_Layer: 0
-  m_Name: Gate (10)
+  m_Name: Checkpoint 10/13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18378,7 +18378,7 @@ GameObject:
   - component: {fileID: 710182618}
   - component: {fileID: 710182619}
   m_Layer: 0
-  m_Name: Warp Trigger
+  m_Name: HyPeRdRiVe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21058,7 +21058,7 @@ GameObject:
   - component: {fileID: 857446213}
   - component: {fileID: 857446212}
   m_Layer: 0
-  m_Name: Warp Gate to Planet
+  m_Name: Warp Gate to Planet of Apes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21338,7 +21338,7 @@ GameObject:
   - component: {fileID: 881967202}
   - component: {fileID: 881967201}
   m_Layer: 0
-  m_Name: Gate (3)
+  m_Name: Checkpoint 3/13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23139,7 +23139,7 @@ GameObject:
   - component: {fileID: 971792717}
   - component: {fileID: 971792716}
   m_Layer: 0
-  m_Name: Gate (8)
+  m_Name: Checkpoint 8/13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24141,7 +24141,7 @@ GameObject:
   - component: {fileID: 1007318906}
   - component: {fileID: 1007318905}
   m_Layer: 0
-  m_Name: Gate (5)
+  m_Name: Checkpoint 5/13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27420,7 +27420,7 @@ GameObject:
   - component: {fileID: 1189937189}
   - component: {fileID: 1189937188}
   m_Layer: 0
-  m_Name: Gate (4)
+  m_Name: Checkpoint 4/13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37562,7 +37562,7 @@ GameObject:
   - component: {fileID: 1475381284}
   - component: {fileID: 1475381283}
   m_Layer: 0
-  m_Name: Gate (11)
+  m_Name: Checkpoint 11/13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38457,7 +38457,7 @@ GameObject:
   - component: {fileID: 1504209871}
   - component: {fileID: 1504209870}
   m_Layer: 0
-  m_Name: Gate (6)
+  m_Name: Checkpoint 6/13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39153,7 +39153,7 @@ GameObject:
   - component: {fileID: 1546199069}
   - component: {fileID: 1546199068}
   m_Layer: 0
-  m_Name: Warp Gate to Station
+  m_Name: Warp Gate to Space Dandy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41320,7 +41320,7 @@ GameObject:
   - component: {fileID: 1666107358}
   - component: {fileID: 1666107357}
   m_Layer: 0
-  m_Name: Gate (2)
+  m_Name: Checkpoint 2/13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41561,7 +41561,7 @@ GameObject:
   - component: {fileID: 1675659259}
   - component: {fileID: 1675659258}
   m_Layer: 0
-  m_Name: Gate (13)
+  m_Name: Checkpoint 13/13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45369,7 +45369,7 @@ GameObject:
   - component: {fileID: 1889916442}
   - component: {fileID: 1889916441}
   m_Layer: 0
-  m_Name: Gate (7)
+  m_Name: Checkpoint 7/13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47263,7 +47263,7 @@ GameObject:
   - component: {fileID: 1988455089}
   - component: {fileID: 1988455088}
   m_Layer: 0
-  m_Name: Gate (1)
+  m_Name: Checkpoint 1/13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
