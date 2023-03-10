@@ -12,6 +12,7 @@ using MagicOnion.Client;
 
 using Jane.Unity;
 using Jane.Unity.ServerShared.Hubs;
+using Jane.Unity.ServerShared.Enums;
 using Jane.Unity.ServerShared.MemoryPackObjects;
 
 namespace Jane.Unity.Server
@@ -19,18 +20,16 @@ namespace Jane.Unity.Server
     public class GameHubManager : MonoBehaviour, IGameHubReceiver
     {
         private readonly CancellationTokenSource shutdownCts = new();
+        private readonly CancellationTokenSource gameCts = new();
         private GrpcChannelManager channelManager;
         private IGameHub? gameHub;
 
-        private NetworkPlayer _self;
+        private NetworkPlayer self;
         private Dictionary<Ulid, NetworkPlayer> players = new(4);
+        [SerializeField] private GameObject playerGameObject;
         [SerializeField] private GameObject otherPlayerPrefab;
-
-        [Header("Player Reference Init")]
-        [SerializeField] private MeshRenderer playerRenderer;
-        [SerializeField] private SpaceshipInputManager inputManager;
-        [SerializeField] private SpaceshipCameraController cameraController;
-
+        [SerializeField] private GameManager gameManager;
+        
         private void OnEnable()
         {
             channelManager = FindObjectOfType<GrpcChannelManager>();
@@ -38,6 +37,7 @@ namespace Jane.Unity.Server
 
         private async UniTaskVoid OnDestroy()
         {
+            gameCts.Cancel();
             shutdownCts.Cancel();
 
             if (gameHub is not null)
@@ -66,26 +66,58 @@ namespace Jane.Unity.Server
                 await UniTask.Delay(TimeSpan.FromSeconds(5), cancellationToken: shutdownCts.Token);
             }
 
-            _self = await JoinAsync();
+            await JoinAsync();
 
-            //WaitForGameStartAsync(shutdownCts.Token).Forget();
-
-            // TODO: 이동 가능 상태 세분화
-            // TODO: Lag Inspection
-            await UniTaskAsyncEnumerable.IntervalFrame(1)
-                .Where(_ => _self is not null && gameHub is not null)
-                .ForEachAwaitAsync(async _ =>
-                {
-                    await gameHub.MoveAsync(new()
-                    {
-                        Id = _self.UniqueId,
-                        Position = _self.transform.position,
-                        Rotation = _self.transform.rotation
-                    });
-                }, shutdownCts.Token);
+            WaitForOtherPlayersReadyAsync(shutdownCts.Token).Forget();
         }
 
-        public async UniTask<NetworkPlayer> JoinAsync()
+        private async UniTask WaitForOtherPlayersReadyAsync(CancellationToken token)
+        {
+            await UniTask.WaitUntil(() => players.Count == GameInfo.PlayerCount, cancellationToken: token);
+
+            if (token.IsCancellationRequested) { return; }
+
+            GameInitializedRequest request = new() { UniqueId = UserInfo.UniqueId };
+            await gameHub.GameInitializedAsync(request).AsTask().AsUniTask();
+
+            // TODO: UI - Waiting for other players
+            await UniTask.WaitUntil(() => GameInfo.GameState is GameState.CountDown, cancellationToken: token);
+
+            // TODO: UI - CountDown
+            WaitForGameStartAsync(token).Forget();
+        }
+
+        private async UniTask WaitForGameStartAsync(CancellationToken token)
+        {
+            await gameManager.CountDownAsync(3);
+            await UniTask.WaitUntil(() => GameInfo.GameState is GameState.Playing, cancellationToken: token);
+
+            gameManager.StartGame().Forget();
+
+            WaitForGameOverAsync(token).Forget();
+        }
+
+        private async UniTask WaitForGameOverAsync(CancellationToken token)
+        {
+            UniTaskAsyncEnumerable.IntervalFrame(1)
+                .Where(_ => GameInfo.GameState is GameState.Playing)
+                .ForEachAsync(_ => gameHub.MoveAsync(new()
+                {
+                    Id = UserInfo.UniqueId,
+                    Position = self.transform.position,
+                    Rotation = self.transform.rotation
+                }), gameCts.Token).SuppressCancellationThrow().Forget();
+
+
+            await UniTask.WaitUntil(() => GameInfo.GameState is GameState.GameOver, cancellationToken: token);
+            gameCts.Cancel();
+            
+            gameManager.GameOver();
+
+            Debug.Log("Game Over!");
+        }
+
+        public async UniTask JoinAsync()
         {
             GameJoinRequest request = new()
             {
@@ -93,6 +125,7 @@ namespace Jane.Unity.Server
                 PlayerCount = GameInfo.PlayerCount,
                 UserId = UserInfo.UserId,
                 UniqueId = UserInfo.UniqueId,
+                IsInitialized = false,
                 InitialPosition = Vector3.zero,
                 InitialRotation = Quaternion.identity
             };
@@ -115,45 +148,34 @@ namespace Jane.Unity.Server
 
                 OnJoin(player);
             }
-            
-            return players[UserInfo.UniqueId];
         }
         
-        public void OnJoin(GamePlayerData joinedPlayer)
+        public void OnJoin(GamePlayerData joinedPlayerData)
         {
-            if (joinedPlayer is null) { throw new ArgumentNullException(); }
+            if (joinedPlayerData is null) { throw new ArgumentNullException(); }
 
-            Debug.Log($"Player {joinedPlayer.UserId}: {joinedPlayer.UniqueId} has joined the room.");
-
-            GameObject playerGameObject;
+            Debug.Log($"Player {joinedPlayerData.UserId}: {joinedPlayerData.UniqueId} has joined the room.");
+            
             NetworkPlayer networkPlayer;
 
             // ME: Server sent that I've successfully joined the room. So I should Initialize Player.
-            if (joinedPlayer.UniqueId.Equals(UserInfo.UniqueId))
+            if (joinedPlayerData.UniqueId.Equals(UserInfo.UniqueId))
             {
-                playerGameObject = playerRenderer.transform.root.gameObject;
-                playerGameObject.transform.SetPositionAndRotation(joinedPlayer.Position, joinedPlayer.Rotation);
-                playerRenderer.enabled = true;
-                RankManager.instance.GetLocalPlayer(playerGameObject.GetComponent<NetworkPlayer>());
-
+                networkPlayer = playerGameObject.GetComponent<NetworkPlayer>();
+                networkPlayer.Initialize(joinedPlayerData, true);
+                self = networkPlayer;
+                RankManager.instance.GetLocalPlayer(self);
                 // Enable Input when game starts
-                // Call MoveAsync Every frame 
-                inputManager.EnableInput();
-                inputManager.EnableMovement();
-                inputManager.EnableSteering();
+                // Call MoveAsync Every frame
             }
             else
             {
-                playerGameObject = Instantiate(otherPlayerPrefab, joinedPlayer.Position, joinedPlayer.Rotation);
+                GameObject other = Instantiate(otherPlayerPrefab, joinedPlayerData.Position, joinedPlayerData.Rotation);
+                networkPlayer = other.GetComponent<NetworkPlayer>();
+                networkPlayer.Initialize(joinedPlayerData, false);
             }
-
-            playerGameObject.name = joinedPlayer.UserId;
-
-            networkPlayer = playerGameObject.GetComponent<NetworkPlayer>();
-            networkPlayer.Initialize(joinedPlayer);
             RankManager.instance.GetPlayers(networkPlayer);
-
-            players.TryAdd(joinedPlayer.UniqueId, networkPlayer);
+            players.TryAdd(joinedPlayerData.UniqueId, networkPlayer);
         }
 
         public void OnLeave(GamePlayerData request)
@@ -165,6 +187,16 @@ namespace Jane.Unity.Server
                 players.Remove(request.UniqueId);
                 other.OnLeaveRoom();
             }
+        }
+
+        public void OnGameStateChange(GameStateChangedResponse response)
+        {
+            GameInfo.GameState = response.GameState;
+        }
+
+        public void OnTimerUpdate(long ticks)
+        {
+            gameManager.UpdateTimer(ticks);
         }
 
         public void OnMove(MoveRequest request)

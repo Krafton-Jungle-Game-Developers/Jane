@@ -43,7 +43,7 @@ namespace Jane.Server.Hubs
             if (isAllPlayersReady)
             {
                 matchedGameId = Ulid.NewUlid();
-                MatchMakingCompleteResponse response = new() { GameId = matchedGameId, PlayerCount = storage.AllValues.Count };
+                MatchMakingCompleteResponse response = new() { GameId = matchedGameId, PlayerCount = await matchMakingLobby.GetMemberCountAsync() };
                 Broadcast(matchMakingLobby).OnMatchMakingComplete(response);
                 await matchMakingLobby.RemoveAsync(Context);
             }

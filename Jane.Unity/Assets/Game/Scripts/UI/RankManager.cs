@@ -15,34 +15,23 @@ public class RankManager : MonoBehaviour
     public StandingsGenerator resultsGenerator;
     public TargetBoxGenerator targetBoxGenerator;
     public CheckPoints checkPoints;
-    
+
     [HideInInspector] public int finishCount = 0;
-    private HUDManager hudManager;
-    private GameController gameController;
-    private Dictionary<string, NetworkPlayer> players;
+    [SerializeField] private HUDManager hudManager;
+    private Dictionary<string, NetworkPlayer> players = new();
     private NetworkPlayer playerID;
-    private List<KeyValuePair<string, NetworkPlayer>> sortedList = new List<KeyValuePair<string, NetworkPlayer>>();
+    private List<KeyValuePair<string, NetworkPlayer>> sortedList = new();
     private bool isUpdating = false;
     private float switchTime = 0.15f;
 
-    private void Awake()
+    private void Awake() => instance = this;
+    void Update()
     {
-        instance = this;
-    }
-    void Start()
-    {
-        players = new Dictionary<string, NetworkPlayer>();
-        gameController = GetComponentInParent<GameController>();
-        hudManager = GameObject.FindGameObjectWithTag("HUD").GetComponentInParent<HUDManager>();
-    }
-
-    void LateUpdate()
-    {
-        if (!isUpdating && !playerID.isFinished && gameController.gameState == GameState.Playing)
+        if (!isUpdating && GameInfo.GameState == GameState.Playing)
         {
             SetStandings(standingsGenerator);
         }
-        else if (!isUpdating && playerID.isFinished && gameController.gameState == GameState.Playing)
+        else if (!isUpdating && GameInfo.GameState == GameState.Playing)
         {
             SetStandings(resultsGenerator);
         }
@@ -66,7 +55,7 @@ public class RankManager : MonoBehaviour
         }
     }
 
-    public void SetStandings(StandingsGenerator standings)
+    private void SetStandings(StandingsGenerator standings)
     {
         IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sortedPlayer = players.Where(x => !x.Value.isFinished)
                                                                                       .OrderByDescending(x => x.Value.activeCheckpointIndex)
@@ -136,7 +125,7 @@ public class RankManager : MonoBehaviour
             {
                 hudManager.currentRankText.text = currentRank.ToString();
             }
-            currentRank++; 
+            currentRank++;
         }
     }
 

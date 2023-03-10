@@ -175,8 +175,8 @@ public class MatchMakingManager : MonoBehaviour, IMatchMakingHubReceiver
         }
         else
         {
-            var otherUser = lobbyUsers.FirstOrDefault(user => user.UniqueId.Equals(leftUser.UniqueId));
-            lobbyUsers.Remove(otherUser);
+            var otherUser = lobbyUsers?.FirstOrDefault(user => user.UniqueId.Equals(leftUser.UniqueId));
+            lobbyUsers?.Remove(otherUser);
 
             var otherUserUI = lobbyUserUIPanels.FirstOrDefault(user => user.additionalText.Equals(leftUser.UniqueId.ToString()));
             otherUserUI?.SetPlayerName(string.Empty);
