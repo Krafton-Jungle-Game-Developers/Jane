@@ -12,6 +12,9 @@ public class Booster : MonoBehaviour
     [Header("Reference and Keys")]
     [SerializeField] private VisualEffect boosterImpactVFX;
     [SerializeField] private VisualEffect boosterLoopVFX;
+    [SerializeField] private AudioSource boosterImpactAudio;
+    [SerializeField] private AudioSource boosterLoopAudio;
+
     [SerializeField] private KeyCode boosterKey = KeyCode.LeftShift;
 
     [Space]
@@ -35,6 +38,9 @@ public class Booster : MonoBehaviour
         boosterImpactVFX.Stop();
         boosterLoopVFX.Stop();
         boosterLoopVFX.SetFloat("WarpAmount", 0);
+
+        boosterImpactAudio.Stop();
+        boosterLoopAudio.Stop();
     }
 
     
@@ -47,6 +53,7 @@ public class Booster : MonoBehaviour
             {
                 _isBoosterActive = true;
                 boosterImpactVFX.Play();
+                boosterImpactAudio.Play();
                 StartCoroutine(ActivateBooster());
             }
             else if (Input.GetKeyUp(boosterKey))
@@ -83,6 +90,7 @@ public class Booster : MonoBehaviour
             // spaceshipController.ChangeSpeed(_boosterSpeed);
             //spaceshipInputManager.SetBoost(1f);
             boosterLoopVFX.Play();
+            boosterLoopAudio.Play();
 
             float _warpAmount = boosterLoopVFX.GetFloat("WarpAmount");
             
@@ -97,7 +105,7 @@ public class Booster : MonoBehaviour
         {
             yield return new WaitForSeconds(0.6f);
             // spaceshipController.ChangeSpeed(_normalSpeed);
-
+            boosterLoopAudio.Stop();
             //spaceshipInputManager.SetBoost(0f);
             float _warpAmount = boosterLoopVFX.GetFloat("WarpAmount");
             while (_warpAmount >= _warpRate)
