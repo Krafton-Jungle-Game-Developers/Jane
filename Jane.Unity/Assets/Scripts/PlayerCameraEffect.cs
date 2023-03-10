@@ -99,7 +99,7 @@ public class PlayerCameraEffect : MonoBehaviour
                                      playerRigidbody.position.z);
 
         //NOTE: Don't use Delta Time (Jittering)
-        playerVelocity = (Mathf.Abs(playerPosition.magnitude - oldPlayerPosition.magnitude)) / Time.deltaTime;
+        playerVelocity = playerRigidbody.velocity.magnitude;
         playerAcceleration = Vector3.Distance(playerPosition, oldPlayerPosition);
         oldPlayerPosition = new Vector3(playerRigidbody.position.x,
                                         0.0f,

@@ -34,7 +34,7 @@ MonoBehaviour:
   enableLocalization: 0
   localizationSettings: {fileID: 11400000, guid: 2cbd73cf0fc79bf4ab2e27e18b1ba7c8,
     type: 2}
-  currentLanguage: {fileID: 11400000, guid: 8d3376ccffec1fb4eb27e25b3629b305, type: 2}
+  currentLanguage: {fileID: 11400000, guid: 7f0d34462af20e740a7fc45541f666a0, type: 2}
   brandLogo: {fileID: 21300000, guid: 78ca0ac98a59e2d49a61da6d805033a7, type: 3}
   brandLogoColor: {r: 1, g: 1, b: 1, a: 255}
   gameLogo: {fileID: 21300000, guid: 46ee5ab304630404d8cdaf9092d41e10, type: 3}

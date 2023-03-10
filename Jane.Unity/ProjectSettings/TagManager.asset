@@ -9,7 +9,7 @@ TagManager:
   - Environment
   - Spawner
   - MeteorPoint
-  - CheckPoint
+  - HUD
   layers:
   - Default
   - TransparentFX

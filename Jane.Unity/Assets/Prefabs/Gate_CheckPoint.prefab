@@ -56,8 +56,14 @@ VisualEffect:
       m_Array: []
     m_Vector4f:
       m_Array:
-      - m_Value: {x: 0.018923549, y: 0.19103774, z: 0.021626908, w: 0}
+      - m_Value: {x: 2.0835643, y: 1.2713275, z: 0, w: 0.31764707}
         m_Name: OuterRingColor
+        m_Overridden: 1
+      - m_Value: {x: 13.1136875, y: 3.982167, z: 0, w: 0}
+        m_Name: ParticleColor
+        m_Overridden: 1
+      - m_Value: {x: 51.559727, y: 47.284042, z: 0, w: 0}
+        m_Name: ShockWaveColor
         m_Overridden: 1
     m_Uint:
       m_Array: []

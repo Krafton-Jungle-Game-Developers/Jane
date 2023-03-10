@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using UnityEngine;
 
 /// <summary>
@@ -31,15 +32,18 @@ public class CheckPoints : MonoBehaviour
 
     public void ControlGates(int gateNo)
     {
-        audioSource.clip = gateClearSFX;
-        audioSource.Play();
+        if(audioSource != null)
+        {
+            audioSource.clip = gateClearSFX;
+            audioSource.Play();
+        }
 
         nextGate.SendMessage("Deactivate");
         idx += 1;
 
         if (gateNo != gateCount)
         {
-            nextGate= checkPointArr[gateNo];
+            nextGate = checkPointArr[gateNo];
             nextGate.SendMessage("Activate");
             targetBoxGenerator.SetNextTargetBox(gateNo);
         }

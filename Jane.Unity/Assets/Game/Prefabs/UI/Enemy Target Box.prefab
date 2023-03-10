@@ -67,6 +67,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distanceText: {fileID: 7267480943806604046}
   nameText: {fileID: 3840026913367127656}
+  minClamp: 0.4
 --- !u!1 &4605491826600701505
 GameObject:
   m_ObjectHideFlags: 0
