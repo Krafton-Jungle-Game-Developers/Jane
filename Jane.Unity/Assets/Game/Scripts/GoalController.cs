@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GoalController : MonoBehaviour
 {
-    private GameManager gameManager;
+    [SerializeField] private GameManager gameManager;
 
     private void OnTriggerEnter(Collider other)
     {
