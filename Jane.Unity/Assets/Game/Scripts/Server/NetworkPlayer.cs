@@ -31,26 +31,26 @@ public class NetworkPlayer : MonoBehaviour
         if (_isSelf) { TryGetComponent(out engine); }
     }
 
-    private async UniTaskVoid OnTriggerEnter(Collider other)
-    {
-        if (_isSelf is false) { return; }
+    //private async UniTaskVoid OnTriggerEnter(Collider other)
+    //{
+    //    if (_isSelf is false) { return; }
 
-        if (other.CompareTag("CheckPoint"))
-        {
-            CheckPoint checkPoint = other.GetComponent<CheckPoint>();
-            CurrentRegion = checkPoint.Region;
-            CurrentZone = checkPoint.CheckPointNumber;
+    //    if (other.CompareTag("CheckPoint"))
+    //    {
+    //        CheckPoint checkPoint = other.GetComponent<CheckPoint>();
+    //        CurrentRegion = checkPoint.Region;
+    //        CurrentZone = checkPoint.CheckPointNumber;
 
-            checkPoint.Interact();
+    //        checkPoint.Interact();
 
-            if (checkPoint.IsWarpGate)
-            {
-                engine.ControlsDisabled = true;
-                await checkPoint.Warp(transform);
-                engine.ControlsDisabled = false;
-            }
-        }
-    }
+    //        if (checkPoint.IsWarpGate)
+    //        {
+    //            engine.ControlsDisabled = true;
+    //            await checkPoint.Warp(transform);
+    //            engine.ControlsDisabled = false;
+    //        }
+    //    }
+    //}
 
     public void Initialize(GamePlayerData data, bool isSelf)
     {
@@ -68,14 +68,14 @@ public class NetworkPlayer : MonoBehaviour
         gameObject.name = data.UserId;
     }
 
-    //private void Update()
-    //{
-    //    RankManager rm = RankManager.instance;
-    //    if (!rm.checkPoints.goalActive)
-    //    {
-    //        distanceToCheckpoint = rm.GetDistance(this.gameObject, rm.checkPoints.checkPointArr[activeCheckpointIndex]);
-    //    }
-    //}
+    private void Update()
+    {
+        RankManager rm = RankManager.instance;
+        if (!rm.checkPoints.goalActive)
+        {
+            distanceToCheckpoint = rm.GetDistance(this.gameObject, rm.checkPoints.checkPointArr[activeCheckpointIndex]);
+        }
+    }
 
     public void UpdateMovement(MoveRequest request)
     {

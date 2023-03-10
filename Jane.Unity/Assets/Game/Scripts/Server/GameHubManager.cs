@@ -174,7 +174,7 @@ namespace Jane.Unity.Server
                 networkPlayer = other.GetComponent<NetworkPlayer>();
                 networkPlayer.Initialize(joinedPlayerData, false);
             }
-            
+            RankManager.instance.GetPlayers(networkPlayer);
             players.TryAdd(joinedPlayerData.UniqueId, networkPlayer);
         }
 

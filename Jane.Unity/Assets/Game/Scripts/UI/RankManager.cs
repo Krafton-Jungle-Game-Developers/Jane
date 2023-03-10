@@ -18,30 +18,20 @@ public class RankManager : MonoBehaviour
 
     [HideInInspector] public int finishCount = 0;
     [SerializeField] private HUDManager hudManager;
-    private Dictionary<string, NetworkPlayer> players;
+    private Dictionary<string, NetworkPlayer> players = new();
     private NetworkPlayer playerID;
     private List<KeyValuePair<string, NetworkPlayer>> sortedList = new();
     private bool isUpdating = false;
     private float switchTime = 0.15f;
 
-    private void Awake()
-    {
-        instance = this;
-    }
-
-    void Start()
-    {
-        players = new Dictionary<string, NetworkPlayer>();
-        hudManager = GameObject.FindGameObjectWithTag("HUD").GetComponentInParent<HUDManager>();
-    }
-
+    private void Awake() => instance = this;
     void Update()
     {
-        if (!isUpdating && !playerID.IsFinished && GameInfo.GameState == GameState.Playing)
+        if (!isUpdating && GameInfo.GameState == GameState.Playing)
         {
             SetStandings(standingsGenerator);
         }
-        else if (!isUpdating && playerID.IsFinished && GameInfo.GameState == GameState.Playing)
+        else if (!isUpdating && GameInfo.GameState == GameState.Playing)
         {
             SetStandings(resultsGenerator);
         }
