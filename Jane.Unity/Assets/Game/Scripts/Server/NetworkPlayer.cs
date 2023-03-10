@@ -20,7 +20,7 @@ public class NetworkPlayer : MonoBehaviour
     private void Update()
     {
         RankManager rm = RankManager.instance;
-        if (!rm.checkPoints.goalActive)
+        if (!rm.checkPoints.goalActive && !isFinished)
         {
             distanceToCheckpoint = rm.GetDistance(this.gameObject, rm.checkPoints.checkPointArr[activeCheckpointIndex]);
         }

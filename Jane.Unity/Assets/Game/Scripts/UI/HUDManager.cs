@@ -11,6 +11,8 @@ namespace Jane.Unity
         public TMP_Text totalRankText;
         public Canvas hudCanvas;
         public Canvas targetCanvas;
+        public Canvas standingsCanvas;
+        public Canvas resultCanvas;
         [SerializeField] private RectTransform cursorRectTransform;
         [SerializeField] private RectTransform lineRectTransform;
         private RectTransform canvasRectTransform;
