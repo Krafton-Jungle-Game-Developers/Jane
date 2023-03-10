@@ -21450,7 +21450,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 703375236}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -23021,7 +23021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5da61ceb26ee86d43ac073c731909ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cover: {fileID: 21300000, guid: 36cb3cbca9e6e6e49b9aed396ea78e3e, type: 3}
+  cover: {fileID: 21300000, guid: 41ad857f9d861ee41bdfe849483b94a2, type: 3}
   title: SEUNGHU LEE
   description: 'Server
 
@@ -23887,7 +23887,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5da61ceb26ee86d43ac073c731909ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cover: {fileID: 21300000, guid: 41ad857f9d861ee41bdfe849483b94a2, type: 3}
+  cover: {fileID: 21300000, guid: a697d05ef3621894a8cab7ae80d9a133, type: 3}
   title: '  SUNWOO LEE'
   description: 'Leader / Client
 
@@ -35015,7 +35015,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1265928323}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -43804,7 +43804,7 @@ MonoBehaviour:
     hotkeyParent: {fileID: 1630504422}
     latestSelected: {fileID: 0}
     hotkeys: []
-  currentPanelIndex: 5
+  currentPanelIndex: 0
   cullPanels: 1
   initializeButtons: 1
   bypassAnimationOnEnable: 0

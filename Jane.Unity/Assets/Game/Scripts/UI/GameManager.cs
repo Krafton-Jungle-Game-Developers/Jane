@@ -100,4 +100,9 @@ public class GameManager : MonoBehaviour
         inputManager.DisableMovement(true);
         inputManager.DisableSteering(true);
     }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }

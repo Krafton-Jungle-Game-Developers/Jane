@@ -19,6 +19,18 @@ namespace Jane.Unity
         public TMP_Text resultTimeText;
         private RectTransform canvasRectTransform;
 
+        private void Start()
+        {
+            HideCursor();
+        }
+        public void HideCursor()
+        {
+            Cursor.visible = false;
+        }
+        public void ShowCursor()
+        {
+            Cursor.visible = true;
+        }
         public virtual Vector3 ViewportPosition
         {
             get
