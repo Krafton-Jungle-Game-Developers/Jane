@@ -164,6 +164,7 @@ namespace Jane.Unity.Server
                 networkPlayer = playerGameObject.GetComponent<NetworkPlayer>();
                 networkPlayer.Initialize(joinedPlayerData, true);
                 self = networkPlayer;
+                RankManager.instance.GetLocalPlayer(self);
                 // Enable Input when game starts
                 // Call MoveAsync Every frame
             }
