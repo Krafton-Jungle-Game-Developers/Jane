@@ -36,7 +36,7 @@ public class RankManager : MonoBehaviour
         hudManager = GameObject.FindGameObjectWithTag("HUD").GetComponentInParent<HUDManager>();
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (!isUpdating && !playerID.isFinished && gameController.gameState == GameState.Playing)
         {
@@ -66,13 +66,18 @@ public class RankManager : MonoBehaviour
         }
     }
 
-    private void SetStandings(StandingsGenerator standings)
+    public void SetStandings(StandingsGenerator standings)
     {
-        IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sortedPlayer = players.OrderByDescending(x => !x.Value.isFinished)
-                                                                                      .ThenByDescending(x => x.Value.activeCheckpointIndex)
+        IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sortedPlayer = players.Where(x => !x.Value.isFinished)
+                                                                                      .OrderByDescending(x => x.Value.activeCheckpointIndex)
                                                                                       .ThenBy(x => x.Value.distanceToCheckpoint);
         List<KeyValuePair<string, NetworkPlayer>> tempList = sortedPlayer.ToList();
 
+        foreach (KeyValuePair<string, NetworkPlayer> item in tempList)
+        { 
+            Debug.Log(item.Key);
+        }
+        Debug.Log(finishCount);
         if (sortedList.Any() && !sortedList.SequenceEqual(tempList) && tempList.Count == sortedList.Count)
         {
             List<int?> differentPositions = sortedList.Zip(tempList, (x, y) => x.Equals(y) ? (int?)null : Array.IndexOf(tempList.ToArray(), x)).ToList();
@@ -141,8 +146,14 @@ public class RankManager : MonoBehaviour
         hudManager.standingsCanvas.enabled = false;
         hudManager.targetCanvas.enabled = false;
         hudManager.resultCanvas.enabled = true;
-/*        hudManager.resultCanvas.gameObject;
-*/    }
+        TMP_Text rankText = GameObject.FindGameObjectsWithTag("RankText")[0].GetComponent<TMP_Text>();
+        TMP_Text standingsText = GameObject.FindGameObjectsWithTag("RankText")[1].GetComponent<TMP_Text>();
+        int i = 0;
+        if(true)
+        {
+            ;
+        }
+    }
 
     public float GetDistance(GameObject playerObj, GameObject checkpointObj)
     {
