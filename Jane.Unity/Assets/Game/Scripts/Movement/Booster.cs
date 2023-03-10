@@ -81,7 +81,7 @@ public class Booster : MonoBehaviour
             //     spaceshipController.ChangeSpeedInstantly(_boosterSpeed);
             // }
             // spaceshipController.ChangeSpeed(_boosterSpeed);
-            spaceshipInputManager.SetBoost(1f);
+            //spaceshipInputManager.SetBoost(1f);
             boosterLoopVFX.Play();
 
             float _warpAmount = boosterLoopVFX.GetFloat("WarpAmount");
@@ -98,7 +98,7 @@ public class Booster : MonoBehaviour
             yield return new WaitForSeconds(0.6f);
             // spaceshipController.ChangeSpeed(_normalSpeed);
 
-            spaceshipInputManager.SetBoost(0f);
+            //spaceshipInputManager.SetBoost(0f);
             float _warpAmount = boosterLoopVFX.GetFloat("WarpAmount");
             while (_warpAmount >= _warpRate)
             {
