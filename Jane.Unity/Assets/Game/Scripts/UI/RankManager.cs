@@ -27,14 +27,18 @@ public class RankManager : MonoBehaviour
     private void Awake() => instance = this;
     void Update()
     {
-        if (!isUpdating && GameInfo.GameState == GameState.Playing)
+        if (playerID != null)
         {
-            SetStandings(standingsGenerator);
+            if (!isUpdating && !playerID.IsFinished && GameInfo.GameState == GameState.Playing)
+            {
+                SetStandings(standingsGenerator);
+            }
+            else if (!isUpdating && playerID.IsFinished && GameInfo.GameState == GameState.Playing)
+            {
+                SetStandings(resultsGenerator);
+            }
         }
-        else if (!isUpdating && GameInfo.GameState == GameState.Playing)
-        {
-            SetStandings(resultsGenerator);
-        }
+        
         SetRank();
     }
 
@@ -57,7 +61,7 @@ public class RankManager : MonoBehaviour
 
     private void SetStandings(StandingsGenerator standings)
     {
-        IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sortedPlayer = players.Where(x => !x.Value.isFinished)
+        IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sortedPlayer = players.Where(x => !x.Value.IsFinished)
                                                                                       .OrderByDescending(x => x.Value.activeCheckpointIndex)
                                                                                       .ThenBy(x => x.Value.distanceToCheckpoint);
         List<KeyValuePair<string, NetworkPlayer>> tempList = sortedPlayer.ToList();
