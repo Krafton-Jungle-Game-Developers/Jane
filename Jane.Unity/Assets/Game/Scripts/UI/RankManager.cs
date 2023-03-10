@@ -35,7 +35,7 @@ public class RankManager : MonoBehaviour
             }
             else if (!isUpdating && playerId.IsFinished && GameInfo.GameState == GameState.Playing)
             {
-                SetStandings(resultsGenerator);
+                SetResultStandings(resultsGenerator);
             }
         }
         SetRank();
@@ -65,6 +65,10 @@ public class RankManager : MonoBehaviour
                                                                                       .ThenBy(x => x.Value.distanceToCheckpoint);
         List<KeyValuePair<string, NetworkPlayer>> tempList = sortedPlayer.ToList();
 
+        foreach (KeyValuePair<string, NetworkPlayer> item in sortedPlayer)
+        {
+            Debug.Log(item.Key);
+        }
         if (sortedList.Any() && !sortedList.SequenceEqual(tempList) && tempList.Count == sortedList.Count)
         {
             List<int?> differentPositions = sortedList.Zip(tempList, (x, y) => x.Equals(y) ? (int?)null : Array.IndexOf(tempList.ToArray(), x)).ToList();
@@ -74,7 +78,6 @@ public class RankManager : MonoBehaviour
             change1 += finishCount;
             change2 += finishCount;
             int i = finishCount;
-            Debug.Log("a");
 
             foreach (KeyValuePair<string, NetworkPlayer> item in sortedPlayer)
             {
@@ -87,9 +90,8 @@ public class RankManager : MonoBehaviour
 
                     RectTransform first = standings.standingsBox[change1].GetComponent<RectTransform>();
                     RectTransform second = tempBox.GetComponent<RectTransform>();
-                    StartCoroutine(MoveStandings(first, second, sortedPlayer, switchTime));
+                    StartCoroutine(MoveStandings(first, second, sortedPlayer, switchTime, standings));
                 }
-                Debug.Log("b");
                 i++;
             }
         }
@@ -109,11 +111,8 @@ public class RankManager : MonoBehaviour
                 standings.standingsBox[i].GetComponentInChildren<TMP_Text>().text = "   " + (i + 1) + "   " + item.Key;
                 i++;
             }
-            Debug.Log("c");
         }
         sortedList = tempList;
-        Debug.Log("d");
-
     }
 
     private void SetRank()
@@ -150,6 +149,64 @@ public class RankManager : MonoBehaviour
         }
     }
 
+    public void SetResultStandings(StandingsGenerator standings)
+    {
+        IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sortedPlayer = players.Where(x => !x.Value.IsFinished)
+                                                                              .OrderByDescending(x => x.Value.activeCheckpointIndex)
+                                                                              .ThenBy(x => x.Value.distanceToCheckpoint);
+        List<KeyValuePair<string, NetworkPlayer>> tempList = sortedPlayer.ToList();
+
+        if (tempList.Any() && tempList.Count != sortedList.Count)
+        {
+            int i = finishCount - 1;
+            foreach (KeyValuePair<string, NetworkPlayer> item in sortedList)
+            {
+                if (item.Value.UniqueId == playerId.UniqueId)
+                {
+                    standings.standingsBox[i].GetComponent<ResultBox>().ChangeColor(new Color(1.0f, 0.5f, 0f, 1.0f));
+                }
+                else
+                {
+                    standings.standingsBox[i].GetComponent<ResultBox>().ChangeColor(new Color(0f, 0f, 0f, 1.0f));
+                }
+                standings.standingsBox[i].GetComponent<ResultBox>().ChangeRank((i + 1).ToString());
+                standings.standingsBox[i].GetComponent<ResultBox>().ChangeStandings(item.Key);
+                i++;
+            }
+        }
+        else if (tempList.Any() && !sortedList.SequenceEqual(tempList) && tempList.Count == sortedList.Count)
+        {
+            List<int?> differentPositions = sortedList.Zip(tempList, (x, y) => x.Equals(y) ? (int?)null : Array.IndexOf(tempList.ToArray(), x)).ToList();
+            differentPositions = differentPositions.Where(x => x != null).ToList();
+            int change1 = differentPositions.First() ?? 0;
+            int change2 = differentPositions.Last() ?? 0;
+            change1 += finishCount;
+            change2 += finishCount;
+            int i = finishCount;
+
+            foreach (KeyValuePair<string, NetworkPlayer> item in sortedPlayer)
+            {
+                if (i == change1)
+                {
+                    isUpdating = true;
+                    GameObject tempBox = standings.standingsBox[change1];
+                    standings.standingsBox[change1] = standings.standingsBox[change2];
+                    standings.standingsBox[change2] = tempBox;
+
+                    RectTransform first = standings.standingsBox[change1].GetComponent<RectTransform>();
+                    RectTransform second = tempBox.GetComponent<RectTransform>();
+                    StartCoroutine(MoveStandings(first, second, sortedPlayer, switchTime, standings));
+                }
+                i++;
+            }
+        }
+        else if (!tempList.Any())
+        {
+            ;
+        }
+        sortedList = tempList;
+    }
+
     public float GetDistance(GameObject playerObj, GameObject checkpointObj)
     {
         Vector3 playerLocation = playerObj.transform.position;
@@ -158,7 +215,7 @@ public class RankManager : MonoBehaviour
         return distance;
     }
 
-    IEnumerator MoveStandings(RectTransform rectTransformA, RectTransform rectTransformB, IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sorted, float duration)
+    IEnumerator MoveStandings(RectTransform rectTransformA, RectTransform rectTransformB, IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sorted, float duration, StandingsGenerator standings)
     {
         Vector2 startPosA = rectTransformA.anchoredPosition;
         Vector2 endPosA = rectTransformB.anchoredPosition;
@@ -176,18 +233,38 @@ public class RankManager : MonoBehaviour
         }
 
         int i = finishCount;
-        foreach (KeyValuePair<string, NetworkPlayer> item in sorted)
+        if (standings == standingsGenerator)
         {
-            if (item.Value.UniqueId == playerId.UniqueId)
+            foreach (KeyValuePair<string, NetworkPlayer> item in sorted)
             {
-                standingsGenerator.standingsBox[i].GetComponent<Image>().color = new Color(1.0f, 0.5f, 0f, 1.0f);
+                if (item.Value.UniqueId == playerId.UniqueId)
+                {
+                    standings.standingsBox[i].GetComponent<Image>().color = new Color(1.0f, 0.5f, 0f, 1.0f);
+                }
+                else
+                {
+                    standings.standingsBox[i].GetComponent<Image>().color = new Color(0f, 0f, 0f, 1.0f);
+                }
+                standings.standingsBox[i].GetComponentInChildren<TMP_Text>().text = "   " + (i + 1) + "   " + item.Key;
+                i++;
             }
-            else
+        }
+        else if (standings == resultsGenerator)
+        {
+            foreach (KeyValuePair<string, NetworkPlayer> item in sortedList)
             {
-                standingsGenerator.standingsBox[i].GetComponent<Image>().color = new Color(0f, 0f, 0f, 1.0f);
+                if (item.Value.UniqueId == playerId.UniqueId)
+                {
+                    standings.standingsBox[i].GetComponent<ResultBox>().ChangeColor(new Color(1.0f, 0.5f, 0f, 1.0f));
+                }
+                else
+                {
+                    standings.standingsBox[i].GetComponent<ResultBox>().ChangeColor(new Color(0f, 0f, 0f, 1.0f));
+                }
+                standings.standingsBox[i].GetComponent<ResultBox>().ChangeRank((i + 1).ToString());
+                standings.standingsBox[i].GetComponent<ResultBox>().ChangeStandings(item.Key);
+                i++;
             }
-            standingsGenerator.standingsBox[i].GetComponentInChildren<TMP_Text>().text = "   " + (i + 1) + "   " + item.Key;
-            i++;
         }
         isUpdating = false;
         rectTransformA.anchoredPosition = endPosA;

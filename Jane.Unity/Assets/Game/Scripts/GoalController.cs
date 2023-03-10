@@ -12,7 +12,6 @@ public class GoalController : MonoBehaviour
             && player.IsFinished is false)
         {
             Debug.Log("finished");
-            RankManager.instance.SetStandings(RankManager.instance.resultsGenerator);
             player.IsFinished = true;
             RankManager.instance.finishCount++;
         }
