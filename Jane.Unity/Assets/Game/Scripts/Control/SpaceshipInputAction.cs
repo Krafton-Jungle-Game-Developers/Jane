@@ -187,7 +187,7 @@ public partial class @SpaceshipInputAction : IInputActionCollection2, IDisposabl
                 {
                     ""name"": """",
                     ""id"": ""0278519b-fafa-450d-9362-588f4002d9c1"",
-                    ""path"": ""<Keyboard>/tab"",
+                    ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

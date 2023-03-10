@@ -41,8 +41,6 @@ public class SpaceshipEngine : MonoBehaviour
     [SerializeField] private AnimationCurve steeringBySpeedCurve = AnimationCurve.Linear(0, 1, 1, 1);
     [SerializeField] private float boostSteeringCoefficient = 1f;
     
-    [SerializeField] private BoostFuel boostFuel;
-
     private void Awake() => TryGetComponent(out spaceShipRigidbody);
 
     public void ClearInputs()
@@ -148,20 +146,7 @@ public class SpaceshipEngine : MonoBehaviour
         boostInputs.y = Mathf.Clamp(newValuesByAxis.y, -1f, 1f);
         boostInputs.z = Mathf.Clamp(newValuesByAxis.z, -1f, 1f);
     }
-
-    private void Update()
-    {
-        // Use resources during boost
-        if (boostInputs.magnitude != 0f)
-        {
-            if (controlsDisabled) return;
-
-            boostInputs.x = Mathf.Clamp(0f, -1f, 1f);
-            boostInputs.y = Mathf.Clamp(0f, -1f, 1f);
-            boostInputs.z = Mathf.Clamp(0f, -1f, 1f);
-        }
-    }
-
+    
     private void FixedUpdate()
     {
         if (enginesActivated is false) { return; }

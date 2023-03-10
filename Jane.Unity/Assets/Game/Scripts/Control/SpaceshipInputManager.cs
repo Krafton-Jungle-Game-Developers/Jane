@@ -174,7 +174,7 @@ namespace Jane.Unity
             spaceEngine.SetMovementInputs(movementInputs);
 
             boostInputs = Vector3.Lerp(boostInputs, boostTarget, boostChangeSpeed * Time.deltaTime);
-            if (boostInputs.magnitude < 0.0001f) { boostInputs = Vector3.zero; }
+            //if (boostInputs.magnitude < 0.0001f) { boostInputs = Vector3.zero; }
             spaceEngine.SetBoostInputs(boostInputs);
         }
 
@@ -182,8 +182,6 @@ namespace Jane.Unity
         {
             if (Mathf.Abs(rollAmount) > 0.0001f) { lastRollTime = Time.time; }
         }
-
-        public void SetBoost(float boostAmount) => boostTarget = new Vector3(0f, 0f, boostAmount);
 
         private void AutoRoll()
         {
