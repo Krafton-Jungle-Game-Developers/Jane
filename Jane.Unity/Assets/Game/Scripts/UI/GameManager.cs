@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
     public GameObject PlayingHolder => playingHolder;
     [SerializeField] private TMP_Text countDownText;
     public TMP_Text CountDownText => countDownText;
-    [SerializeField] private GameObject finishHolder;
     [SerializeField] private GameObject gameOverHolder;
     [SerializeField] private GameObject resultHolder;
     [SerializeField] private TMP_Text minuteText;
@@ -75,10 +74,9 @@ public class GameManager : MonoBehaviour
 
     public void RaceFinish()
     {
+        RankManager.instance.SetResult(GameInfo.GameTime);
         // Do Stuff
         // Game is not yet over for others
-        playingHolder.SetActive(false);
-        finishHolder.SetActive(true);
 
         engine.ControlsDisabled = true;
         engine.EnginesActivated = false;
@@ -92,7 +90,6 @@ public class GameManager : MonoBehaviour
         // Show Result Game UI
         HUD.SetActive(false);
         playingHolder.SetActive(false);
-        finishHolder.SetActive(false);
 
         gameOverHolder.SetActive(true);
 

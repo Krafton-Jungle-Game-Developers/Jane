@@ -13,6 +13,8 @@ public class StandingsGenerator : MonoBehaviour
         for (int i = 0; i < standingsBox.Count; i++)
         {
             standingsBox[i].transform.parent = transform;
+            RectTransform rect = standingsBox[i].GetComponent<RectTransform>();
+            rect.localScale = Vector3.one;
         }
     }
 }

@@ -131,19 +131,20 @@ public class RankManager : MonoBehaviour
         }
     }
 
-    public void SetResult()
+    public void SetResult(long tick)
     {
         hudManager.hudCanvas.enabled = false;
         hudManager.standingsCanvas.enabled = false;
         hudManager.targetCanvas.enabled = false;
         hudManager.resultCanvas.enabled = true;
         int i = 0;
+        TimeSpan time = TimeSpan.FromTicks(tick);
         foreach (KeyValuePair<string, NetworkPlayer> item in sortedList)
         {
             if (item.Value == playerId)
             {
                 hudManager.resultRankText.text = "" + (i + 1);
-                hudManager.resultTimeText.text = "time instance";
+                hudManager.resultTimeText.text = $"{time.Minutes:00}:{time.Seconds:00}.{time.Milliseconds:000}";
             }
             i++;
         }
@@ -170,7 +171,8 @@ public class RankManager : MonoBehaviour
                     standings.standingsBox[i].GetComponent<ResultBox>().ChangeColor(new Color(0f, 0f, 0f, 1.0f));
                 }
                 standings.standingsBox[i].GetComponent<ResultBox>().ChangeRank((i + 1).ToString());
-                standings.standingsBox[i].GetComponent<ResultBox>().ChangeStandings(item.Key);
+                standings.standingsBox[i].GetComponent<ResultBox>().ChangeStandings(" " + item.Key);
+                standings.standingsBox[i].GetComponent<ResultBox>().RecordTime(GameInfo.GameTime);
                 i++;
             }
         }
@@ -199,6 +201,15 @@ public class RankManager : MonoBehaviour
                 }
                 i++;
             }
+        }
+        else if (tempList.Any() && sortedList.SequenceEqual(tempList) && tempList.Count == sortedList.Count)
+        {
+            int i = finishCount;
+            foreach (KeyValuePair<string, NetworkPlayer> item in sortedList)
+            {
+                standings.standingsBox[i].GetComponent<ResultBox>().RecordTime(GameInfo.GameTime);
+                i++;
+            };
         }
         else if (!tempList.Any())
         {
@@ -262,7 +273,8 @@ public class RankManager : MonoBehaviour
                     standings.standingsBox[i].GetComponent<ResultBox>().ChangeColor(new Color(0f, 0f, 0f, 1.0f));
                 }
                 standings.standingsBox[i].GetComponent<ResultBox>().ChangeRank((i + 1).ToString());
-                standings.standingsBox[i].GetComponent<ResultBox>().ChangeStandings(item.Key);
+                standings.standingsBox[i].GetComponent<ResultBox>().ChangeStandings(" " + item.Key);
+                standings.standingsBox[i].GetComponent<ResultBox>().RecordTime(GameInfo.GameTime);
                 i++;
             }
         }

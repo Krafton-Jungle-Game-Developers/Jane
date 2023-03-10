@@ -196,6 +196,11 @@ namespace Jane.Unity.Server
 
         public void OnTimerUpdate(long ticks)
         {
+            if (GameInfo.GameState is not GameState.Playing)
+            {
+                return;
+            }
+            GameInfo.GameTime = ticks;
             gameManager.UpdateTimer(ticks);
         }
 

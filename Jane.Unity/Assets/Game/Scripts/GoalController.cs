@@ -19,7 +19,6 @@ public class GoalController : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             gameManager.RaceFinish();
-            RankManager.instance.SetResult();
         }
     }
 }
