@@ -21450,7 +21450,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 703375236}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -23887,7 +23887,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5da61ceb26ee86d43ac073c731909ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cover: {fileID: 21300000, guid: 4bab1621d1a725347b68cfc7802a163f, type: 3}
+  cover: {fileID: 21300000, guid: 41ad857f9d861ee41bdfe849483b94a2, type: 3}
   title: '  SUNWOO LEE'
   description: 'Leader / Client
 
@@ -28540,7 +28540,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5da61ceb26ee86d43ac073c731909ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cover: {fileID: 21300000, guid: 36cb3cbca9e6e6e49b9aed396ea78e3e, type: 3}
+  cover: {fileID: 21300000, guid: 9190891bd7b6b2140bcc4731812c3e06, type: 3}
   title: HONGPYO JANG
   description: 'Client
 
@@ -35015,7 +35015,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1265928323}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -41647,7 +41647,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5da61ceb26ee86d43ac073c731909ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cover: {fileID: 21300000, guid: fecc01ec8d4da5b40aae2046f163b42a, type: 3}
+  cover: {fileID: 21300000, guid: 7120ce9c8f7b65b4e8cfbdef4517b6d2, type: 3}
   title: JIYOUNG JANG
   description: 'Client
 
@@ -43788,14 +43788,6 @@ MonoBehaviour:
     hotkeyParent: {fileID: 0}
     latestSelected: {fileID: 0}
     hotkeys: []
-  - panelName: Achievements
-    panelObject: {fileID: 1467741127}
-    panelButton: {fileID: 0}
-    altPanelButton: {fileID: 0}
-    firstSelected: {fileID: 8383288}
-    hotkeyParent: {fileID: 1630504422}
-    latestSelected: {fileID: 0}
-    hotkeys: []
   - panelName: CreditPage
     panelObject: {fileID: 703375237}
     panelButton: {fileID: 0}
@@ -43804,7 +43796,15 @@ MonoBehaviour:
     hotkeyParent: {fileID: 1630504422}
     latestSelected: {fileID: 0}
     hotkeys: []
-  currentPanelIndex: 0
+  - panelName: Achievements
+    panelObject: {fileID: 1467741127}
+    panelButton: {fileID: 0}
+    altPanelButton: {fileID: 0}
+    firstSelected: {fileID: 8383288}
+    hotkeyParent: {fileID: 1630504422}
+    latestSelected: {fileID: 0}
+    hotkeys: []
+  currentPanelIndex: 5
   cullPanels: 1
   initializeButtons: 1
   bypassAnimationOnEnable: 0
