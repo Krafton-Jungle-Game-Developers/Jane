@@ -15,37 +15,30 @@ public class RankManager : MonoBehaviour
     public StandingsGenerator resultsGenerator;
     public TargetBoxGenerator targetBoxGenerator;
     public CheckPoints checkPoints;
-    
+
     [HideInInspector] public int finishCount = 0;
-    private HUDManager hudManager;
-    private GameController gameController;
-    private Dictionary<string, NetworkPlayer> players;
+    [SerializeField] private HUDManager hudManager;
+    private Dictionary<string, NetworkPlayer> players = new();
     private NetworkPlayer playerID;
-    private List<KeyValuePair<string, NetworkPlayer>> sortedList = new List<KeyValuePair<string, NetworkPlayer>>();
+    private List<KeyValuePair<string, NetworkPlayer>> sortedList = new();
     private bool isUpdating = false;
     private float switchTime = 0.15f;
 
-    private void Awake()
-    {
-        instance = this;
-    }
-    void Start()
-    {
-        players = new Dictionary<string, NetworkPlayer>();
-        gameController = GetComponentInParent<GameController>();
-        hudManager = GameObject.FindGameObjectWithTag("HUD").GetComponentInParent<HUDManager>();
-    }
-
+    private void Awake() => instance = this;
     void Update()
     {
-        if (!isUpdating && !playerID.isFinished && gameController.gameState == GameState.Playing)
+        if (playerID != null)
         {
-            SetStandings(standingsGenerator);
+            if (!isUpdating && !playerID.IsFinished && GameInfo.GameState == GameState.Playing)
+            {
+                SetStandings(standingsGenerator);
+            }
+            else if (!isUpdating && playerID.IsFinished && GameInfo.GameState == GameState.Playing)
+            {
+                SetStandings(resultsGenerator);
+            }
         }
-        else if (!isUpdating && playerID.isFinished && gameController.gameState == GameState.Playing)
-        {
-            SetStandings(resultsGenerator);
-        }
+        
         SetRank();
     }
 
@@ -68,11 +61,16 @@ public class RankManager : MonoBehaviour
 
     private void SetStandings(StandingsGenerator standings)
     {
-        IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sortedPlayer = players.OrderByDescending(x => !x.Value.isFinished)
-                                                                                      .ThenByDescending(x => x.Value.activeCheckpointIndex)
+        IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sortedPlayer = players.Where(x => !x.Value.IsFinished)
+                                                                                      .OrderByDescending(x => x.Value.activeCheckpointIndex)
                                                                                       .ThenBy(x => x.Value.distanceToCheckpoint);
         List<KeyValuePair<string, NetworkPlayer>> tempList = sortedPlayer.ToList();
 
+        foreach (KeyValuePair<string, NetworkPlayer> item in tempList)
+        { 
+            Debug.Log(item.Key);
+        }
+        Debug.Log(finishCount);
         if (sortedList.Any() && !sortedList.SequenceEqual(tempList) && tempList.Count == sortedList.Count)
         {
             List<int?> differentPositions = sortedList.Zip(tempList, (x, y) => x.Equals(y) ? (int?)null : Array.IndexOf(tempList.ToArray(), x)).ToList();
@@ -131,7 +129,7 @@ public class RankManager : MonoBehaviour
             {
                 hudManager.currentRankText.text = currentRank.ToString();
             }
-            currentRank++; 
+            currentRank++;
         }
     }
 
@@ -141,8 +139,14 @@ public class RankManager : MonoBehaviour
         hudManager.standingsCanvas.enabled = false;
         hudManager.targetCanvas.enabled = false;
         hudManager.resultCanvas.enabled = true;
-/*        hudManager.resultCanvas.gameObject;
-*/    }
+        TMP_Text rankText = GameObject.FindGameObjectsWithTag("RankText")[0].GetComponent<TMP_Text>();
+        TMP_Text standingsText = GameObject.FindGameObjectsWithTag("RankText")[1].GetComponent<TMP_Text>();
+        int i = 0;
+        if(true)
+        {
+            ;
+        }
+    }
 
     public float GetDistance(GameObject playerObj, GameObject checkpointObj)
     {

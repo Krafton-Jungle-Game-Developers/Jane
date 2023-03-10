@@ -338,6 +338,8 @@ namespace Jane.Unity.ServerShared.Hubs
         
         public global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinResponse> JoinAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinRequest request)
             => new global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinResponse>(base.WriteMessageWithResponseAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinRequest, global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinResponse>(-733403293, request));
+        public global::System.Threading.Tasks.ValueTask GameInitializedAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.GameInitializedRequest request)
+            => new global::System.Threading.Tasks.ValueTask(base.WriteMessageWithResponseAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.GameInitializedRequest, global::MessagePack.Nil>(1238107325, request));
         public global::System.Threading.Tasks.ValueTask LeaveAsync()
             => new global::System.Threading.Tasks.ValueTask(base.WriteMessageWithResponseAsync<global::MessagePack.Nil, global::MessagePack.Nil>(1368362116, global::MessagePack.Nil.Default));
         public global::System.Threading.Tasks.ValueTask MoveAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MoveRequest request)
@@ -360,6 +362,8 @@ namespace Jane.Unity.ServerShared.Hubs
         
             public global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinResponse> JoinAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinRequest request)
                 => new global::System.Threading.Tasks.ValueTask<global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinResponse>(parent.WriteMessageFireAndForgetAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinRequest, global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinResponse>(-733403293, request));
+            public global::System.Threading.Tasks.ValueTask GameInitializedAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.GameInitializedRequest request)
+                => new global::System.Threading.Tasks.ValueTask(parent.WriteMessageFireAndForgetAsync<global::Jane.Unity.ServerShared.MemoryPackObjects.GameInitializedRequest, global::MessagePack.Nil>(1238107325, request));
             public global::System.Threading.Tasks.ValueTask LeaveAsync()
                 => new global::System.Threading.Tasks.ValueTask(parent.WriteMessageFireAndForgetAsync<global::MessagePack.Nil, global::MessagePack.Nil>(1368362116, global::MessagePack.Nil.Default));
             public global::System.Threading.Tasks.ValueTask MoveAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.MoveRequest request)
@@ -371,7 +375,7 @@ namespace Jane.Unity.ServerShared.Hubs
         {
             switch (methodId)
             {
-                case -1297457280: // Void OnJoin(global::Jane.Unity.ServerShared.MemoryPackObjects.GamePlayerData joinedPlayer)
+                case -1297457280: // Void OnJoin(global::Jane.Unity.ServerShared.MemoryPackObjects.GamePlayerData joinedPlayerData)
                     {
                         var value = base.Deserialize<global::Jane.Unity.ServerShared.MemoryPackObjects.GamePlayerData>(data);
                         receiver.OnJoin(value);
@@ -381,6 +385,18 @@ namespace Jane.Unity.ServerShared.Hubs
                     {
                         var value = base.Deserialize<global::Jane.Unity.ServerShared.MemoryPackObjects.GamePlayerData>(data);
                         receiver.OnLeave(value);
+                    }
+                    break;
+                case -219305069: // Void OnGameStateChange(global::Jane.Unity.ServerShared.MemoryPackObjects.GameStateChangedResponse response)
+                    {
+                        var value = base.Deserialize<global::Jane.Unity.ServerShared.MemoryPackObjects.GameStateChangedResponse>(data);
+                        receiver.OnGameStateChange(value);
+                    }
+                    break;
+                case -1610262240: // Void OnTimerUpdate(global::System.Int64 ticks)
+                    {
+                        var value = base.Deserialize<global::System.Int64>(data);
+                        receiver.OnTimerUpdate(value);
                     }
                     break;
                 case 1429874301: // Void OnMove(global::Jane.Unity.ServerShared.MemoryPackObjects.MoveRequest request)
@@ -398,6 +414,9 @@ namespace Jane.Unity.ServerShared.Hubs
             {
                 case -733403293: // ValueTask<GameJoinResponse> JoinAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinRequest request)
                     base.SetResultForResponse<global::Jane.Unity.ServerShared.MemoryPackObjects.GameJoinResponse>(taskCompletionSource, data);
+                    break;
+                case 1238107325: // ValueTask GameInitializedAsync(global::Jane.Unity.ServerShared.MemoryPackObjects.GameInitializedRequest request)
+                    base.SetResultForResponse<global::MessagePack.Nil>(taskCompletionSource, data);
                     break;
                 case 1368362116: // ValueTask LeaveAsync()
                     base.SetResultForResponse<global::MessagePack.Nil>(taskCompletionSource, data);

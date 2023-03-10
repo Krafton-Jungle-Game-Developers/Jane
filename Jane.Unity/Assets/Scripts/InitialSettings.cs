@@ -46,7 +46,7 @@ namespace Assets.Scripts
                                                       "Nemesis", "Oner", "Perkz", "Quas", "River", "Sneaky", "Tomo", "Uzi", "Vicla", "WildTurtle", "Xmithie", "YamatoCanon", "Zven"};
             string randomName = names[random.Next(names.Count)];
             string uniqueID = UserInfo.UniqueId.ToString();
-            UserInfo.UserId = randomName + "#" + uniqueID.Substring(uniqueID.Length - 4);
+            UserInfo.UserId = randomName + " #" + uniqueID.Substring(uniqueID.Length - 4);
         }
     }
 }

@@ -1,20 +1,33 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class SpaceshipEngine : MonoBehaviour
 {
     [Header("Input")]
-    [SerializeField] public bool controlsDisabled = false;
-    [SerializeField] public Vector3 movementInputs;
+    [SerializeField] private bool controlsDisabled = false;
+    public bool ControlsDisabled
+    {
+        get => controlsDisabled;
+        set => controlsDisabled = value;
+    }
+
+    [SerializeField] private Vector3 movementInputs;
+    public Vector3 MovementInputs => movementInputs;
     [SerializeField] public Vector3 steeringInputs;
     [SerializeField] public Vector3 boostInputs;
+    public Vector3 BoostInputs => boostInputs;
 
     [SerializeField] private Vector3 minMovementInputs = new(-1f, -1f, -0.3f);
     [SerializeField] private Vector3 maxMovementInputs = new(1f, 1f, 1f);
 
     [Header("Movement & Steering Forces")]
-    [SerializeField] private bool enginesActivated = true;
+    [SerializeField] private bool enginesActivated = false;
+    public bool EnginesActivated
+    {
+        get => enginesActivated;
+        set => enginesActivated = value;
+    }
     [SerializeField] private Rigidbody spaceShipRigidbody;
 
     [SerializeField] private Vector3 maxMovementForces = new(500f, 500f, 1000f);
@@ -27,10 +40,7 @@ public class SpaceshipEngine : MonoBehaviour
     [Header("Speed-Steering Relationship")]
     [SerializeField] private AnimationCurve steeringBySpeedCurve = AnimationCurve.Linear(0, 1, 1, 1);
     [SerializeField] private float boostSteeringCoefficient = 1f;
-
-    //[Header("Resource Handlers")]
-    //[SerializeField] private List<ResourceHandler> boostResourceHandlers = new();
-
+    
     private void Awake() => TryGetComponent(out spaceShipRigidbody);
 
     public void ClearInputs()
@@ -136,23 +146,10 @@ public class SpaceshipEngine : MonoBehaviour
         boostInputs.y = Mathf.Clamp(newValuesByAxis.y, -1f, 1f);
         boostInputs.z = Mathf.Clamp(newValuesByAxis.z, -1f, 1f);
     }
-
-    private void Update()
-    {
-        // Use resources during boost
-        if (boostInputs.magnitude != 0f)
-        {
-            if (controlsDisabled) return;
-
-            boostInputs.x = Mathf.Clamp(0f, -1f, 1f);
-            boostInputs.y = Mathf.Clamp(0f, -1f, 1f);
-            boostInputs.z = Mathf.Clamp(0f, -1f, 1f);
-        }
-    }
-
+    
     private void FixedUpdate()
     {
-        if (enginesActivated is false) return;
+        if (enginesActivated is false) { return; }
 
         // Implement steering torques
         float steeringSpeedMultiplier = 1f;

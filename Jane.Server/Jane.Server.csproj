@@ -11,6 +11,8 @@
 		<PackageReference Include="Grpc.AspNetCore" Version="2.51.0" />
 		<PackageReference Include="MagicOnion.Serialization.MemoryPack" Version="5.1.2-preview" />
 		<PackageReference Include="MagicOnion.Server" Version="5.1.2" />
+		<PackageReference Include="MessagePipe" Version="1.7.4" />
+		<PackageReference Include="ZLogger" Version="1.7.0" />
 	</ItemGroup>
 
 	<ItemGroup>
