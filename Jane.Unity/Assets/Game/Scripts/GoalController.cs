@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GoalController : MonoBehaviour
 {
-    private GameManager gameManager;
+    [SerializeField] private GameManager gameManager;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -12,7 +12,7 @@ public class GoalController : MonoBehaviour
             && player.IsFinished is false)
         {
             Debug.Log("finished");
-
+            RankManager.instance.SetStandings(RankManager.instance.resultsGenerator);
             player.IsFinished = true;
             RankManager.instance.finishCount++;
         }
@@ -20,12 +20,7 @@ public class GoalController : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             gameManager.RaceFinish();
-
-            //other.gameObject.GetComponent<SpaceshipEngine>().DisableMovement();
-            //other.gameObject.GetComponent<SpaceshipEngine>().ClearInputs();
-            //_gameController.endGameText.GetComponent<TMP_Text>().enabled = true;
-            //Canvas hud = GameObject.FindGameObjectWithTag("HUD").GetComponent<Canvas>();
-            //hud.enabled = false;
+            RankManager.instance.SetResult();
         }
     }
 }

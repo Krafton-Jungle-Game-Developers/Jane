@@ -15,6 +15,8 @@ namespace Jane.Unity
         public Canvas resultCanvas;
         [SerializeField] private RectTransform cursorRectTransform;
         [SerializeField] private RectTransform lineRectTransform;
+        public TMP_Text resultRankText;
+        public TMP_Text resultTimeText;
         private RectTransform canvasRectTransform;
 
         public virtual Vector3 ViewportPosition

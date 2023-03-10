@@ -17,15 +17,18 @@ public class DistanceText : MonoBehaviour
     }
     private void UpdateDistance(Vector3 objectPos)
     {
-        distance = Vector3.Distance(player.position, objectPos);
-        float scale = targetBoxScale / distance;
-        scale = Mathf.Clamp(scale, minClamp, 1f);
+        if (player != null)
+        {
+            distance = Vector3.Distance(player.position, objectPos);
+            float scale = targetBoxScale / distance;
+            scale = Mathf.Clamp(scale, minClamp, 1f);
 
-        ScaleAlpha(scale);
-        ScaleSize(scale);
+            ScaleAlpha(scale);
+            ScaleSize(scale);
 
-        distance = Mathf.RoundToInt(distance);
-        distanceText.text = $"{distance}m";
+            distance = Mathf.RoundToInt(distance);
+            distanceText.text = $"{distance}m";
+        }
     }
     private void SetName(string name)
     {

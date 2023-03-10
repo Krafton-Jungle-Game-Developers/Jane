@@ -10,6 +10,8 @@ TagManager:
   - Spawner
   - MeteorPoint
   - HUD
+  - CheckPoint
+  - RankText
   layers:
   - Default
   - TransparentFX

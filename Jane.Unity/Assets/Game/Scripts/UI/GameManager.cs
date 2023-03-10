@@ -77,7 +77,6 @@ public class GameManager : MonoBehaviour
     {
         // Do Stuff
         // Game is not yet over for others
-        HUD.SetActive(false);
         playingHolder.SetActive(false);
         finishHolder.SetActive(true);
 
