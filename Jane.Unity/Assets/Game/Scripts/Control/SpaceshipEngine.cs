@@ -10,16 +10,16 @@ public class SpaceshipEngine : MonoBehaviour
     [SerializeField] public Vector3 steeringInputs;
     [SerializeField] public Vector3 boostInputs;
 
-    [SerializeField] private Vector3 minMovementInputs = new(-1f, -1f, -0.5f);
+    [SerializeField] private Vector3 minMovementInputs = new(-1f, -1f, -0.3f);
     [SerializeField] private Vector3 maxMovementInputs = new(1f, 1f, 1f);
 
     [Header("Movement & Steering Forces")]
     [SerializeField] private bool enginesActivated = true;
     [SerializeField] private Rigidbody spaceShipRigidbody;
 
-    [SerializeField] private Vector3 maxMovementForces = new(400f, 400f, 400f);
+    [SerializeField] private Vector3 maxMovementForces = new(500f, 500f, 1000f);
     [SerializeField] private Vector3 maxSteeringForces = new(8f, 8f, 10f);
-    [SerializeField] private Vector3 maxBoostForces = new(800f, 800f, 800f);
+    [SerializeField] private Vector3 maxBoostForces = new(800f, 800f, 2500f);
 
     [SerializeField] private float movementInputResponseSpeed = 5f;
     private Vector3 currentMovementForcesByAxis = Vector3.zero;
@@ -38,6 +38,20 @@ public class SpaceshipEngine : MonoBehaviour
         steeringInputs = Vector3.zero;
         movementInputs = Vector3.zero;
         boostInputs = Vector3.zero;
+    }
+
+    public void DisableMovement()
+    {
+        minMovementInputs = Vector3.zero;
+        maxMovementInputs = Vector3.zero;
+        maxBoostForces = Vector3.zero;
+    }
+
+    public void EnableMovement()
+    {
+        minMovementInputs = new(-1f, -1f, -0.5f);
+        maxMovementInputs = new(1f, 1f, 1f);
+        maxBoostForces = new(800f, 800f, 2500f);
     }
 
     public Vector3 GetDefaultMaxSpeedByAxis(bool withBoost)
@@ -116,15 +130,6 @@ public class SpaceshipEngine : MonoBehaviour
 
     public void SetBoostInputs(Vector3 newValuesByAxis)
     {
-        //for (int i = 0; i < boostResourceHandlers.Count; ++i)
-        //{
-        //    if (!boostResourceHandlers[i].Ready())
-        //    {
-        //        newValuesByAxis = Vector3.zero;
-        //        break;
-        //    }
-        //}
-
         if (controlsDisabled) return;
 
         boostInputs.x = Mathf.Clamp(newValuesByAxis.x, -1f, 1f);
@@ -135,24 +140,14 @@ public class SpaceshipEngine : MonoBehaviour
     private void Update()
     {
         // Use resources during boost
-        //if (boostInputs.magnitude != 0f)
-        //{
-        //    for (int i = 0; i < boostResourceHandlers.Count; ++i)
-        //    {
-        //        if (boostResourceHandlers[i].Ready())
-        //        {
-        //            boostResourceHandlers[i].Implement();
-        //        }
-        //        else
-        //        {
-        //            if (controlsDisabled) return;
+        if (boostInputs.magnitude != 0f)
+        {
+            if (controlsDisabled) return;
 
-        //            boostInputs.x = Mathf.Clamp(0f, -1f, 1f);
-        //            boostInputs.y = Mathf.Clamp(0f, -1f, 1f);
-        //            boostInputs.z = Mathf.Clamp(0f, -1f, 1f);
-        //        }
-        //    }
-        //}
+            boostInputs.x = Mathf.Clamp(0f, -1f, 1f);
+            boostInputs.y = Mathf.Clamp(0f, -1f, 1f);
+            boostInputs.z = Mathf.Clamp(0f, -1f, 1f);
+        }
     }
 
     private void FixedUpdate()

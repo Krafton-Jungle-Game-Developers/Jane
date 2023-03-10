@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 
 namespace Jane.Unity
 {
@@ -6,7 +7,10 @@ namespace Jane.Unity
     {
         [SerializeField] private Camera hUDCamera;
         public Camera HUDCamera { get; set; }
-        [SerializeField] private Canvas canvas;
+        public TMP_Text currentRankText;
+        public TMP_Text totalRankText;
+        public Canvas hudCanvas;
+        public Canvas targetCanvas;
         [SerializeField] private RectTransform cursorRectTransform;
         [SerializeField] private RectTransform lineRectTransform;
         private RectTransform canvasRectTransform;
@@ -32,7 +36,7 @@ namespace Jane.Unity
             }
         }
 
-        private void Awake() => canvas.TryGetComponent(out canvasRectTransform);
+        private void Awake() => hudCanvas.TryGetComponent(out canvasRectTransform);
 
         public void CenterCursor() => SetViewportPosition(new Vector3(0.5f, 0.5f, 0.5f));
 
@@ -58,5 +62,4 @@ namespace Jane.Unity
             }
         }
     }
-
 }

@@ -1,3 +1,5 @@
+using Jane.Unity;
+using Jane.Unity.ServerShared.Enums;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,12 +13,16 @@ public class RankManager : MonoBehaviour
     public static RankManager instance;
     public StandingsGenerator standingsGenerator;
     public TargetBoxGenerator targetBoxGenerator;
+    public CheckPoints checkPoints;
+    public int finishCount = 0;
 
+    private HUDManager hudManager;
+    private GameController gameController;
     private Dictionary<string, NetworkPlayer> players;
     private Ulid playerID;
     private List<KeyValuePair<string, NetworkPlayer>> sortedList = new List<KeyValuePair<string, NetworkPlayer>>();
-    public CheckPoints checkPoints;
-    public float switchTime = 0.5f;
+    private bool isUpdating = false;
+    private float switchTime = 0.15f;
 
     private void Awake()
     {
@@ -25,11 +31,17 @@ public class RankManager : MonoBehaviour
     void Start()
     {
         players = new Dictionary<string, NetworkPlayer>();
+        gameController = GetComponentInParent<GameController>();
+        hudManager = GameObject.FindGameObjectWithTag("HUD").GetComponentInParent<HUDManager>();
     }
 
     void Update()
     {
-        SetPlayers();
+        if (!isUpdating && gameController.gameState == GameState.Playing)
+        {
+            SetStandings();
+        }
+        SetRank();
     }
 
     public void GetLocalPlayer(Ulid currentLocalID)
@@ -48,20 +60,42 @@ public class RankManager : MonoBehaviour
         }
     }
 
-    void SetPlayers()
+    private void SetStandings()
     {
-        IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sortedPlayer = players.OrderByDescending(x => x.Value.activeCheckpointIndex)
+        IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sortedPlayer = players.OrderByDescending(x => !x.Value.isFinished)
+                                                                                      .ThenByDescending(x => x.Value.activeCheckpointIndex)
                                                                                       .ThenBy(x => x.Value.distanceToCheckpoint);
-/*        List<KeyValuePair<string, NetworkPlayer>> tempList = sortedPlayer.ToList();
-        if (!sortedList.Any() && !sortedList.SequenceEqual(tempList))
+        List<KeyValuePair<string, NetworkPlayer>> tempList = sortedPlayer.ToList();
+
+        if (sortedList.Any() && !sortedList.SequenceEqual(tempList) && tempList.Count == sortedList.Count)
         {
             List<int?> differentPositions = sortedList.Zip(tempList, (x, y) => x.Equals(y) ? (int?)null : Array.IndexOf(tempList.ToArray(), x)).ToList();
             differentPositions = differentPositions.Where(x => x != null).ToList();
-
             int change1 = differentPositions.First() ?? 0;
             int change2 = differentPositions.Last() ?? 0;
-*/            int i = 0;
+            change1 += finishCount;
+            change2 += finishCount;
+            int i = finishCount;
 
+            foreach (KeyValuePair<string, NetworkPlayer> item in sortedPlayer)
+            {
+                if (i == change1)
+                {
+                    isUpdating = true;
+                    GameObject tempBox = standingsGenerator.standingsBox[change1];
+                    standingsGenerator.standingsBox[change1] = standingsGenerator.standingsBox[change2];
+                    standingsGenerator.standingsBox[change2] = tempBox;
+
+                    RectTransform first = standingsGenerator.standingsBox[change1].GetComponent<RectTransform>();
+                    RectTransform second = tempBox.GetComponent<RectTransform>();
+                    StartCoroutine(MoveStandings(first, second, sortedPlayer, switchTime));
+                }
+                i++;
+            }
+        }
+        else if (!sortedList.Any())
+        {
+            int i = finishCount;
             foreach (KeyValuePair<string, NetworkPlayer> item in sortedPlayer)
             {
                 if (item.Value.UniqueId == playerID)
@@ -72,23 +106,30 @@ public class RankManager : MonoBehaviour
                 {
                     standingsGenerator.standingsBox[i].GetComponent<Image>().color = new Color(0f, 0f, 0f, 1.0f);
                 }
-/*            if (i != change1 || i != change2)
-            {
-*/                standingsGenerator.standingsBox[i].GetComponentInChildren<TMP_Text>().text = " " + (i + 1) + "   " + item.Key;
-/*            }
-*//*            else if (i == change2)
-                {
-                    RectTransform first = standingsGenerator.standingsBox[change1].GetComponent<RectTransform>();
-                    RectTransform second = standingsGenerator.standingsBox[change2].GetComponent<RectTransform>();
-                    StartCoroutine(MoveStandings(first, second));
-                }
-*/                i++;
+                standingsGenerator.standingsBox[i].GetComponentInChildren<TMP_Text>().text = "   " + (i + 1) + "   " + item.Key;
+                i++;
             }
         }
-/*    sortedList = tempList;
-  }
-*/
-public float GetDistance(GameObject playerObj, GameObject checkpointObj)
+        sortedList = tempList;
+    }
+
+    private void SetRank()
+    {
+        int currentRank = finishCount + 1;
+        int totalRank = players.Count;
+        hudManager.totalRankText.text = "/" + totalRank.ToString();
+
+        foreach (KeyValuePair<string, NetworkPlayer> player in sortedList)
+        {
+            if (player.Value.UniqueId == playerID)
+            {
+                hudManager.currentRankText.text = currentRank.ToString();
+            }
+            currentRank++; 
+        }
+    }
+
+    public float GetDistance(GameObject playerObj, GameObject checkpointObj)
     {
         Vector3 playerLocation = playerObj.transform.position;
         Vector3 checkpointLocation = checkpointObj.transform.position;
@@ -96,7 +137,7 @@ public float GetDistance(GameObject playerObj, GameObject checkpointObj)
         return distance;
     }
 
-    IEnumerator MoveStandings(RectTransform rectTransformA, RectTransform rectTransformB)
+    IEnumerator MoveStandings(RectTransform rectTransformA, RectTransform rectTransformB, IOrderedEnumerable<KeyValuePair<string, NetworkPlayer>> sorted, float duration)
     {
         Vector2 startPosA = rectTransformA.anchoredPosition;
         Vector2 endPosA = rectTransformB.anchoredPosition;
@@ -104,15 +145,30 @@ public float GetDistance(GameObject playerObj, GameObject checkpointObj)
         Vector2 endPosB = rectTransformA.anchoredPosition;
 
         float elapsedTime = 0f;
-        while (elapsedTime < switchTime)
+        while (elapsedTime < duration)
         {
-            float t = Mathf.Clamp01(elapsedTime / switchTime);
+            float t = Mathf.Clamp01(elapsedTime / duration);
             rectTransformA.anchoredPosition = Vector2.Lerp(startPosA, endPosA, t);
             rectTransformB.anchoredPosition = Vector2.Lerp(startPosB, endPosB, t);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
+        int i = finishCount;
+        foreach (KeyValuePair<string, NetworkPlayer> item in sorted)
+        {
+            if (item.Value.UniqueId == playerID)
+            {
+                standingsGenerator.standingsBox[i].GetComponent<Image>().color = new Color(1.0f, 0.5f, 0f, 1.0f);
+            }
+            else
+            {
+                standingsGenerator.standingsBox[i].GetComponent<Image>().color = new Color(0f, 0f, 0f, 1.0f);
+            }
+            standingsGenerator.standingsBox[i].GetComponentInChildren<TMP_Text>().text = "   " + (i + 1) + "   " + item.Key;
+            i++;
+        }
+        isUpdating = false;
         rectTransformA.anchoredPosition = endPosA;
         rectTransformB.anchoredPosition = endPosB;
     }

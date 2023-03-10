@@ -29,13 +29,21 @@ public class GateTriggerQuad : MonoBehaviour
     }
     public void Activate()
     {
-        gateActivateVFX.Play();
-/*        swirlGreen.Play();
-*/    }
+        if (gateActivateVFX != null)
+        {
+            gateActivateVFX.Play();
+        }
+        /*        swirlGreen.Play();
+        */
+    }
 
     public void Deactivate()
     {
-        gateActivateVFX.Stop();
-/*        swirlGreen.Stop();
-*/    }
+        if (gateActivateVFX != null)
+        {
+            gateActivateVFX.Stop();
+        }
+        /*        swirlGreen.Stop();
+        */
+    }
 }
