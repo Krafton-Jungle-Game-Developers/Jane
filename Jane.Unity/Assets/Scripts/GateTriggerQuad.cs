@@ -9,7 +9,6 @@ using UnityEngine.VFX;
 public class GateTriggerQuad : MonoBehaviour
 {
     [SerializeField] private VisualEffect gateActivateVFX;
-    [SerializeField] private ParticleSystem swirlGreen;
     public int gateNumber;
 
     private void OnTriggerEnter(Collider other)
@@ -33,8 +32,6 @@ public class GateTriggerQuad : MonoBehaviour
         {
             gateActivateVFX.Play();
         }
-        /*        swirlGreen.Play();
-        */
     }
 
     public void Deactivate()
@@ -43,7 +40,5 @@ public class GateTriggerQuad : MonoBehaviour
         {
             gateActivateVFX.Stop();
         }
-        /*        swirlGreen.Stop();
-        */
     }
 }

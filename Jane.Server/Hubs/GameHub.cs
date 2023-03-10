@@ -20,7 +20,7 @@ namespace Jane.Server.Hubs
 
         private Ulid gameId;
         private GameState gameState = GameState.Waiting;
-        private TimeSpan gameDuration = TimeSpan.FromSeconds(10);
+        private TimeSpan gameDuration = TimeSpan.FromSeconds(120);
         private TimeSpan timeLeft;
         private Task waitOtherPlayersTask = null;
         private Task timerTask = null;
