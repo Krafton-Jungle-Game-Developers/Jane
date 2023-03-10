@@ -29,9 +29,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameState DebugCurrentState;
 
     [Header("Audio")]
-    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioSource SFXAudioSource;
     [SerializeField] private AudioClip countClip;
     [SerializeField] private AudioClip startClip;
+    [SerializeField] private AudioSource BGMAudioSource;
+    [SerializeField] private AudioClip BGMClip;
 
     private void Update() => DebugCurrentState = GameInfo.GameState;
 
@@ -41,7 +43,7 @@ public class GameManager : MonoBehaviour
         while (seconds > 0)
         {
             countDownText.text = $"{seconds}";
-            audioSource.PlayOneShot(countClip);
+            SFXAudioSource.PlayOneShot(countClip);
             await UniTask.Delay(TimeSpan.FromSeconds(1));
             seconds--;
         }
@@ -51,7 +53,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Game Start!");
         countDownText.text = "GO!";
-        audioSource.PlayOneShot(startClip);
+        SFXAudioSource.PlayOneShot(startClip);
         playingHolder.SetActive(true);
 
         inputManager.EnableInput();
