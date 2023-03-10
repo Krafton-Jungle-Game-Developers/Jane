@@ -11,6 +11,7 @@ namespace Jane.Unity.ServerShared.MemoryPackObjects
         public int PlayerCount { get; set; }
         public string UserId { get; set; }
         public Ulid UniqueId { get; set; }
+        public bool IsInitialized { get; set; }
         public Vector3 InitialPosition { get; set; } 
         public Quaternion InitialRotation { get; set; }
     }

@@ -165,7 +165,7 @@ namespace Jane.Unity
 
         private void UpdateMovement()
         {
-            Vector3 movementInputs = spaceEngine.movementInputs;
+            Vector3 movementInputs = spaceEngine.MovementInputs;
 
             movementInputs.z += acceleration * Time.deltaTime;
             movementInputs.x = strafing.x;

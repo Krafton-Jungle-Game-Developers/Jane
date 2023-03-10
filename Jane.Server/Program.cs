@@ -2,15 +2,18 @@ using MagicOnion;
 using MagicOnion.Serialization;
 using MagicOnion.Serialization.MemoryPack;
 using MagicOnion.Server;
+using MessagePipe;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.WebHost.UseKestrel(options =>
 {
     options.ConfigureEndpointDefaults(endpointOptions =>
     {
         endpointOptions.Protocols = HttpProtocols.Http1AndHttp2;
     });
+    
 }).UseUrls("http://jane.jungle-gamedev.com:5000;https://jane.jungle-gamedev.com:5001");
 
 builder.Services.AddGrpc();

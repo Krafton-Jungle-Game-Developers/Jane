@@ -8,12 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Title Scene.unity
     guid: 10a75ece917b5aa459eeec8cc6fa585a
-  - enabled: 0
-    path: Assets/Scenes/New Control.unity
-    guid: 0f4351c65e8a3f346aadff8ed1a5b531
   - enabled: 1
-    path: Assets/Scenes/Game Scene (Network).unity
-    guid: c2b051022064ff34c8cca0c05640ff68
+    path: Assets/Scenes/Dev Scene (DO NOT TOUCH).unity
+    guid: 9fb4286ed55822d4fb677ffdfd906cb3
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: c1c6bd42c8c2f6847a620a2d22094be7,
       type: 2}
